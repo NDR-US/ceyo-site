@@ -29,16 +29,16 @@ a{color:inherit;text-decoration:none;}
 .index-item:last-child{border-right:none;}
 .index-item:hover,.index-item.active{color:var(--ivory);background:rgba(255,255,240,.04);}
 
-.hero-sticky-wrap{position:relative;height:140vh;}
+.hero-sticky-wrap{position:relative;height:160vh;}
 .hero-sticky{position:sticky;top:0;height:100vh;display:flex;flex-direction:column;justify-content:center;padding:100px 40px 80px;overflow:hidden;z-index:2;}
 .hero-sticky::after{content:'';position:absolute;left:0;right:0;bottom:0;height:55%;background:linear-gradient(to bottom,transparent,var(--bg) 90%);pointer-events:none;}
 .hero-version{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--green);margin-bottom:24px;display:flex;align-items:center;gap:12px;}
 .hero-version::before{content:'';display:inline-block;width:28px;height:1px;background:var(--green);}
-.hero-h1{font-family:'Outfit',sans-serif;font-weight:900;font-style:italic;font-size:clamp(44px,7.8vw,92px);letter-spacing:-.05em;line-height:.92;text-transform:uppercase;color:var(--ivory);max-width:900px;will-change:transform,opacity,filter;}
+.hero-h1{font-family:'Outfit',sans-serif;font-weight:900;font-style:italic;font-size:clamp(52px,9.5vw,120px);letter-spacing:-.05em;line-height:.92;text-transform:uppercase;color:var(--ivory);max-width:900px;will-change:transform,opacity,filter;}
 .hero-h1 .accent{color:var(--green2);}
-.hero-lead-wrap{margin-top:28px;max-width:620px;}
+.hero-lead-wrap{margin-top:36px;max-width:640px;}
 .hero-lead{font-size:15px;line-height:1.75;color:var(--muted);font-weight:300;}
-.hero-cta-row{margin-top:26px;display:flex;gap:12px;flex-wrap:wrap;}
+.hero-cta-row{margin-top:28px;display:flex;gap:12px;flex-wrap:wrap;}
 .btn{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;padding:12px 24px;border:1px solid var(--stroke);color:var(--muted);background:transparent;cursor:pointer;display:inline-block;transition:all .15s;}
 .btn:hover,.btn:active{background:var(--ivory);color:var(--bg);border-color:var(--ivory);}
 .btn.primary{border-color:var(--green);color:var(--green2);background:rgba(74,93,59,.1);}
@@ -54,61 +54,52 @@ a{color:inherit;text-decoration:none;}
 .section.focus{border-top-color:var(--ivory);background:rgba(255,255,240,.012);}
 .section-label{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--green);margin-bottom:20px;display:flex;align-items:center;gap:12px;}
 .section-label::after{content:'';flex:1;height:1px;background:linear-gradient(to right,var(--green),transparent);max-width:120px;}
-.section-h2{font-family:'Outfit',sans-serif;font-weight:900;font-style:italic;font-size:clamp(26px,4.2vw,54px);letter-spacing:-.04em;line-height:1.0;text-transform:uppercase;color:var(--ivory);margin-bottom:22px;}
-.section-body{font-size:15px;line-height:1.8;color:var(--muted);max-width:68ch;margin-bottom:14px;}
+.section-h2{font-family:'Outfit',sans-serif;font-weight:900;font-style:italic;font-size:clamp(28px,4.5vw,56px);letter-spacing:-.04em;line-height:1.0;text-transform:uppercase;color:var(--ivory);margin-bottom:28px;}
+.section-body{font-size:15px;line-height:1.8;color:var(--muted);max-width:64ch;margin-bottom:14px;}
 
-.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:1px;margin-top:26px;background:var(--stroke);border:1px solid var(--stroke);}
-.card{background:var(--bg);padding:26px 22px;transition:background .2s;position:relative;overflow:hidden;}
-.card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:var(--ivory);transform:scaleX(0);transform-origin:left;transition:transform .3s ease;}
-.card:hover::before{transform:scaleX(1);}
-.card:hover{background:rgba(255,255,240,.025);}
-.card-label{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:var(--green);margin-bottom:10px;}
-.card-text{font-size:13px;color:var(--muted);line-height:1.7;}
+.not-section{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:start;}
+.not-list{list-style:none;display:flex;flex-direction:column;gap:10px;}
+.not-list li{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.08em;color:var(--muted2);padding-left:22px;position:relative;line-height:1.55;}
+.not-list li::before{content:'·';position:absolute;left:0;color:var(--green2);font-size:16px;line-height:1.4;}
+.not-affirm{margin-top:20px;padding:18px;border:1px solid rgba(74,93,59,.4);background:rgba(74,93,59,.06);}
+.not-affirm p{font-size:13px;color:var(--muted);line-height:1.7;}
 
-.mono{font-family:'IBM Plex Mono',monospace;}
-.list{list-style:none;display:flex;flex-direction:column;gap:10px;margin-top:10px;}
-.list li{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.08em;color:var(--muted2);padding-left:18px;position:relative;line-height:1.55;}
-.list li::before{content:'·';position:absolute;left:0;color:var(--green2);font-size:16px;line-height:1.3;}
-
-.form{margin-top:18px;border:1px solid var(--stroke);background:rgba(255,255,240,.01);}
-.form-head{padding:12px 20px;border-bottom:1px solid var(--stroke2);font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:var(--muted2);}
-.form-body{padding:20px;display:grid;grid-template-columns:1fr 1fr;gap:14px;}
-.fg{display:flex;flex-direction:column;gap:8px;}
-.fg.full{grid-column:1 / -1;}
-label{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.20em;text-transform:uppercase;color:var(--muted2);}
-input,select,textarea{
-  background:rgba(0,0,0,.35);
-  border:1px solid var(--stroke2);
-  color:var(--ivory);
-  padding:12px 12px;
-  outline:none;
-  font-family:'Inter',system-ui,sans-serif;
-  font-size:13px;
-}
-textarea{min-height:120px;resize:vertical;}
-input:focus,select:focus,textarea:focus{border-color:rgba(94,122,74,.65);box-shadow:0 0 0 3px rgba(94,122,74,.10);}
-.form-actions{padding:0 20px 20px;display:flex;gap:12px;flex-wrap:wrap;}
-.helper{margin-top:10px;font-size:12px;color:var(--muted2);line-height:1.7;}
-
-.boundary-wrap{border:1px solid var(--stroke);padding:28px 32px;background:rgba(255,255,240,.015);margin-top:26px;}
-.boundary-lbl{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.24em;text-transform:uppercase;color:var(--muted2);margin-bottom:16px;display:flex;align-items:center;gap:12px;}
+.boundary-section{max-width:1160px;margin:0 auto;padding:0 40px 80px;}
+.boundary-wrap{border:1px solid var(--stroke);padding:28px 32px;background:rgba(255,255,240,.015);}
+.boundary-lbl{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.24em;text-transform:uppercase;color:var(--muted2);margin-bottom:20px;display:flex;align-items:center;gap:12px;}
 .boundary-lbl::before{content:'';width:20px;height:1px;background:var(--muted2);}
 .boundary-items{display:grid;grid-template-columns:1fr 1fr;gap:10px 40px;}
-.bi{font-size:12px;color:var(--muted2);line-height:1.65;}
-.boundary-close{margin-top:16px;padding-top:16px;border-top:1px solid var(--stroke2);font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.08em;color:var(--muted2);}
+.bi{font-size:12px;color:var(--muted2);line-height:1.65;padding-left:16px;position:relative;}
+.bi::before{content:'·';position:absolute;left:0;}
+.boundary-close{margin-top:20px;padding-top:20px;border-top:1px solid var(--stroke2);font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.08em;color:var(--muted2);}
+
+.form{margin-top:18px;border:1px solid var(--stroke);}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--stroke);}
+.form-cell{background:var(--bg);padding:16px 18px;}
+.form-cell.full{grid-column:1/-1;}
+.label{display:block;font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:var(--muted2);margin-bottom:10px;}
+.input,.select,.textarea{width:100%;background:rgba(255,255,240,.02);border:1px solid var(--stroke2);color:var(--ivory);padding:12px 12px;font-family:'Inter',system-ui,sans-serif;font-size:13px;outline:none;transition:border-color .15s,background .15s;}
+.textarea{min-height:130px;resize:vertical;line-height:1.6;}
+.input:focus,.select:focus,.textarea:focus{border-color:rgba(255,255,240,.22);background:rgba(255,255,240,.03);}
+.form-note{padding:14px 18px;border-top:1px solid var(--stroke2);font-size:12px;line-height:1.65;color:var(--muted2);}
+.form-actions{padding:16px 18px;border-top:1px solid var(--stroke2);display:flex;gap:12px;flex-wrap:wrap;align-items:center;justify-content:flex-start;}
 
 @keyframes cursor-blink{0%,100%{opacity:1}50%{opacity:0}}
 .typewrite-cursor::after{content:'|';animation:cursor-blink .7s ease-in-out infinite;color:var(--green);}
 
 @media(max-width:880px){
-  .grid-2{grid-template-columns:1fr;}
-  .form-body{grid-template-columns:1fr;}
-  .boundary-items{grid-template-columns:1fr;}
+  .not-section{grid-template-columns:1fr;}
+  .form-row{grid-template-columns:1fr;}
   .topnav,.section{padding-left:20px;padding-right:20px;}
   .hero-sticky{padding:90px 20px 70px;}
   .scroll-hint{left:20px;}
+  .boundary-section{padding-left:20px;padding-right:20px;}
+  .boundary-items{grid-template-columns:1fr;}
 }
-@media(max-width:500px){.topnav-right{display:none;}.hero-cta-row{flex-direction:column;}}
+@media(max-width:500px){
+  .topnav-right{display:none;}
+  .hero-cta-row{flex-direction:column;}
+}
 @media print{
   body{background:#fff;color:#000;cursor:auto;}
   #cursor,#spotlight,.topnav,.index-bar,.hero-sticky-wrap,.scroll-hint,body::before{display:none;}
@@ -117,7 +108,6 @@ input:focus,select:focus,textarea:focus{border-color:rgba(94,122,74,.65);box-sha
   </style>
 </head>
 <body>
-
 <div id="cursor" aria-hidden="true"></div>
 <div id="spotlight" aria-hidden="true"></div>
 
@@ -133,16 +123,16 @@ input:focus,select:focus,textarea:focus{border-color:rgba(94,122,74,.65);box-sha
 
 <div class="hero-sticky-wrap" aria-label="Hero">
   <div class="hero-sticky" id="hero-sticky">
-    <div class="hero-version" id="hw1">V2026.02.19 &nbsp;·&nbsp; Engagement</div>
-    <h1 class="hero-h1" id="hero-h1">Controlled<br><span class="accent">Contact</span></h1>
+    <div class="hero-version" id="hw1">V2026.02.19 &nbsp;·&nbsp; Institutional engagement</div>
+    <h1 class="hero-h1" id="hero-h1">Contact<br><span class="accent">CEYO</span></h1>
     <div class="hero-lead-wrap">
       <p class="hero-lead" id="hw2">
         CEYO engages with regulated operators, institutional oversight bodies, and organizations conducting structured review of AI inference systems.
         Public materials remain intentionally high-level. Operational specifics, technical documentation, and deployment discussions occur under controlled review.
       </p>
       <div class="hero-cta-row" id="hw4">
-        <a class="btn primary" href="#controlled-review">Controlled Review</a>
-        <a class="btn" href="#primary-contact">Primary Contact</a>
+        <a class="btn primary" href="#request">Submit Inquiry</a>
+        <a class="btn" href="#primary">Primary Contact</a>
       </div>
     </div>
     <div class="scroll-hint" aria-hidden="true">Scroll to continue</div>
@@ -151,165 +141,154 @@ input:focus,select:focus,textarea:focus{border-color:rgba(94,122,74,.65);box-sha
 
 <main class="content-scroll">
 
-  <section class="section" id="controlled-review" aria-labelledby="cr-h">
-    <div class="section-label">[Controlled review requests]</div>
-    <h2 class="section-h2" id="cr-h">Controlled Review Requests</h2>
+  <section class="section" id="request" aria-labelledby="rq-h">
+    <div class="section-label">[Engagement channel]</div>
+    <h2 class="section-h2" id="rq-h">Controlled Review Requests</h2>
     <p class="section-body">
-      Institutions seeking technical evaluation may request controlled review access. Controlled review may include:
+      Institutions seeking technical evaluation may request controlled review access. Controlled review does not constitute license or deployment authorization.
     </p>
 
-    <div class="grid-2" role="list" aria-label="Controlled review scope">
-      <div class="card" role="listitem">
-        <div class="card-label">Documentation</div>
-        <div class="card-text">
-          Technical Requirements access, capture policy schema review, and verification contract review under executed agreement.
+    <div class="not-section">
+      <div>
+        <p class="section-body">
+          Controlled review may include:
+        </p>
+        <ul class="not-list" aria-label="Controlled review may include">
+          <li>Technical Requirements access</li>
+          <li>Policy schema review</li>
+          <li>Verification contract review</li>
+          <li>Reference benchmark discussion</li>
+          <li>Architecture Q&amp;A</li>
+        </ul>
+        <div class="not-affirm">
+          <p>
+            Public documentation is descriptive. Operational specifications and deployment details are shared under executed review agreement.
+          </p>
         </div>
       </div>
-      <div class="card" role="listitem">
-        <div class="card-label">Evaluation</div>
-        <div class="card-text">
-          Reference benchmark discussion and architecture Q&amp;A aligned to institutional due diligence.
+
+      <div aria-label="Inquiry form">
+        <div class="section-body" style="max-width:64ch;">
+          Route your request for controlled review, deployment inquiry, institutional partnership, licensing discussion, or security reporting.
         </div>
+
+        <form class="form" action="#" method="post">
+          <div class="form-row">
+            <div class="form-cell">
+              <label class="label" for="name">Name</label>
+              <input class="input" id="name" name="name" type="text" autocomplete="name" />
+            </div>
+            <div class="form-cell">
+              <label class="label" for="email">Email</label>
+              <input class="input" id="email" name="email" type="email" autocomplete="email" />
+            </div>
+            <div class="form-cell">
+              <label class="label" for="org">Institution</label>
+              <input class="input" id="org" name="org" type="text" autocomplete="organization" />
+            </div>
+            <div class="form-cell">
+              <label class="label" for="type">Inquiry type</label>
+              <select class="select" id="type" name="type">
+                <option value="controlled-review">Controlled Review Request</option>
+                <option value="deployment">Deployment Inquiry</option>
+                <option value="partnership">Institutional Partnership</option>
+                <option value="licensing">Licensing Discussion</option>
+                <option value="security">Security / Vulnerability Report</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+            <div class="form-cell full">
+              <label class="label" for="message">Message</label>
+              <textarea class="textarea" id="message" name="message"></textarea>
+            </div>
+          </div>
+          <div class="form-note">
+            Controlled review access and exchange of technical materials may require execution of NDA or written review agreement prior to disclosure.
+          </div>
+          <div class="form-actions">
+            <button class="btn primary" type="submit">Submit</button>
+            <a class="btn" href="#primary">Use email</a>
+          </div>
+        </form>
+
       </div>
     </div>
-
-    <p class="section-body helper">
-      Controlled review does not constitute license or deployment authorization.
-    </p>
   </section>
 
-  <section class="section" id="deployment" aria-labelledby="dep-h">
-    <div class="section-label">[Deployment inquiries]</div>
-    <h2 class="section-h2" id="dep-h">Deployment Inquiries</h2>
+  <section class="section" id="deployment" aria-labelledby="dp-h">
+    <div class="section-label">[Deployment]</div>
+    <h2 class="section-h2" id="dp-h">Deployment Inquiries</h2>
     <p class="section-body">
-      Organizations exploring pilot integration or phased deployment may submit deployment inquiries. Initial discussions typically address:
+      Organizations exploring pilot integration or phased deployment may submit deployment inquiries. Initial discussions typically address deployment architecture posture, capture policy configuration, infrastructure compatibility, key custody integration, and disclosure tier requirements.
     </p>
-    <ul class="list" aria-label="Initial discussion topics">
-      <li>Deployment architecture posture</li>
-      <li>Capture policy configuration</li>
-      <li>Infrastructure compatibility</li>
-      <li>Key custody integration</li>
-      <li>Disclosure tier requirements</li>
-    </ul>
     <p class="section-body">
       Deployment terms are defined through written agreement.
     </p>
   </section>
 
   <section class="section" id="partnerships" aria-labelledby="ip-h">
-    <div class="section-label">[Institutional partnerships]</div>
+    <div class="section-label">[Institutional]</div>
     <h2 class="section-h2" id="ip-h">Institutional Partnerships</h2>
     <p class="section-body">
-      CEYO may engage with:
-    </p>
-    <ul class="list" aria-label="Potential partners">
-      <li>Regulatory bodies</li>
-      <li>Standards organizations</li>
-      <li>Research institutions</li>
-      <li>Infrastructure providers</li>
-    </ul>
-    <p class="section-body">
-      Partnership discussions are evaluated on alignment with CEYO’s integrity and non-adjudication posture.
+      CEYO may engage with regulatory bodies, standards organizations, research institutions, and infrastructure providers. Partnership discussions are evaluated on alignment with CEYO’s integrity and non-adjudication posture.
     </p>
   </section>
 
-  <section class="section" id="licensing" aria-labelledby="lic-h">
-    <div class="section-label">[Intellectual property &amp; licensing]</div>
-    <h2 class="section-h2" id="lic-h">Intellectual Property &amp; Licensing</h2>
+  <section class="section" id="licensing" aria-labelledby="lc-h">
+    <div class="section-label">[Commercial]</div>
+    <h2 class="section-h2" id="lc-h">Intellectual Property &amp; Licensing</h2>
     <p class="section-body">
-      Inquiries regarding licensing, intellectual property, or commercial terms should be submitted directly through the contact channel.
-      Public documentation does not grant usage rights.
+      Inquiries regarding licensing, intellectual property, or commercial terms should be submitted directly through the contact channel. Public documentation does not grant usage rights.
     </p>
   </section>
 
-  <section class="section" id="confidentiality" aria-labelledby="conf-h">
+  <section class="section" id="confidentiality" aria-labelledby="cf-h">
     <div class="section-label">[Confidentiality]</div>
-    <h2 class="section-h2" id="conf-h">Confidentiality</h2>
+    <h2 class="section-h2" id="cf-h">Confidentiality</h2>
     <p class="section-body">
-      CEYO intends to treat inquiries as confidential. Formal nondisclosure agreements (NDAs) may be executed upon mutual agreement
-      prior to exchange of technical materials.
+      CEYO intends to treat inquiries as confidential. Formal nondisclosure agreements (NDAs) may be executed upon mutual agreement prior to exchange of technical materials.
     </p>
   </section>
 
-  <section class="section" id="primary-contact" aria-labelledby="pc-h">
+  <section class="section" id="primary" aria-labelledby="pc-h">
     <div class="section-label">[Primary contact]</div>
-    <h2 class="section-h2" id="pc-h">Primary Contact</h2>
+    <h2 class="section-h2" id="pc-h">Email</h2>
+    <p class="section-body">
+      <span style="font-family:'IBM Plex Mono',monospace;letter-spacing:.14em;color:var(--ivory);">contact@nadir-ai.com</span>
+    </p>
+    <p class="section-body">
+      Subject line guidance:
+    </p>
+    <ul class="not-list" aria-label="Subject line guidance">
+      <li>Controlled Review Request</li>
+      <li>Deployment Inquiry</li>
+      <li>Institutional Partnership</li>
+      <li>Licensing Discussion</li>
+      <li>Security / Vulnerability Report</li>
+    </ul>
+  </section>
 
-    <div class="grid-2" role="list" aria-label="Contact channels">
-      <div class="card" role="listitem">
-        <div class="card-label">Email</div>
-        <div class="card-text">
-          <span class="mono" style="letter-spacing:.14em;color:var(--ivory);">contact@nadir-ai.com</span>
-        </div>
-      </div>
-      <div class="card" role="listitem">
-        <div class="card-label">Subject line guidance</div>
-        <div class="card-text">
-          <div class="mono" style="font-size:11px;letter-spacing:.10em;color:var(--muted2);line-height:1.65;">
-            Controlled Review Request<br>
-            Deployment Inquiry<br>
-            Institutional Partnership<br>
-            Licensing Discussion<br>
-            Security / Vulnerability Report
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="form" role="region" aria-label="Contact form">
-      <div class="form-head">Inquiry routing (optional)</div>
-      <div class="form-body">
-        <div class="fg">
-          <label for="name">Name</label>
-          <input id="name" name="name" autocomplete="name" placeholder="">
-        </div>
-        <div class="fg">
-          <label for="email">Email</label>
-          <input id="email" name="email" autocomplete="email" placeholder="">
-        </div>
-        <div class="fg">
-          <label for="org">Institution</label>
-          <input id="org" name="org" autocomplete="organization" placeholder="">
-        </div>
-        <div class="fg">
-          <label for="type">Inquiry type</label>
-          <select id="type" name="type">
-            <option>Controlled Review Request</option>
-            <option>Deployment Inquiry</option>
-            <option>Institutional Partnership</option>
-            <option>Licensing Discussion</option>
-            <option>Security / Vulnerability Report</option>
-            <option>Other</option>
-          </select>
-        </div>
-        <div class="fg full">
-          <label for="msg">Message</label>
-          <textarea id="msg" name="msg" placeholder=""></textarea>
-          <div class="helper">
-            Submission does not grant access to controlled materials. Technical specifics are shared under executed agreement and authorized disclosure scope.
-          </div>
-        </div>
-      </div>
-      <div class="form-actions">
-        <a class="btn primary" href="mailto:contact@nadir-ai.com?subject=Controlled%20Review%20Request">Email Contact</a>
-        <a class="btn" href="#controlled-review">Review Scope</a>
-      </div>
-    </div>
-
+  <div class="boundary-section">
     <div class="boundary-wrap" role="region" aria-label="Boundary position">
-      <div class="boundary-lbl">Boundary Position</div>
+      <div class="boundary-lbl">Boundary Position &nbsp;·&nbsp; V2026.02.19</div>
 
-      <p class="bi">
+      <p class="section-body" style="margin-bottom:10px;max-width:none;">
         Public pages are descriptive only. Technical specifics and operational materials are shared under controlled conditions.
       </p>
-      <p class="bi">
+      <p class="section-body" style="margin-bottom:18px;max-width:none;">
         Engagement does not imply certification, compliance endorsement, or regulatory authority.
       </p>
 
-      <div class="boundary-close">Public materials remain descriptive. Operational specifics are shared under controlled review.</div>
-    </div>
+      <div class="boundary-items">
+        <p class="bi">Controlled review does not constitute license or deployment authorization.</p>
+        <p class="bi">Public documentation does not grant usage rights absent written agreement.</p>
+        <p class="bi">CEYO does not certify regulatory compliance or guarantee legal admissibility.</p>
+        <p class="bi">Operational terms are defined exclusively through executed written agreements.</p>
+      </div>
 
-  </section>
+      <p class="boundary-close">Engagement is evaluative. Authority remains institutional.</p>
+    </div>
+  </div>
 
 </main>
 
@@ -331,7 +310,7 @@ document.addEventListener('mousemove',e=>{
 });
 document.addEventListener('mouseleave',()=>{cursor.style.opacity='0';spotlight.style.background='none';});
 document.addEventListener('mouseenter',()=>{cursor.style.opacity='1';});
-document.querySelectorAll('a,button,.card,.btn,.index-item').forEach(el=>{
+document.querySelectorAll('a,button,.btn,.index-item,select,input,textarea').forEach(el=>{
   el.addEventListener('mouseenter',()=>cursor.classList.add('hover'));
   el.addEventListener('mouseleave',()=>cursor.classList.remove('hover'));
 });
@@ -339,10 +318,10 @@ document.querySelectorAll('a,button,.card,.btn,.index-item').forEach(el=>{
 const heroH1=document.getElementById('hero-h1');
 const heroWrap=document.querySelector('.hero-sticky-wrap');
 function onScroll(){
-  const pct=Math.min(window.scrollY/(heroWrap.offsetHeight*0.45),1);
-  heroH1.style.opacity=Math.max(0,1-pct*1.15);
-  heroH1.style.filter=`blur(${pct*10}px)`;
-  heroH1.style.transform=`translateY(${pct*-18}px)`;
+  const pct=Math.min(window.scrollY/(heroWrap.offsetHeight*0.42),1);
+  heroH1.style.opacity=Math.max(0,1-pct*1.2);
+  heroH1.style.filter=`blur(${pct*12}px)`;
+  heroH1.style.transform=`translateY(${pct*-22}px)`;
 }
 window.addEventListener('scroll',onScroll,{passive:true});
 
@@ -355,7 +334,6 @@ const focusObs=new IntersectionObserver(entries=>{
 },{threshold:0.10});
 sections.forEach(s=>focusObs.observe(s));
 
-@keyframes cursor-blink{0%,100%{opacity:1}50%{opacity:0}}
 function typewrite(el,text,speed){
   const original=text||el.textContent;
   el.textContent='';
@@ -366,7 +344,6 @@ function typewrite(el,text,speed){
     if(i>=original.length){clearInterval(iv);el.classList.remove('typewrite-cursor');}
   },speed||18);
 }
-
 const typeObs=new IntersectionObserver(entries=>{
   entries.forEach(e=>{
     if(e.isIntersecting&&!e.target.dataset.typed){
@@ -387,7 +364,7 @@ const h2obs=new IntersectionObserver(entries=>{
 },{threshold:0.5});
 document.querySelectorAll('.section-h2').forEach(h=>h2obs.observe(h));
 
-document.querySelectorAll('.btn,.card,.index-item').forEach(el=>{
+document.querySelectorAll('.btn,.index-item').forEach(el=>{
   el.addEventListener('touchstart',()=>{el.style.background='var(--ivory)';el.style.color='var(--bg)';},{passive:true});
   el.addEventListener('touchend',()=>{setTimeout(()=>{el.style.background='';el.style.color='';},180);},{passive:true});
 });
