@@ -2,359 +2,653 @@
 <html lang="en">
 <head>
   <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>CEYO — Contact</title>
-  <meta name="description" content="CEYO engagement channel for controlled review requests, deployment inquiries, and institutional partnerships."/>
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+  <title>CEYO — Controlled Review</title>
+  <meta name="description" content="Request controlled review. Public pages are descriptive only. Technical specifics shared under controlled conditions."/>
+  <meta name="theme-color" content="#060A13"/>
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;900&family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@300;400;500;600&family=Outfit:ital,wght@0,700;0,900;1,900&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+
   <style>
-:root{--bg:#0D0E0B;--ivory:#FFFFF0;--green:#4A5D3B;--green2:#5E7A4A;--text:rgba(255,255,240,.88);--muted:rgba(255,255,240,.52);--muted2:rgba(255,255,240,.30);--stroke:rgba(255,255,240,.12);--stroke2:rgba(255,255,240,.06);}
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;}
-body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-serif;overflow-x:hidden;min-height:100vh;cursor:none;}
-body::before{content:'';position:fixed;inset:0;z-index:9000;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");opacity:0.04;}
-a{color:inherit;text-decoration:none;}
-#cursor{position:fixed;top:0;left:0;z-index:9999;width:8px;height:8px;background:var(--ivory);border-radius:50%;pointer-events:none;transform:translate(-50%,-50%);transition:transform .08s ease,width .12s ease,height .12s ease;mix-blend-mode:exclusion;}
-#cursor.hover{width:36px;height:36px;opacity:.5;}
-#spotlight{position:fixed;inset:0;z-index:1;pointer-events:none;}
-.topnav{position:fixed;top:0;left:0;right:0;z-index:500;display:flex;align-items:center;justify-content:space-between;padding:20px 40px;background:linear-gradient(to bottom,rgba(13,14,11,.95) 0%,transparent 100%);}
-.brand{font-family:'Outfit',sans-serif;font-weight:900;font-style:italic;font-size:22px;letter-spacing:-.03em;color:var(--ivory);text-transform:uppercase;}
-.brand span{color:var(--green2);}
-.topnav-right{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.20em;text-transform:uppercase;color:var(--muted2);display:flex;gap:28px;}
-.topnav-right a{color:var(--muted2);transition:color .12s;}
-.topnav-right a:hover{color:var(--ivory);}
-.index-bar{position:fixed;bottom:0;left:0;right:0;z-index:500;display:flex;align-items:stretch;height:44px;background:#000;border-top:1px solid var(--stroke);}
-.index-item{flex:1;display:flex;align-items:center;justify-content:center;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.20em;text-transform:uppercase;color:var(--muted2);border-right:1px solid var(--stroke);transition:color .12s,background .12s;}
-.index-item:last-child{border-right:none;}
-.index-item:hover,.index-item.active{color:var(--ivory);background:rgba(255,255,240,.04);}
+    :root{
+      --navy:#060A13;
+      --navy2:#0B1220;
+      --ivory:#F4F0E6;
+      --royal:#2D67FF;
+      --royal-glow: rgba(45,103,255,0.40);
+      --text:rgba(244,240,230,.92);
+      --muted:rgba(244,240,230,.56);
+      --stroke:rgba(244,240,230,.10);
+      --brandFont:'Outfit', system-ui, sans-serif;
+      --monoFont:'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --bodyFont:'Inter', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    }
 
-.hero-sticky-wrap{position:relative;height:160vh;}
-.hero-sticky{position:sticky;top:0;height:100vh;display:flex;flex-direction:column;justify-content:center;padding:100px 40px 80px;overflow:hidden;z-index:2;}
-.hero-sticky::after{content:'';position:absolute;left:0;right:0;bottom:0;height:55%;background:linear-gradient(to bottom,transparent,var(--bg) 90%);pointer-events:none;}
-.hero-version{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--green);margin-bottom:24px;display:flex;align-items:center;gap:12px;}
-.hero-version::before{content:'';display:inline-block;width:28px;height:1px;background:var(--green);}
-.hero-h1{font-family:'Outfit',sans-serif;font-weight:900;font-style:italic;font-size:clamp(52px,9.5vw,120px);letter-spacing:-.05em;line-height:.92;text-transform:uppercase;color:var(--ivory);max-width:900px;will-change:transform,opacity,filter;}
-.hero-h1 .accent{color:var(--green2);}
-.hero-lead-wrap{margin-top:36px;max-width:700px;}
-.hero-lead{font-size:15px;line-height:1.75;color:var(--muted);font-weight:300;}
-.hero-cta-row{margin-top:28px;display:flex;gap:12px;flex-wrap:wrap;}
-.btn{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;padding:12px 24px;border:1px solid var(--stroke);color:var(--muted);background:transparent;cursor:pointer;display:inline-block;transition:all .15s;}
-.btn:hover,.btn:active{background:var(--ivory);color:var(--bg);border-color:var(--ivory);}
-.btn.primary{border-color:var(--green);color:var(--green2);background:rgba(74,93,59,.1);}
-.btn.primary:hover{background:var(--green);color:var(--ivory);}
-.scroll-hint{position:absolute;bottom:80px;left:40px;font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.20em;text-transform:uppercase;color:var(--muted2);display:flex;align-items:center;gap:10px;animation:blink 2.4s ease-in-out infinite;}
-.scroll-hint::before{content:'';display:block;width:1px;height:32px;background:var(--muted2);animation:grow-line 2.4s ease-in-out infinite;}
-@keyframes blink{0%,100%{opacity:.3}50%{opacity:.9}}
-@keyframes grow-line{0%,100%{transform:scaleY(.3);transform-origin:top}50%{transform:scaleY(1)}}
+    html{scroll-behavior:smooth; background:var(--navy);}
+    body{
+      margin:0; background:var(--navy); color:var(--text);
+      font-family:var(--bodyFont); overflow-x:hidden; cursor:none;
+    }
+    @media (pointer: coarse){
+      body{ cursor:auto; }
+      #cursor{ display:none; }
+    }
 
-.content-scroll{position:relative;z-index:10;background:var(--bg);padding-bottom:64px;}
-.section{padding:80px 40px;border-top:1px solid var(--stroke2);max-width:1160px;margin:0 auto;opacity:0;transform:translateY(20px);transition:opacity .6s ease,transform .6s ease,border-top-color .4s ease,background .4s ease;}
-.section.visible{opacity:1;transform:translateY(0);}
-.section.focus{border-top-color:var(--ivory);background:rgba(255,255,240,.012);}
-.section-label{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--green);margin-bottom:20px;display:flex;align-items:center;gap:12px;}
-.section-label::after{content:'';flex:1;height:1px;background:linear-gradient(to right,var(--green),transparent);max-width:120px;}
-.section-h2{font-family:'Outfit',sans-serif;font-weight:900;font-style:italic;font-size:clamp(28px,4.5vw,56px);letter-spacing:-.04em;line-height:1.0;text-transform:uppercase;color:var(--ivory);margin-bottom:28px;}
-.section-body{font-size:15px;line-height:1.8;color:var(--muted);max-width:64ch;margin-bottom:14px;}
+    /* Background (same palette, different emphasis) */
+    #stage{
+      position:fixed; inset:0; z-index:0; pointer-events:none;
+      background:
+        radial-gradient(1050px 700px at 72% 78%, rgba(45,103,255,.11), transparent 62%),
+        radial-gradient(900px 520px at 22% 24%, rgba(45,103,255,.06), transparent 66%),
+        linear-gradient(180deg, var(--navy2), var(--navy));
+    }
+    #gl{ width:100%; height:100%; display:block; }
 
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:start;}
-.list{list-style:none;display:flex;flex-direction:column;gap:10px;}
-.list li{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.08em;color:var(--muted2);padding-left:22px;position:relative;line-height:1.55;}
-.list li::before{content:'·';position:absolute;left:0;color:var(--green2);font-size:16px;line-height:1.4;}
-.callout{margin-top:18px;padding:18px;border:1px solid rgba(74,93,59,.4);background:rgba(74,93,59,.06);}
-.callout p{font-size:13px;color:var(--muted);line-height:1.7;}
+    /* Grain */
+    #grain{
+      position:fixed; inset:0; z-index:2; pointer-events:none; opacity:.05;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='320' height='320'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='320' height='320' filter='url(%23n)'/%3E%3C/svg%3E");
+    }
 
-.form{margin-top:18px;border:1px solid var(--stroke);}
-.form-row{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--stroke);}
-.form-cell{background:var(--bg);padding:16px 18px;}
-.form-cell.full{grid-column:1/-1;}
-.label{display:block;font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:var(--muted2);margin-bottom:10px;}
-.input,.select,.textarea{width:100%;background:rgba(255,255,240,.02);border:1px solid var(--stroke2);color:var(--ivory);padding:12px 12px;font-family:'Inter',system-ui,sans-serif;font-size:13px;outline:none;transition:border-color .15s,background .15s;}
-.textarea{min-height:130px;resize:vertical;line-height:1.6;}
-.input:focus,.select:focus,.textarea:focus{border-color:rgba(255,255,240,.22);background:rgba(255,255,240,.03);}
-.form-note{padding:14px 18px;border-top:1px solid var(--stroke2);font-size:12px;line-height:1.65;color:var(--muted2);}
-.form-actions{padding:16px 18px;border-top:1px solid var(--stroke2);display:flex;gap:12px;flex-wrap:wrap;align-items:center;justify-content:flex-start;}
+    /* Cursor */
+    #cursor{
+      position:fixed; z-index:9999; width:10px; height:10px; border-radius:50%;
+      background:var(--ivory); mix-blend-mode:difference; pointer-events:none;
+      transform:translate(-50%,-50%);
+      transition: width .16s ease, height .16s ease, opacity .16s ease;
+    }
+    #cursor.big{ width:42px; height:42px; opacity:.55; background: var(--royal); }
 
-.boundary-section{max-width:1160px;margin:0 auto;padding:0 40px 80px;}
-.boundary-wrap{border:1px solid var(--stroke);padding:28px 32px;background:rgba(255,255,240,.015);}
-.boundary-lbl{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.24em;text-transform:uppercase;color:var(--muted2);margin-bottom:20px;display:flex;align-items:center;gap:12px;}
-.boundary-lbl::before{content:'';width:20px;height:1px;background:var(--muted2);}
-.boundary-items{display:grid;grid-template-columns:1fr 1fr;gap:10px 40px;}
-.bi{font-size:12px;color:var(--muted2);line-height:1.65;padding-left:16px;position:relative;}
-.bi::before{content:'·';position:absolute;left:0;}
-.boundary-close{margin-top:20px;padding-top:20px;border-top:1px solid var(--stroke2);font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.08em;color:var(--muted2);}
+    /* Nav */
+    #topnav{
+      position:fixed; top:0; left:0; right:0; z-index:50;
+      padding: 22px 32px;
+      display:flex; justify-content:space-between; align-items:center;
+      transition: background .25s ease, border-color .25s ease, backdrop-filter .25s ease;
+      border-bottom:1px solid transparent;
+    }
+    #topnav.scrolled{
+      background: rgba(6,10,19,.70);
+      backdrop-filter: blur(14px);
+      border-bottom-color: rgba(244,240,230,.08);
+    }
 
-@keyframes cursor-blink{0%,100%{opacity:1}50%{opacity:0}}
-.typewrite-cursor::after{content:'|';animation:cursor-blink .7s ease-in-out infinite;color:var(--green);}
+    /* Buttons */
+    .btn{
+      display:inline-flex; align-items:center; justify-content:center;
+      font-family:var(--monoFont);
+      font-size:10px;
+      letter-spacing:.20em;
+      text-transform:uppercase;
+      border-radius:999px;
+      padding: 16px 32px;
+      border:1px solid var(--stroke);
+      transition: transform .18s ease, box-shadow .18s ease, background .18s ease, border-color .18s ease, color .18s ease;
+      user-select:none;
+    }
+    .btn.primary{
+      background: var(--royal);
+      border-color: rgba(45,103,255,.85);
+      color: #fff;
+    }
+    .btn:hover{
+      transform: translateY(-1px);
+      box-shadow: 0 0 26px var(--royal-glow);
+      border-color: rgba(45,103,255,.75);
+    }
+    .btn.ghost:hover{ background: rgba(244,240,230,.05); }
 
-@media(max-width:880px){
-  .grid2{grid-template-columns:1fr;}
-  .form-row{grid-template-columns:1fr;}
-  .topnav,.section{padding-left:20px;padding-right:20px;}
-  .hero-sticky{padding:90px 20px 70px;}
-  .scroll-hint{left:20px;}
-  .boundary-section{padding-left:20px;padding-right:20px;}
-  .boundary-items{grid-template-columns:1fr;}
-}
-@media(max-width:500px){
-  .topnav-right{display:none;}
-  .hero-cta-row{flex-direction:column;}
-}
-@media print{
-  body{background:#fff;color:#000;cursor:auto;}
-  #cursor,#spotlight,.topnav,.index-bar,.hero-sticky-wrap,.scroll-hint,body::before{display:none;}
-  .section{opacity:1;transform:none;}
-}
+    /* Contact surfaces (unique to this page) */
+    .panel{
+      border: 1px solid var(--stroke);
+      background: rgba(11,18,32,0.38);
+      backdrop-filter: blur(10px);
+      border-radius: 18px;
+    }
+    .panel.soft{
+      background: rgba(244,240,230,0.03);
+    }
+    .rule{
+      height:1px; background: var(--stroke);
+    }
+    .mono-kicker{
+      font-family:var(--monoFont);
+      font-size:10px;
+      letter-spacing:.40em;
+      text-transform:uppercase;
+      color: rgba(45,103,255,.95);
+    }
+    .h1{
+      font-family: var(--brandFont);
+      font-weight: 900;
+      font-size: clamp(44px, 7.6vw, 96px);
+      line-height: 0.92;
+      letter-spacing: -0.05em;
+      text-transform: uppercase;
+    }
+    .h2{
+      font-family: var(--brandFont);
+      font-weight: 900;
+      font-style: italic;
+      font-size: clamp(22px, 3.6vw, 44px);
+      line-height: 1.05;
+      letter-spacing: -0.03em;
+      text-transform: uppercase;
+    }
+    .field{
+      width:100%;
+      border:1px solid rgba(244,240,230,.10);
+      background: rgba(6,10,19,.55);
+      color: rgba(244,240,230,.92);
+      border-radius: 14px;
+      padding: 14px 14px;
+      outline: none;
+      transition: border-color .16s ease, box-shadow .16s ease, background .16s ease;
+    }
+    .field:focus{
+      border-color: rgba(45,103,255,.65);
+      box-shadow: 0 0 0 4px rgba(45,103,255,.12);
+      background: rgba(6,10,19,.72);
+    }
+    .label{
+      font-family:var(--monoFont);
+      font-size:10px;
+      letter-spacing:.22em;
+      text-transform:uppercase;
+      color: rgba(244,240,230,.62);
+    }
+    .hint{
+      font-size:12px;
+      color: rgba(244,240,230,.50);
+      line-height: 1.65;
+    }
+
+    /* Bottom bar */
+    #bottombar{
+      position:fixed; bottom:0; left:0; right:0; z-index:50;
+      height:56px;
+      background: rgba(6,10,19,.88);
+      backdrop-filter: blur(12px);
+      border-top: 1px solid var(--stroke);
+      display:flex;
+      font-family: var(--monoFont);
+      font-size: 9px;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+    }
+    #bottombar a{
+      flex:1; display:flex; align-items:center; justify-content:center;
+      border-right: 1px solid var(--stroke);
+      transition: background .16s ease, color .16s ease;
+      color: rgba(244,240,230,.70);
+    }
+    #bottombar a:last-child{ border-right:none; }
+    #bottombar a:hover{ background: rgba(244,240,230,.05); color: rgba(244,240,230,.92); }
+    #bottombar a.active{
+      color: rgba(244,240,230,.92);
+      box-shadow: inset 0 2px 0 rgba(45,103,255,.95);
+    }
+
+    .section-pad{ padding-top: 10.5rem; padding-bottom: 10.5rem; }
+    @media (max-width: 640px){
+      .section-pad{ padding-top: 8rem; padding-bottom: 8rem; }
+      #topnav{ padding: 18px 18px; }
+    }
   </style>
 </head>
+
 <body>
-<div id="cursor" aria-hidden="true"></div>
-<div id="spotlight" aria-hidden="true"></div>
+  <div id="stage" aria-hidden="true"><canvas id="gl"></canvas></div>
+  <div id="grain" aria-hidden="true"></div>
+  <div id="cursor" aria-hidden="true"></div>
 
-<nav class="topnav" aria-label="Primary navigation">
-  <a href="index.html" class="brand">CE<span>YO</span></a>
-  <div class="topnav-right">
-    <a href="platform.html">Architecture</a>
-    <a href="trust.html">Trust</a>
-    <a href="governance.html">Governance</a>
-    <a href="contact.html" aria-current="page">Contact</a>
-  </div>
-</nav>
-
-<div class="hero-sticky-wrap" aria-label="Hero">
-  <div class="hero-sticky" id="hero-sticky">
-    <div class="hero-version" id="hw1">V2026.02.19 &nbsp;·&nbsp; Institutional engagement</div>
-    <h1 class="hero-h1" id="hero-h1">Contact<br><span class="accent">CEYO</span></h1>
-    <div class="hero-lead-wrap">
-      <p class="hero-lead" id="hw2">
-        CEYO engages with regulated operators, institutional oversight bodies, and organizations conducting structured review of AI inference systems.
-        Public materials remain intentionally high-level. Operational specifics, technical documentation, and deployment discussions occur under controlled review.
-      </p>
-      <div class="hero-cta-row" id="hw4">
-        <a class="btn primary" href="#request">Submit Inquiry</a>
-        <a class="btn" href="#primary">Primary Contact</a>
-      </div>
+  <nav id="topnav" aria-label="Primary navigation">
+    <div class="flex items-baseline gap-4">
+      <a href="index.html" class="font-[var(--brandFont)] font-black text-2xl italic nav-exit">CEYO</a>
+      <span class="font-mono text-[9px] tracking-[0.30em] opacity-40 uppercase">Evidentiary Layer</span>
     </div>
-    <div class="scroll-hint" aria-hidden="true">Scroll to continue</div>
-  </div>
-</div>
 
-<main class="content-scroll">
+    <div class="hidden md:flex gap-8 font-mono text-[10px] tracking-widest uppercase opacity-60">
+      <a href="platform.html" class="nav-exit hover:text-[var(--royal)] transition-colors">Architecture</a>
+      <a href="trust.html" class="nav-exit hover:text-[var(--royal)] transition-colors">Trust</a>
+      <a href="governance.html" class="nav-exit hover:text-[var(--royal)] transition-colors">Governance</a>
+      <a href="contact.html" class="hover:text-[var(--royal)] transition-colors">Contact</a>
+    </div>
+  </nav>
 
-  <section class="section" id="request" aria-labelledby="rq-h">
-    <div class="section-label">[Engagement channel]</div>
-    <h2 class="section-h2" id="rq-h">Controlled Review Requests</h2>
-    <p class="section-body">
-      Institutions seeking technical evaluation may request controlled review access. Controlled review does not constitute license or deployment authorization.
-    </p>
+  <main class="relative z-10 max-w-7xl mx-auto px-6">
+    <!-- HERO -->
+    <section class="min-h-[92vh] flex items-center pt-28">
+      <div class="grid lg:grid-cols-12 gap-10 w-full">
+        <div class="lg:col-span-7">
+          <div class="mono-kicker mb-6">Controlled Review Intake</div>
+          <h1 class="h1 mb-7">
+            Request<br/>
+            <span class="italic" style="color: var(--royal);">Controlled</span><br/>
+            Access
+          </h1>
 
-    <div class="grid2">
-      <div>
-        <p class="section-body">Controlled review may include:</p>
-        <ul class="list" aria-label="Controlled review may include">
-          <li>Technical Requirements access</li>
-          <li>Policy schema review</li>
-          <li>Verification contract review</li>
-          <li>Reference benchmark discussion</li>
-          <li>Architecture Q&amp;A</li>
-        </ul>
-        <div class="callout">
-          <p>Public documentation is descriptive. Operational specifications and deployment details are shared under executed review agreement.</p>
+          <p class="text-[var(--muted)] text-lg leading-loose max-w-2xl">
+            Public pages are descriptive only. Technical specifics and operational materials are shared under controlled conditions.
+          </p>
+          <p class="text-[var(--muted)] text-lg leading-loose max-w-2xl mt-4">
+            Engagement does not imply certification, compliance endorsement, or regulatory authority.
+          </p>
+
+          <div class="mt-10 flex gap-4 flex-wrap">
+            <a href="#intake" class="btn primary">Start Intake</a>
+            <a href="#scope" class="btn ghost">Review Scope</a>
+          </div>
+
+          <div class="mt-10 panel soft p-6">
+            <div class="label mb-3">What you receive</div>
+            <div class="grid sm:grid-cols-2 gap-3 text-[11px] font-mono uppercase tracking-wider">
+              <div class="text-[rgba(244,240,230,.70)]">• Technical Requirements access</div>
+              <div class="text-[rgba(244,240,230,.70)]">• Policy schema review</div>
+              <div class="text-[rgba(244,240,230,.70)]">• Verification contract review</div>
+              <div class="text-[rgba(244,240,230,.70)]">• Architecture Q&amp;A</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- RIGHT COLUMN: contact methods (unique layout; not index hero) -->
+        <div class="lg:col-span-5">
+          <div class="panel p-7">
+            <div class="flex items-center justify-between">
+              <div class="label">Preferred channel</div>
+              <div class="label" style="color: rgba(45,103,255,.90);">V2026.02.19</div>
+            </div>
+            <div class="rule my-5"></div>
+
+            <div class="space-y-5">
+              <div>
+                <div class="text-sm font-semibold uppercase italic">Email</div>
+                <div class="hint mt-2">
+                  Set your intake address in one place. This page will route requests without changing layout.
+                </div>
+                <div class="mt-3 flex gap-3 flex-wrap">
+                  <a class="btn ghost nav-exit" href="mailto:contact@ceyo.example">Email Intake</a>
+                  <button class="btn ghost" type="button" onclick="copyEmail()">Copy Address</button>
+                </div>
+                <div class="hint mt-3">
+                  Replace <span class="font-mono opacity-80">contact@ceyo.example</span> with your real inbox.
+                </div>
+              </div>
+
+              <div class="rule"></div>
+
+              <div>
+                <div class="text-sm font-semibold uppercase italic">Response discipline</div>
+                <div class="hint mt-2">
+                  Requests are triaged by operational fit and disclosure tier. You will receive either a controlled review path or a decline.
+                </div>
+              </div>
+
+              <div class="rule"></div>
+
+              <div>
+                <div class="text-sm font-semibold uppercase italic">Disclosure tiers</div>
+                <div class="hint mt-2">
+                  Public / Redacted materials may be shared broadly. Controlled Review materials require declared scope, responsible party, and a verification purpose.
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-5 panel p-7">
+            <div class="label mb-4">Minimum signal</div>
+            <div class="grid grid-cols-2 gap-3 text-[11px] font-mono uppercase tracking-wider text-[rgba(244,240,230,.70)]">
+              <div>• Organization</div>
+              <div>• Use case</div>
+              <div>• Contact role</div>
+              <div>• Review purpose</div>
+            </div>
+          </div>
         </div>
       </div>
+    </section>
 
-      <div aria-label="Inquiry form">
-        <p class="section-body" style="max-width:64ch;">
-          Route your request for controlled review, deployment inquiry, institutional partnership, licensing discussion, or security reporting.
-        </p>
+    <!-- INTAKE -->
+    <section id="intake" class="section-pad">
+      <div class="grid lg:grid-cols-12 gap-10 items-start">
+        <div class="lg:col-span-5">
+          <div class="mono-kicker mb-4">Intake</div>
+          <h2 class="h2 mb-6">Controlled Review Request</h2>
+          <p class="text-[var(--muted)] leading-loose text-lg">
+            Provide only what is necessary to evaluate fit and disclosure tier. Do not include proprietary model weights, private keys, or sensitive personal data.
+          </p>
 
-        <form class="form" action="#" method="post">
-          <div class="form-row">
-            <div class="form-cell">
-              <label class="label" for="name">Name</label>
-              <input class="input" id="name" name="name" type="text" autocomplete="name" />
-            </div>
-            <div class="form-cell">
-              <label class="label" for="email">Email</label>
-              <input class="input" id="email" name="email" type="email" autocomplete="email" />
-            </div>
-            <div class="form-cell">
-              <label class="label" for="org">Institution</label>
-              <input class="input" id="org" name="org" type="text" autocomplete="organization" />
-            </div>
-            <div class="form-cell">
-              <label class="label" for="type">Inquiry type</label>
-              <select class="select" id="type" name="type">
-                <option value="controlled-review">Controlled Review Request</option>
-                <option value="deployment">Deployment Inquiry</option>
-                <option value="partnership">Institutional Partnership</option>
-                <option value="licensing">Licensing Discussion</option>
-                <option value="security">Security / Vulnerability Report</option>
-                <option value="other">Other</option>
-              </select>
-            </div>
-            <div class="form-cell full">
-              <label class="label" for="message">Message</label>
-              <textarea class="textarea" id="message" name="message"></textarea>
+          <div class="mt-10 panel soft p-6">
+            <div class="label mb-3">Boundary position</div>
+            <div class="hint">
+              CEYO produces records. It does not validate correctness, fairness, legality, or compliance outcomes.
+              Authorized institutions and operators retain responsibility for decisions and determinations.
             </div>
           </div>
-          <div class="form-note">
-            Controlled review access and exchange of technical materials may require execution of NDA or written review agreement prior to disclosure.
+        </div>
+
+        <div class="lg:col-span-7">
+          <div class="panel p-7">
+            <div class="flex items-center justify-between">
+              <div class="label">Form</div>
+              <div class="label opacity-60">Public → Controlled</div>
+            </div>
+            <div class="rule my-5"></div>
+
+            <!-- Pure HTML (no backend). Replace action when you wire server-side intake. -->
+            <form action="mailto:contact@ceyo.example" method="post" enctype="text/plain">
+              <div class="grid md:grid-cols-2 gap-4">
+                <div>
+                  <div class="label mb-2">Name</div>
+                  <input class="field" name="name" autocomplete="name" placeholder="Full name" required>
+                </div>
+                <div>
+                  <div class="label mb-2">Email</div>
+                  <input class="field" name="email" type="email" autocomplete="email" placeholder="work@email.com" required>
+                </div>
+                <div>
+                  <div class="label mb-2">Organization</div>
+                  <input class="field" name="org" autocomplete="organization" placeholder="Institution / Company" required>
+                </div>
+                <div>
+                  <div class="label mb-2">Role</div>
+                  <input class="field" name="role" placeholder="Security / Legal / Engineering / Ops" required>
+                </div>
+              </div>
+
+              <div class="mt-4">
+                <div class="label mb-2">Review purpose</div>
+                <select class="field" name="purpose" required>
+                  <option value="" selected disabled>Select one</option>
+                  <option>Institutional verification workflow</option>
+                  <option>Audit / oversight readiness</option>
+                  <option>Incident / post-hoc review architecture</option>
+                  <option>Procurement / evaluation</option>
+                  <option>Other</option>
+                </select>
+              </div>
+
+              <div class="mt-4">
+                <div class="label mb-2">Message</div>
+                <textarea class="field" name="message" rows="6" placeholder="One paragraph. What system class, what verification need, what disclosure constraints." required></textarea>
+                <div class="hint mt-2">
+                  Keep it short. If you need to share operational materials, request Controlled Review.
+                </div>
+              </div>
+
+              <div class="mt-6 flex gap-3 flex-wrap">
+                <button type="submit" class="btn primary">Send Request</button>
+                <a href="#scope" class="btn ghost">Scope & tiers</a>
+              </div>
+
+              <div class="hint mt-5">
+                Replace the mailto target with your intake address or wire this form to your server endpoint.
+              </div>
+            </form>
           </div>
-          <div class="form-actions">
-            <button class="btn primary" type="submit">Submit</button>
-            <a class="btn" href="#primary">Use email</a>
-          </div>
-        </form>
+        </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <section class="section" id="deployment" aria-labelledby="dp-h">
-    <div class="section-label">[Deployment]</div>
-    <h2 class="section-h2" id="dp-h">Deployment Inquiries</h2>
-    <p class="section-body">
-      Organizations exploring pilot integration or phased deployment may submit deployment inquiries. Initial discussions typically address deployment architecture posture, capture policy configuration, infrastructure compatibility, key custody integration, and disclosure tier requirements.
-    </p>
-    <p class="section-body">Deployment terms are defined through written agreement.</p>
-  </section>
+    <!-- SCOPE -->
+    <section id="scope" class="section-pad pt-0">
+      <div class="panel p-7">
+        <div class="grid lg:grid-cols-12 gap-10 items-start">
+          <div class="lg:col-span-5">
+            <div class="mono-kicker mb-4">Scope</div>
+            <h2 class="h2 mb-6">What Controlled Review Covers</h2>
+            <p class="text-[var(--muted)] leading-loose text-lg">
+              Controlled Review can include capture schema, verification procedure, sealing suite, and tiered disclosure structure aligned to institutional workflows.
+            </p>
+          </div>
 
-  <section class="section" id="partnerships" aria-labelledby="ip-h">
-    <div class="section-label">[Institutional]</div>
-    <h2 class="section-h2" id="ip-h">Institutional Partnerships</h2>
-    <p class="section-body">
-      CEYO may engage with regulatory bodies, standards organizations, research institutions, and infrastructure providers. Partnership discussions are evaluated on alignment with CEYO’s integrity and non-adjudication posture.
-    </p>
-  </section>
-
-  <section class="section" id="licensing" aria-labelledby="lc-h">
-    <div class="section-label">[Commercial]</div>
-    <h2 class="section-h2" id="lc-h">Intellectual Property &amp; Licensing</h2>
-    <p class="section-body">
-      Inquiries regarding licensing, intellectual property, or commercial terms should be submitted directly through the contact channel. Public documentation does not grant usage rights.
-    </p>
-  </section>
-
-  <section class="section" id="confidentiality" aria-labelledby="cf-h">
-    <div class="section-label">[Confidentiality]</div>
-    <h2 class="section-h2" id="cf-h">Confidentiality</h2>
-    <p class="section-body">
-      CEYO intends to treat inquiries as confidential. Formal nondisclosure agreements (NDAs) may be executed upon mutual agreement prior to exchange of technical materials.
-    </p>
-  </section>
-
-  <section class="section" id="primary" aria-labelledby="pc-h">
-    <div class="section-label">[Primary contact]</div>
-    <h2 class="section-h2" id="pc-h">Email</h2>
-    <p class="section-body">
-      <span style="font-family:'IBM Plex Mono',monospace;letter-spacing:.14em;color:var(--ivory);">contact@nadir-ai.com</span>
-    </p>
-    <p class="section-body">Subject line guidance:</p>
-    <ul class="list" aria-label="Subject line guidance">
-      <li>Controlled Review Request</li>
-      <li>Deployment Inquiry</li>
-      <li>Institutional Partnership</li>
-      <li>Licensing Discussion</li>
-      <li>Security / Vulnerability Report</li>
-    </ul>
-  </section>
-
-  <div class="boundary-section">
-    <div class="boundary-wrap" role="region" aria-label="Boundary position">
-      <div class="boundary-lbl">Boundary Position &nbsp;·&nbsp; V2026.02.19</div>
-
-      <p class="section-body" style="margin-bottom:10px;max-width:none;">
-        Public pages are descriptive only. Technical specifics and operational materials are shared under controlled conditions.
-      </p>
-      <p class="section-body" style="margin-bottom:18px;max-width:none;">
-        Engagement does not imply certification, compliance endorsement, or regulatory authority.
-      </p>
-
-      <div class="boundary-items">
-        <p class="bi">Controlled review does not constitute license or deployment authorization.</p>
-        <p class="bi">Public documentation does not grant usage rights absent written agreement.</p>
-        <p class="bi">CEYO does not certify regulatory compliance or guarantee legal admissibility.</p>
-        <p class="bi">Operational terms are defined exclusively through executed written agreements.</p>
+          <div class="lg:col-span-7">
+            <div class="grid md:grid-cols-2 gap-4">
+              <div class="panel soft p-6">
+                <div class="label mb-3">Capture scope</div>
+                <div class="hint">
+                  Operator-defined field selection, exclusion, masking, and versioning before artifact generation.
+                </div>
+              </div>
+              <div class="panel soft p-6">
+                <div class="label mb-3">Canonical structure</div>
+                <div class="hint">
+                  Deterministic schema and stable byte representation to support independent recomputation.
+                </div>
+              </div>
+              <div class="panel soft p-6">
+                <div class="label mb-3">Sealing</div>
+                <div class="hint">
+                  Hashing + signature as reference implementations. Suite selection aligned to operational requirements.
+                </div>
+              </div>
+              <div class="panel soft p-6">
+                <div class="label mb-3">Disclosure tiers</div>
+                <div class="hint">
+                  Public / Redacted vs Controlled Review materials. Verification without default exposure of proprietary internals.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
+    </section>
 
-      <p class="boundary-close">Engagement is evaluative. Authority remains institutional.</p>
-    </div>
-  </div>
+    <!-- BOUNDARY + FOOTER (kept consistent) -->
+    <section id="boundary" class="section-pad opacity-60 hover:opacity-100 transition-opacity">
+      <div class="border-t border-[var(--stroke)] pt-12">
+        <div class="font-mono text-[10px] mb-8 uppercase tracking-widest">Boundary Declaration · V2026.02.19</div>
 
-</main>
+        <div class="grid md:grid-cols-2 gap-8 text-[10px] font-mono leading-relaxed uppercase text-[rgba(244,240,230,.70)]">
+          <div class="space-y-4">
+            <p>Public pages are descriptive only. Technical specifics and operational materials are shared under controlled conditions.</p>
+            <p>Engagement does not imply certification, compliance endorsement, or regulatory authority.</p>
+          </div>
+          <div class="space-y-4">
+            <p>CEYO produces records. It does not validate correctness, fairness, legality, or compliance outcomes. Authorized institutions and operators retain responsibility for decisions and determinations.</p>
+            <p>Verification confirms integrity and provenance under policy scope — not correctness of model output. CEYO does not certify regulatory compliance and does not guarantee legal admissibility.</p>
+          </div>
+        </div>
 
-<nav class="index-bar" aria-label="Site index">
-  <a class="index-item" href="index.html">Index</a>
-  <a class="index-item" href="platform.html">Arch</a>
-  <a class="index-item" href="trust.html">Trust</a>
-  <a class="index-item" href="governance.html">Gov</a>
-  <a class="index-item active" href="contact.html">Contact</a>
-</nav>
+        <div class="mt-12 pt-10 border-t border-[var(--stroke)] flex flex-wrap justify-between gap-6 font-mono text-[10px] uppercase tracking-widest opacity-70">
+          <div>© <span id="year">2026</span> CEYO · All Rights Reserved</div>
+          <div class="flex gap-8">
+            <a href="terms.html" class="nav-exit hover:text-[var(--royal)] transition-colors">Terms</a>
+            <a href="privacy.html" class="nav-exit hover:text-[var(--royal)] transition-colors">Privacy</a>
+            <a href="contact.html" class="hover:text-[var(--royal)] transition-colors">Contact</a>
+          </div>
+        </div>
+      </div>
+    </section>
 
-<script>
-const cursor=document.getElementById('cursor');
-const spotlight=document.getElementById('spotlight');
-document.addEventListener('mousemove',e=>{
-  cursor.style.left=e.clientX+'px';
-  cursor.style.top=e.clientY+'px';
-  spotlight.style.background=`radial-gradient(circle 300px at ${e.clientX}px ${e.clientY}px,rgba(255,255,240,.065) 0%,transparent 70%)`;
-});
-document.addEventListener('mouseleave',()=>{cursor.style.opacity='0';spotlight.style.background='none';});
-document.addEventListener('mouseenter',()=>{cursor.style.opacity='1';});
-document.querySelectorAll('a,button,.btn,.index-item,select,input,textarea').forEach(el=>{
-  el.addEventListener('mouseenter',()=>cursor.classList.add('hover'));
-  el.addEventListener('mouseleave',()=>cursor.classList.remove('hover'));
-});
+    <div style="height:72px"></div>
+  </main>
 
-const heroH1=document.getElementById('hero-h1');
-const heroWrap=document.querySelector('.hero-sticky-wrap');
-function onScroll(){
-  const pct=Math.min(window.scrollY/(heroWrap.offsetHeight*0.42),1);
-  heroH1.style.opacity=Math.max(0,1-pct*1.2);
-  heroH1.style.filter=`blur(${pct*12}px)`;
-  heroH1.style.transform=`translateY(${pct*-22}px)`;
-}
-window.addEventListener('scroll',onScroll,{passive:true});
+  <nav id="bottombar" aria-label="Site index">
+    <a href="index.html" class="nav-exit">INDEX</a>
+    <a href="platform.html" class="nav-exit">ARCH</a>
+    <a href="trust.html" class="nav-exit">TRUST</a>
+    <a href="governance.html" class="nav-exit">GOV</a>
+    <a href="contact.html" class="active">CONTACT</a>
+  </nav>
 
-const sections=document.querySelectorAll('.section');
-const focusObs=new IntersectionObserver(entries=>{
-  entries.forEach(e=>{
-    if(e.isIntersecting){e.target.classList.add('visible','focus');}
-    else{e.target.classList.remove('focus');}
-  });
-},{threshold:0.10});
-sections.forEach(s=>focusObs.observe(s));
+  <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
 
-function typewrite(el,text,speed){
-  const original=text||el.textContent;
-  el.textContent='';
-  el.classList.add('typewrite-cursor');
-  let i=0;
-  const iv=setInterval(()=>{
-    el.textContent+=original[i];i++;
-    if(i>=original.length){clearInterval(iv);el.classList.remove('typewrite-cursor');}
-  },speed||18);
-}
-const typeObs=new IntersectionObserver(entries=>{
-  entries.forEach(e=>{
-    if(e.isIntersecting&&!e.target.dataset.typed){
-      e.target.dataset.typed='1';
-      typewrite(e.target,e.target.textContent,12);
+  <script>
+    gsap.registerPlugin(ScrollTrigger);
+
+    /* Cursor */
+    const cursor = document.getElementById('cursor');
+    if (window.matchMedia("(pointer: fine)").matches){
+      document.addEventListener('mousemove', (e) => {
+        gsap.to(cursor, {x: e.clientX, y: e.clientY, duration: 0.10, overwrite:true});
+      }, {passive:true});
+      document.querySelectorAll('a, button, input, textarea, select').forEach(el => {
+        el.addEventListener('mouseenter', () => cursor.classList.add('big'), {passive:true});
+        el.addEventListener('mouseleave', () => cursor.classList.remove('big'), {passive:true});
+      });
     }
-  });
-},{threshold:0.7});
-document.querySelectorAll('.hero-version').forEach(t=>typeObs.observe(t));
 
-const h2obs=new IntersectionObserver(entries=>{
-  entries.forEach(e=>{
-    if(e.isIntersecting&&!e.target.dataset.typed){
-      e.target.dataset.typed='1';
-      typewrite(e.target,e.target.textContent,22);
+    /* Top nav scroll */
+    const topnav = document.getElementById('topnav');
+    window.addEventListener('scroll', () => {
+      topnav.classList.toggle('scrolled', window.scrollY > 24);
+    }, {passive:true});
+
+    /* Year */
+    document.getElementById("year").textContent = new Date().getFullYear();
+
+    /* Copy email */
+    function copyEmail(){
+      const email = "contact@ceyo.example";
+      if (navigator.clipboard && window.isSecureContext){
+        navigator.clipboard.writeText(email);
+      } else {
+        const t = document.createElement('textarea');
+        t.value = email;
+        t.style.position = 'fixed';
+        t.style.left = '-9999px';
+        document.body.appendChild(t);
+        t.focus(); t.select();
+        try { document.execCommand('copy'); } catch(e){}
+        document.body.removeChild(t);
+      }
     }
-  });
-},{threshold:0.5});
-document.querySelectorAll('.section-h2').forEach(h=>h2obs.observe(h));
-</script>
+    window.copyEmail = copyEmail;
 
+    /* ===== Minimal THREE/GSAP motion (keeps your system alive, lighter than index) ===== */
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(70, window.innerWidth/window.innerHeight, 0.1, 260);
+    const renderer = new THREE.WebGLRenderer({
+      canvas: document.getElementById('gl'),
+      alpha: true,
+      antialias: true,
+      powerPreference:"high-performance"
+    });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+
+    const nodeCount = 180;
+    const bounds = 14;
+    const positions = new Float32Array(nodeCount * 3);
+    const velocities = new Float32Array(nodeCount * 3);
+
+    for (let i=0; i<nodeCount; i++){
+      const k = i*3;
+      positions[k+0] = (Math.random()-0.5) * bounds*2;
+      positions[k+1] = (Math.random()-0.5) * bounds*2;
+      positions[k+2] = (Math.random()-0.5) * bounds*2;
+
+      velocities[k+0] = (Math.random()-0.5) * 0.020;
+      velocities[k+1] = (Math.random()-0.5) * 0.020;
+      velocities[k+2] = (Math.random()-0.5) * 0.020;
+    }
+
+    const pointsGeo = new THREE.BufferGeometry();
+    pointsGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+    const pointsMat = new THREE.PointsMaterial({
+      color: 0x2D67FF,
+      size: 0.060,
+      transparent: true,
+      opacity: 0.90,
+      depthWrite: false
+    });
+    const points = new THREE.Points(pointsGeo, pointsMat);
+    scene.add(points);
+
+    // faint core
+    const coreGeometry = new THREE.IcosahedronGeometry(2.2, 1);
+    const coreMaterial = new THREE.MeshBasicMaterial({
+      color: 0x2D67FF,
+      wireframe: true,
+      transparent: true,
+      opacity: 0.22
+    });
+    const coreBall = new THREE.Mesh(coreGeometry, coreMaterial);
+    scene.add(coreBall);
+
+    camera.position.z = 18;
+
+    let targetRotX = 0, targetRotY = 0;
+    if (window.matchMedia("(pointer: fine)").matches){
+      window.addEventListener('mousemove', (e) => {
+        const nx = (e.clientX / window.innerWidth) * 2 - 1;
+        const ny = (e.clientY / window.innerHeight) * 2 - 1;
+        targetRotY = nx * 0.12;
+        targetRotX = ny * 0.07;
+      }, {passive:true});
+    }
+
+    const state = { burst: 0.0 };
+
+    function explode(duration=0.55){
+      gsap.to(state, { burst: 1.0, duration, ease: "power2.out" });
+      gsap.to(state, { burst: 0.0, duration: 0.9, ease: "power2.out", delay: 0.25 });
+      gsap.to(camera.position, { z: 22.0, duration, ease: "power2.out" });
+      gsap.to(camera.position, { z: 18.0, duration: 0.9, ease: "power2.out", delay: 0.25 });
+    }
+
+    function animate(){
+      requestAnimationFrame(animate);
+
+      points.rotation.y += (targetRotY - points.rotation.y) * 0.04;
+      points.rotation.x += (targetRotX - points.rotation.x) * 0.04;
+      coreBall.rotation.x += 0.002;
+      coreBall.rotation.y += 0.003;
+
+      const pos = pointsGeo.attributes.position.array;
+      const b = state.burst;
+
+      for (let i=0; i<nodeCount; i++){
+        const k = i*3;
+
+        pos[k+0] += velocities[k+0];
+        pos[k+1] += velocities[k+1];
+        pos[k+2] += velocities[k+2];
+
+        if (pos[k+0] > bounds || pos[k+0] < -bounds) velocities[k+0] *= -1;
+        if (pos[k+1] > bounds || pos[k+1] < -bounds) velocities[k+1] *= -1;
+        if (pos[k+2] > bounds || pos[k+2] < -bounds) velocities[k+2] *= -1;
+
+        if (b > 0.001){
+          const x = pos[k+0], y = pos[k+1], z = pos[k+2];
+          const len = Math.max(0.0001, Math.hypot(x,y,z));
+          pos[k+0] += (x/len) * 0.060 * b;
+          pos[k+1] += (y/len) * 0.060 * b;
+          pos[k+2] += (z/len) * 0.060 * b;
+        }
+      }
+
+      pointsGeo.attributes.position.needsUpdate = true;
+      renderer.render(scene, camera);
+    }
+    animate();
+
+    window.addEventListener('resize', () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+    }, {passive:true});
+
+    /* Page transition: explode then navigate */
+    function navWithExplosion(url){
+      explode(0.45);
+      setTimeout(() => { window.location.href = url; }, 520);
+    }
+    document.querySelectorAll('a.nav-exit').forEach(a => {
+      a.addEventListener('click', (e) => {
+        const href = a.getAttribute('href');
+        if (!href || href.startsWith('#')) return;
+        e.preventDefault();
+        navWithExplosion(href);
+      });
+    });
+  </script>
 </body>
 </html>
