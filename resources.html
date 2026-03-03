@@ -1,15 +1,10 @@
-<!-- =========================
-FILE: resources.html  (9) RESOURCES / LIBRARY
-Mode: PAPER (ivory). Same shell, inverted.
-No neurons. Maximum readability.
-========================= -->
 <!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
   <title>CEYO — Resources</title>
-  <meta name="description" content="Specs, samples, glossary, and FAQs. Downloadable materials and reference artifacts for evaluation and verification."/>
+  <meta name="description" content="Specs, samples, glossary, and FAQs. Reference materials for evaluation and verification."/>
   <meta name="theme-color" content="#F5F2EA"/>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -18,7 +13,6 @@ No neurons. Maximum readability.
 
   <style>
     :root{
-      /* Paper mode */
       --paper:#F5F2EA;
       --textOnPaper:#12161D;
       --mutedOnPaper:rgba(18,22,29,.68);
@@ -58,7 +52,9 @@ No neurons. Maximum readability.
     a{color:inherit;text-decoration:none}
     button{font:inherit}
 
-    /* Paper background texture (subtle, premium) */
+    /* Anchor offset for sticky header (fixes “hidden under header” and overlap perception) */
+    [id]{ scroll-margin-top: calc(var(--navH) + 24px); }
+
     .bg{
       position:fixed; inset:0; pointer-events:none; z-index:0;
       background:
@@ -88,7 +84,7 @@ No neurons. Maximum readability.
       display:flex; align-items:center; justify-content:space-between; gap:var(--s3);
     }
 
-    .logo{ display:flex; align-items:center; gap:10px; min-width:180px; font-weight:600; letter-spacing:-.01em; }
+    .logo{ display:flex; align-items:center; gap:10px; font-weight:600; letter-spacing:-.01em; }
     .logo .mark{
       display:inline-flex; align-items:center; gap:10px;
       padding:10px 12px; border-radius:999px;
@@ -108,6 +104,7 @@ No neurons. Maximum readability.
     nav.center a{
       padding:10px 10px; border-radius:999px; border:1px solid transparent;
       transition: background .18s ease, border-color .18s ease, transform .18s ease;
+      white-space:nowrap;
     }
     nav.center a:hover{
       background: rgba(0,0,0,.03);
@@ -119,7 +116,7 @@ No neurons. Maximum readability.
       background: rgba(201,164,74,.14);
     }
 
-    .actions{ display:flex; align-items:center; gap:10px; min-width:220px; justify-content:flex-end; }
+    .actions{ display:flex; align-items:center; gap:10px; justify-content:flex-end; }
     .btn{
       height:48px; padding:0 18px; border-radius:999px;
       border:1px solid var(--lineOnPaper);
@@ -153,7 +150,9 @@ No neurons. Maximum readability.
       color: rgba(18,22,29,.86);
       align-items:center; justify-content:center;
     }
-    @media (max-width: 980px){
+
+    /* IMPORTANT: prevent desktop overlap by switching to hamburger earlier */
+    @media (max-width: 1180px){
       nav.center{ display:none; }
       .actions .btn.secondary{ display:none; }
       .hamburger{ display:inline-flex; }
@@ -201,7 +200,6 @@ No neurons. Maximum readability.
     }
     .drawerLinks a:hover{ transform: translateY(-1px); border-color: rgba(201,164,74,.55); }
 
-    /* Typography */
     .read{ max-width: var(--readW); }
     p{ margin: 0 0 14px 0; line-height: var(--lh); }
     .muted{ color: var(--mutedOnPaper); }
@@ -226,7 +224,6 @@ No neurons. Maximum readability.
       h3{ font-size: 19px; }
     }
 
-    /* Library layout */
     .heroRow{
       display:flex; align-items:flex-end; justify-content:space-between;
       gap: 14px; flex-wrap:wrap;
@@ -298,9 +295,8 @@ No neurons. Maximum readability.
       background: rgba(255,255,255,.70);
       border-radius: var(--r-lg);
       padding: 18px 18px;
-      box-shadow: none;
       transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
-      min-height: 160px;
+      min-height: 170px;
       display:flex;
       flex-direction:column;
       justify-content:space-between;
@@ -355,7 +351,6 @@ No neurons. Maximum readability.
     }
     .link:hover{ color: rgba(18,22,29,.90); }
 
-    /* Sections for glossary + FAQ */
     .panel{
       border:1px solid var(--lineOnPaper);
       background: rgba(255,255,255,.70);
@@ -427,7 +422,6 @@ No neurons. Maximum readability.
     .chev{ transition: transform .16s ease; opacity:.65; }
     .qa.open .chev{ transform: rotate(180deg); }
 
-    /* Footer */
     footer{ border-top:1px solid var(--lineOnPaper); padding: var(--s7) 0 var(--s6); }
     .footGrid{
       display:grid;
@@ -504,7 +498,7 @@ No neurons. Maximum readability.
       </nav>
 
       <div class="actions" aria-label="Actions">
-        <a class="btn secondary" href="resources.html#sample-artifact">Sample artifacts<span class="arr">→</span></a>
+        <a class="btn secondary" href="#sample-artifact">Sample artifacts<span class="arr">→</span></a>
         <a class="btn primary" href="contact.html">Request walkthrough<span class="arr">→</span></a>
         <button class="hamburger" id="openMenu" aria-label="Open menu" type="button">☰</button>
       </div>
@@ -534,14 +528,12 @@ No neurons. Maximum readability.
   </div>
 
   <main class="wrap">
-    <!-- HERO -->
     <section style="padding-top: var(--s6);">
       <div class="read reveal">
         <div class="eyebrow">Resources · Specs · Samples</div>
-        <h1>Specs, samples, and reference material.</h1>
+        <h1>Reference material for evaluation and verification.</h1>
         <p class="muted">
-          Reference materials for institutional evaluation, technical due diligence, and verification walkthroughs.
-          Public materials are high-level. Controlled materials are shared under appropriate confidentiality boundaries.
+          Public resources provide structure and boundaries. Controlled resources are shared under appropriate confidentiality terms for qualified review.
         </p>
 
         <div class="heroRow">
@@ -555,7 +547,7 @@ No neurons. Maximum readability.
 
           <div class="search" aria-label="Search resources">
             <span class="tag">Search</span>
-            <input id="q" type="search" placeholder="Type: verification, artifact, policy, schema…" aria-label="Search input"/>
+            <input id="q" type="search" placeholder="Search: verification, artifact, policy, schema…" aria-label="Search input"/>
           </div>
         </div>
 
@@ -567,21 +559,19 @@ No neurons. Maximum readability.
       </div>
     </section>
 
-    <!-- LIBRARY -->
     <section id="library">
       <div class="read reveal">
         <h2>Library</h2>
-        <p class="muted">Short, review-ready resources. Replace placeholders with your real PDFs/files when ready.</p>
+        <p class="muted">Short, review-ready resources for procurement, due diligence, and verification walkthroughs.</p>
 
         <div class="grid" id="grid" aria-label="Resource cards grid">
-          <!-- SPEC -->
           <a class="card reveal" data-kind="spec" data-title="Verification Specification" href="#" aria-label="Verification Specification">
             <div>
               <div class="metaRow">
                 <span class="pill">Spec</span>
                 <span class="small">PDF · Controlled</span>
               </div>
-              <div style="margin-top:10px;"><b>Verification Specification</b></div>
+              <div style="margin-top:10px;"><b>Verification specification</b></div>
               <p>Deterministic procedure: canonicalize, recompute hash, validate signature, policy alignment.</p>
             </div>
             <div class="cta">
@@ -590,13 +580,13 @@ No neurons. Maximum readability.
             </div>
           </a>
 
-          <a class="card reveal" data-kind="spec" data-title="Capture Policy Schema" href="#" aria-label="Capture Policy Schema">
+          <a class="card reveal" data-kind="spec" data-title="Capture Policy & Masking Schema" href="#" aria-label="Capture Policy & Masking Schema">
             <div>
               <div class="metaRow">
                 <span class="pill">Spec</span>
                 <span class="small">PDF · Controlled</span>
               </div>
-              <div style="margin-top:10px;"><b>Capture Policy & Masking Schema</b></div>
+              <div style="margin-top:10px;"><b>Capture policy & masking schema</b></div>
               <p>Inclusion/exclusion rules, masking behavior, disclosure tiers, policy identifiers and versioning.</p>
             </div>
             <div class="cta">
@@ -605,15 +595,14 @@ No neurons. Maximum readability.
             </div>
           </a>
 
-          <!-- SAMPLE -->
-          <a class="card reveal" id="sample-artifact" data-kind="sample" data-title="Sample Artifact" href="#" aria-label="Sample Artifact JSON">
+          <a class="card reveal" id="sample-artifact" data-kind="sample" data-title="Public Sample Artifact (Redacted Fields)" href="#" aria-label="Public sample artifact">
             <div>
               <div class="metaRow">
                 <span class="pill">Sample</span>
                 <span class="small">JSON · Public</span>
               </div>
-              <div style="margin-top:10px;"><b>Sample artifact (redacted)</b></div>
-              <p>Example artifact wrapper fields: policy ID/version, canonicalization, digest, signature metadata.</p>
+              <div style="margin-top:10px;"><b>Sample artifact (public, redacted fields)</b></div>
+              <p>Example wrapper: policy ID/version, canonicalization, digest, signature metadata (with scoped fields removed or masked).</p>
             </div>
             <div class="cta">
               <span class="link">View sample</span>
@@ -621,14 +610,14 @@ No neurons. Maximum readability.
             </div>
           </a>
 
-          <a class="card reveal" data-kind="sample" data-title="Verification Output" href="#" aria-label="Verification Output">
+          <a class="card reveal" data-kind="sample" data-title="Verification Output Examples" href="#" aria-label="Verification output examples">
             <div>
               <div class="metaRow">
                 <span class="pill">Sample</span>
                 <span class="small">TXT · Public</span>
               </div>
-              <div style="margin-top:10px;"><b>Verification output states</b></div>
-              <p>PASS / FAIL / POLICY_MISMATCH examples and what each outcome means.</p>
+              <div style="margin-top:10px;"><b>Verification output examples</b></div>
+              <p>PASS / FAIL / POLICY_MISMATCH outcomes and what each state indicates.</p>
             </div>
             <div class="cta">
               <span class="link">View sample</span>
@@ -636,15 +625,14 @@ No neurons. Maximum readability.
             </div>
           </a>
 
-          <!-- POLICY -->
-          <a class="card reveal" data-kind="policy" data-title="Responsible Use" href="ethical.html" aria-label="Responsible Use Policy">
+          <a class="card reveal" data-kind="policy" data-title="Responsible Use Policy" href="ethical.html" aria-label="Responsible Use Policy">
             <div>
               <div class="metaRow">
                 <span class="pill">Policy</span>
                 <span class="small">HTML · Public</span>
               </div>
-              <div style="margin-top:10px;"><b>Responsible Use Policy</b></div>
-              <p>Use boundaries, operator responsibilities, prohibited deployments, escalation pathway.</p>
+              <div style="margin-top:10px;"><b>Responsible use policy</b></div>
+              <p>Use boundaries, operator responsibilities, prohibited deployments, and escalation pathway.</p>
             </div>
             <div class="cta">
               <span class="link">Open</span>
@@ -652,13 +640,13 @@ No neurons. Maximum readability.
             </div>
           </a>
 
-          <a class="card reveal" data-kind="policy" data-title="Vulnerability Disclosure" href="vdp.html" aria-label="Vulnerability Disclosure Program">
+          <a class="card reveal" data-kind="policy" data-title="Vulnerability Disclosure Program" href="vdp.html" aria-label="Vulnerability Disclosure Program">
             <div>
               <div class="metaRow">
                 <span class="pill">Policy</span>
                 <span class="small">HTML · Public</span>
               </div>
-              <div style="margin-top:10px;"><b>Vulnerability Disclosure Program</b></div>
+              <div style="margin-top:10px;"><b>Vulnerability disclosure program</b></div>
               <p>Reporting channel, safe harbor, scope, and coordinated disclosure expectations.</p>
             </div>
             <div class="cta">
@@ -667,15 +655,14 @@ No neurons. Maximum readability.
             </div>
           </a>
 
-          <!-- LEGAL -->
-          <a class="card reveal" data-kind="policy" data-title="Privacy" href="privacy.html" aria-label="Privacy Statement">
+          <a class="card reveal" data-kind="policy" data-title="Privacy Statement" href="privacy.html" aria-label="Privacy statement">
             <div>
               <div class="metaRow">
                 <span class="pill">Legal</span>
                 <span class="small">HTML · Public</span>
               </div>
               <div style="margin-top:10px;"><b>Privacy</b></div>
-              <p>Public site collection, contact submissions, deployment posture boundaries and requests.</p>
+              <p>Public site collection, contact submissions, and deployment posture boundaries.</p>
             </div>
             <div class="cta">
               <span class="link">Open</span>
@@ -683,7 +670,7 @@ No neurons. Maximum readability.
             </div>
           </a>
 
-          <a class="card reveal" data-kind="policy" data-title="Terms" href="terms.html" aria-label="Terms of Use">
+          <a class="card reveal" data-kind="policy" data-title="Terms of Use" href="terms.html" aria-label="Terms of use">
             <div>
               <div class="metaRow">
                 <span class="pill">Legal</span>
@@ -698,18 +685,17 @@ No neurons. Maximum readability.
             </div>
           </a>
 
-          <!-- FAQ (anchor) -->
-          <a class="card reveal" data-kind="faq" data-title="FAQs" href="#faq" aria-label="FAQs">
+          <a class="card reveal" data-kind="faq" data-title="FAQ" href="#faq" aria-label="FAQ">
             <div>
               <div class="metaRow">
                 <span class="pill">FAQ</span>
                 <span class="small">HTML · Public</span>
               </div>
-              <div style="margin-top:10px;"><b>FAQs</b></div>
-              <p>Non-technical first. Clear boundaries. Verification workflow questions answered.</p>
+              <div style="margin-top:10px;"><b>Frequently asked questions</b></div>
+              <p>Common questions from non-technical and institutional reviewers.</p>
             </div>
             <div class="cta">
-              <span class="link">Jump to FAQ</span>
+              <span class="link">Open</span>
               <span class="small">Public</span>
             </div>
           </a>
@@ -717,11 +703,10 @@ No neurons. Maximum readability.
       </div>
     </section>
 
-    <!-- GLOSSARY -->
     <section id="glossary">
       <div class="read reveal">
         <h2>Glossary</h2>
-        <p class="muted">Definitions used across CEYO pages. Keep terms consistent.</p>
+        <p class="muted">Key terms used throughout CEYO.</p>
 
         <div class="panel reveal">
           <div class="defGrid">
@@ -739,62 +724,83 @@ No neurons. Maximum readability.
             </div>
             <div class="def">
               <div class="k">Sealing</div>
-              <p class="muted">Cryptographic hashing and signatures applied to canonical bytes to enable tamper detection and provenance checks.</p>
+              <p class="muted">Hashing and signatures applied to canonical bytes to enable tamper detection and provenance checks.</p>
             </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- FAQ -->
     <section id="faq">
       <div class="read reveal">
         <h2>FAQ</h2>
-        <p class="muted">Short answers first. Technical detail stays bounded.</p>
+        <p class="muted">Common questions for evaluators, operators, and institutional reviewers.</p>
 
         <div class="panel reveal">
           <div class="faq">
             <div class="qa">
               <button class="qbtn" type="button">
-                <div>Does CEYO certify compliance or correctness?</div>
-                <span>Boundary</span>
-                <span class="chev">▾</span>
-              </button>
-              <div class="ans">
-                CEYO produces integrity-sealed records. It does not certify regulatory compliance, admissibility, or correctness of model output. Oversight conclusions remain institutional.
-              </div>
-            </div>
-
-            <div class="qa">
-              <button class="qbtn" type="button">
-                <div>What does verification prove?</div>
+                <div>What does CEYO verify?</div>
                 <span>Verify</span>
                 <span class="chev">▾</span>
               </button>
               <div class="ans">
-                Verification confirms that an artifact has not been modified since sealing, that the signature validates against the declared public key reference, and that policy identifiers align to expected configuration.
+                Integrity and provenance under declared policy scope: canonicalize → recompute hash → validate signature → confirm policy alignment. Verification does not confirm correctness, fairness, legality, or compliance conclusions.
               </div>
             </div>
 
             <div class="qa">
               <button class="qbtn" type="button">
-                <div>Do you need access to model weights?</div>
+                <div>Does CEYO require access to model weights or proprietary internals?</div>
                 <span>Disclosure</span>
                 <span class="chev">▾</span>
               </button>
               <div class="ans">
-                No. CEYO is designed to support verification without default exposure of proprietary weights or trade-secret architecture. Disclosure is tiered and policy-defined before artifact generation.
+                No by default. Capture scope is policy-defined and can exclude proprietary internals. Disclosure tiers support verification without default exposure of weights or trade-secret implementation.
               </div>
             </div>
 
             <div class="qa">
               <button class="qbtn" type="button">
-                <div>Can CEYO block inference if sealing fails?</div>
+                <div>What happens if sealing fails during an inference event?</div>
                 <span>Availability</span>
                 <span class="chev">▾</span>
               </button>
               <div class="ans">
-                CEYO supports fail-open posture by default: inference continues if sealing fails, and failure is logged/flagged. Operators may configure stricter behavior if their environment requires it.
+                CEYO supports fail-open posture by default: inference continues, the failure is logged/flagged, and the artifact is marked unsealed (reviewable). Operators may configure stricter behavior if required.
+              </div>
+            </div>
+
+            <div class="qa">
+              <button class="qbtn" type="button">
+                <div>Who controls signing keys?</div>
+                <span>Keys</span>
+                <span class="chev">▾</span>
+              </button>
+              <div class="ans">
+                Operators retain signing keys in their own HSM/KMS/TEE environments. CEYO is designed as non-custodial: it does not possess, transmit, or store private signing keys.
+              </div>
+            </div>
+
+            <div class="qa">
+              <button class="qbtn" type="button">
+                <div>Is a CEYO artifact guaranteed to be admissible in court or accepted by regulators?</div>
+                <span>Legal</span>
+                <span class="chev">▾</span>
+              </button>
+              <div class="ans">
+                No guarantee. CEYO supports integrity and provenance arguments. Admissibility and regulatory sufficiency are determined by the relevant authority, jurisdiction, and institutional procedures.
+              </div>
+            </div>
+
+            <div class="qa">
+              <button class="qbtn" type="button">
+                <div>What is included in a “public, redacted” sample artifact?</div>
+                <span>Samples</span>
+                <span class="chev">▾</span>
+              </button>
+              <div class="ans">
+                A public example with sensitive fields removed or masked, while preserving the artifact structure: policy identifiers, canonicalization identifier, digest, signature metadata, and a minimal payload sufficient to demonstrate the verification workflow.
               </div>
             </div>
           </div>
@@ -807,7 +813,6 @@ No neurons. Maximum readability.
       </div>
     </section>
 
-    <!-- FOOTER -->
     <footer id="footer">
       <div class="footGrid reveal">
         <div class="footCol">
@@ -829,7 +834,7 @@ No neurons. Maximum readability.
           <a href="#library">Library</a>
           <a href="#sample-artifact">Sample Artifacts</a>
           <a href="#glossary">Glossary</a>
-          <a href="#faq">FAQs</a>
+          <a href="#faq">FAQ</a>
         </div>
         <div class="footCol">
           <div class="t">Legal</div>
@@ -881,7 +886,7 @@ No neurons. Maximum readability.
       });
     });
 
-    // Filters + search (client-side)
+    // Filters + search
     const chips = Array.from(document.querySelectorAll('.chip'));
     const cards = Array.from(document.querySelectorAll('.card'));
     const q = document.getElementById('q');
