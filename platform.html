@@ -4,8 +4,8 @@
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
   <title>CEYO — Platform Architecture</title>
-  <meta name="description" content="CEYO platform architecture: inference-boundary attachment, policy-scoped capture, canonical artifacts, RFC 8785 canonicalization, cryptographic sealing, non-custodial keys, and independent verification under constrained disclosure."/>
-  <meta name="theme-color" content="#F4F0E6"/>
+  <meta name="description" content="Platform architecture for CEYO: sidecar deployment, artifact pipeline, canonicalization, sealing, tiers, and verification workflow."/>
+  <meta name="theme-color" content="#060A13"/>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -17,144 +17,103 @@
       --navy:#060A13;
       --navy2:#0B1220;
       --ivory:#F4F0E6;
-      --ink:#0B1220;
-      --mutedInk: rgba(11,18,32,.66);
-
       --royal:#2D67FF;
-      --royalGlow: rgba(45,103,255,.24);
-
-      --danger:#D93B3B;
-      --dangerSoft: rgba(217,59,59,.14);
-
-      --strokeInk: rgba(11,18,32,.12);
-      --strokeIv: rgba(244,240,230,.12);
+      --royal-glow: rgba(45,103,255,0.40);
+      --text:rgba(244,240,230,.92);
+      --muted:rgba(244,240,230,.56);
+      --stroke:rgba(244,240,230,.10);
 
       --brandFont:'Outfit', system-ui, sans-serif;
       --monoFont:'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
       --bodyFont:'Inter', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
     }
 
-    html{scroll-behavior:smooth; background: var(--ivory);}
+    html{scroll-behavior:smooth; background:var(--navy);}
     body{
-      margin:0;
-      background: var(--ivory);
-      color: rgba(11,18,32,.92);
-      font-family: var(--bodyFont);
-      overflow-x:hidden;
-      cursor:none;
+      margin:0; background:var(--navy); color:var(--text);
+      font-family:var(--bodyFont); overflow-x:hidden; cursor:none;
     }
     @media (pointer: coarse){
       body{ cursor:auto; }
       #cursor{ display:none; }
     }
 
-    /* Blueprint Stage (unique identity) */
+    /* Stage (distinct: blueprint grid + colder gradients) */
     #stage{
       position:fixed; inset:0; z-index:0; pointer-events:none;
       background:
-        radial-gradient(900px 560px at 18% 18%, rgba(45,103,255,.10), transparent 60%),
-        radial-gradient(760px 520px at 76% 72%, rgba(217,59,59,.08), transparent 62%),
-        linear-gradient(180deg, rgba(244,240,230,1), rgba(244,240,230,.94));
+        radial-gradient(1100px 650px at 40% 20%, rgba(45,103,255,.12), transparent 60%),
+        radial-gradient(900px 520px at 85% 75%, rgba(45,103,255,.07), transparent 65%),
+        linear-gradient(180deg, var(--navy), var(--navy2));
     }
+    #gl{ width:100%; height:100%; display:block; }
 
-    /* Grid + blueprint dots */
-    #blueprint{
-      position:fixed; inset:-80px; z-index:1; pointer-events:none;
+    /* Grid overlay */
+    #grid{
+      position:fixed; inset:0; z-index:1; pointer-events:none; opacity:.10;
       background-image:
-        linear-gradient(to right, rgba(11,18,32,.08) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(11,18,32,.07) 1px, transparent 1px),
-        radial-gradient(circle at 1px 1px, rgba(11,18,32,.07) 1px, transparent 1.2px);
-      background-size: 56px 56px, 56px 56px, 14px 14px;
-      mask-image: radial-gradient(520px 320px at 50% 18%, #000 25%, transparent 72%);
-      opacity:.22;
+        linear-gradient(to right, rgba(244,240,230,.10) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(244,240,230,.08) 1px, transparent 1px);
+      background-size: 84px 84px;
+      mask-image: radial-gradient(700px 420px at 52% 24%, #000 55%, transparent 85%);
     }
 
-    /* Grain (subtle, ivory) */
+    /* Grain */
     #grain{
-      position:fixed; inset:0; z-index:2; pointer-events:none; opacity:.035;
+      position:fixed; inset:0; z-index:2; pointer-events:none; opacity:.05;
       background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='320' height='320'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='320' height='320' filter='url(%23n)'/%3E%3C/svg%3E");
-      mix-blend-mode:multiply;
     }
 
     /* Cursor */
     #cursor{
       position:fixed; z-index:9999; width:10px; height:10px; border-radius:50%;
-      background: var(--ink);
-      mix-blend-mode:multiply;
-      pointer-events:none;
+      background:var(--ivory); mix-blend-mode:difference; pointer-events:none;
       transform:translate(-50%,-50%);
-      transition: width .16s ease, height .16s ease, opacity .16s ease, background .16s ease;
-      opacity:.9;
+      transition: width .16s ease, height .16s ease, opacity .16s ease;
     }
-    #cursor.big{ width:42px; height:42px; opacity:.22; background: var(--royal); mix-blend-mode:normal; }
+    #cursor.big{ width:42px; height:42px; opacity:.55; background: var(--royal); }
 
-    /* Top nav (light variant) */
+    /* Top nav */
     #topnav{
-      position:fixed; top:0; left:0; right:0; z-index:50;
-      padding: 20px 28px;
+      position:fixed; top:0; left:0; right:0; z-index:60;
+      padding: 22px 32px;
       display:flex; justify-content:space-between; align-items:center;
       transition: background .25s ease, border-color .25s ease, backdrop-filter .25s ease;
       border-bottom:1px solid transparent;
     }
     #topnav.scrolled{
-      background: rgba(244,240,230,.78);
+      background: rgba(6,10,19,.70);
       backdrop-filter: blur(14px);
-      border-bottom-color: rgba(11,18,32,.10);
+      border-bottom-color: rgba(244,240,230,.08);
     }
 
-    .brand{
-      font-family: var(--brandFont);
-      font-weight: 900;
-      letter-spacing: -0.02em;
-      text-transform: uppercase;
-    }
-
-    .routeMenu{
-      display:flex; gap:18px; align-items:center;
-      font-family: var(--monoFont);
-      font-size: 10px;
-      letter-spacing: .18em;
-      text-transform: uppercase;
-      color: rgba(11,18,32,.70);
-    }
-    .routeMenu a{ opacity:.84; transition: opacity .14s ease, color .14s ease; }
-    .routeMenu a:hover{ opacity:1; color: rgba(11,18,32,.95); }
-    .routeMenu a.active{ opacity:1; color: rgba(11,18,32,.95); }
-
-    /* Layout shell */
-    .shell{
-      position:relative; z-index:10;
-      max-width: 1180px; margin: 0 auto;
-      padding: 0 24px;
-    }
-    .padTop{ padding-top: 118px; }
-
+    /* Headings */
     .kicker{
       font-family: var(--monoFont);
       font-size: 10px;
       letter-spacing: .40em;
       text-transform: uppercase;
-      color: rgba(11,18,32,.60);
+      color: rgba(244,240,230,.70);
     }
-
     .h1{
       font-family: var(--brandFont);
       font-weight: 900;
+      font-size: clamp(48px, 7.8vw, 96px);
+      line-height: 0.92;
+      letter-spacing: -0.05em;
+      text-transform: uppercase;
+    }
+    .h2{
+      font-family: var(--brandFont);
+      font-weight: 900;
       font-style: italic;
-      font-size: clamp(34px, 4.6vw, 68px);
+      font-size: clamp(30px, 4.6vw, 60px);
       letter-spacing: -0.03em;
       text-transform: uppercase;
       line-height: 0.98;
-      color: rgba(11,18,32,.95);
     }
 
-    .lead{
-      font-size: 18px;
-      line-height: 1.9;
-      color: rgba(11,18,32,.72);
-    }
-
-    /* Buttons (light page) */
+    /* Buttons */
     .btn{
       display:inline-flex; align-items:center; justify-content:center;
       font-family:var(--monoFont);
@@ -162,8 +121,8 @@
       letter-spacing:.20em;
       text-transform:uppercase;
       border-radius:999px;
-      padding: 14px 26px;
-      border:1px solid rgba(11,18,32,.14);
+      padding: 16px 32px;
+      border:1px solid var(--stroke);
       transition: transform .18s ease, box-shadow .18s ease, background .18s ease, border-color .18s ease, color .18s ease;
       user-select:none;
       white-space:nowrap;
@@ -175,109 +134,58 @@
     }
     .btn:hover{
       transform: translateY(-1px);
-      box-shadow: 0 0 26px var(--royalGlow);
-      border-color: rgba(45,103,255,.45);
+      box-shadow: 0 0 26px var(--royal-glow);
+      border-color: rgba(45,103,255,.75);
     }
-    .btn.ghost{
-      background: rgba(244,240,230,.55);
-    }
-    .btn.ghost:hover{ background: rgba(45,103,255,.06); }
+    .btn.ghost:hover{ background: rgba(244,240,230,.05); }
 
-    /* Panels (light) */
-    .panel{
-      border: 1px solid rgba(11,18,32,.12);
-      background: rgba(244,240,230,.84);
-      border-radius: 22px;
-      box-shadow: 0 18px 46px rgba(0,0,0,.10);
-    }
-    .panel.pad{ padding: 28px; }
-    @media (min-width: 768px){ .panel.pad{ padding: 42px; } }
-
-    /* Schematic card */
-    .schem{
-      border: 1px dashed rgba(11,18,32,.24);
-      border-radius: 18px;
-      background: rgba(244,240,230,.62);
-      padding: 22px;
-    }
-    .schem .node{
-      border: 1px solid rgba(11,18,32,.14);
-      border-radius: 14px;
-      padding: 14px 14px;
-      background: rgba(244,240,230,.88);
-    }
-    .schem .tag{
-      font-family: var(--monoFont);
-      font-size: 9px;
-      letter-spacing: .22em;
-      text-transform: uppercase;
-      color: rgba(11,18,32,.62);
-    }
-    .schem .arrow{
-      font-family: var(--monoFont);
-      font-size: 10px;
-      letter-spacing: .18em;
-      text-transform: uppercase;
-      color: rgba(45,103,255,.82);
-    }
-
-    /* Constraint callouts (red identity) */
-    .constraint{
-      border: 1px solid rgba(217,59,59,.28);
-      background: rgba(217,59,59,.06);
-      border-radius: 18px;
-      padding: 16px 18px;
-    }
-    .constraint .x{
-      font-family: var(--monoFont);
-      font-size: 10px;
-      letter-spacing: .18em;
-      text-transform: uppercase;
-      color: rgba(217,59,59,.90);
-    }
-    .constraint .t{
-      color: rgba(11,18,32,.76);
-      line-height: 1.75;
-      font-size: 14px;
-      margin-top: 6px;
-    }
-
-    /* Expand blocks */
-    .data-block{
-      border: 1px solid rgba(11,18,32,.12);
-      background: rgba(244,240,230,.70);
+    /* Modules (distinct from index data-blocks) */
+    .module{
+      border: 1px solid var(--stroke);
+      background: rgba(11,18,32,0.42);
+      backdrop-filter: blur(10px);
       transition: all 0.40s cubic-bezier(0.16, 1, 0.3, 1);
       cursor: pointer;
       overflow: hidden;
-      max-height: 88px;
+      max-height: 90px;
       border-radius: 18px;
     }
-    .data-block:hover{ border-color: rgba(45,103,255,.45); background: rgba(45,103,255,0.05); }
-    .data-block.expanded{
-      max-height: 820px;
-      border-color: rgba(45,103,255,.65);
+    .module:hover{ border-color: rgba(45,103,255,.55); background: rgba(45,103,255,0.05); }
+    .module.expanded{
+      max-height: 680px;
+      border-color: rgba(45,103,255,.85);
       background: rgba(45,103,255,0.06);
-      box-shadow: 0 18px 50px rgba(0,0,0,.12);
+      box-shadow: 0 22px 60px rgba(0,0,0,.35);
     }
-    .data-block .content{
+    .module .content{
       opacity: 0;
       transform: translateY(8px);
       transition: opacity 0.28s ease, transform 0.28s ease;
       pointer-events: none;
     }
-    .data-block.expanded .content{
+    .module.expanded .content{
       opacity: 1;
       transform: translateY(0);
       pointer-events: auto;
     }
 
-    /* Bottom bar (light) */
+    /* Layout helpers */
+    .shell{ max-width: 1180px; margin: 0 auto; padding: 0 24px; position:relative; z-index:10; }
+    .section{ padding-top: 124px; padding-bottom: 110px; }
+    .section.tight{ padding-top: 96px; padding-bottom: 92px; }
+
+    @media (max-width: 640px){
+      .section{ padding-top: 110px; padding-bottom: 98px; }
+      #topnav{ padding: 18px 18px; }
+    }
+
+    /* Bottom bar */
     #bottombar{
-      position:fixed; bottom:0; left:0; right:0; z-index:50;
+      position:fixed; bottom:0; left:0; right:0; z-index:70;
       height:56px;
-      background: rgba(244,240,230,.90);
+      background: rgba(6,10,19,.88);
       backdrop-filter: blur(12px);
-      border-top: 1px solid rgba(11,18,32,.12);
+      border-top: 1px solid var(--stroke);
       display:flex;
       font-family: var(--monoFont);
       font-size: 9px;
@@ -286,384 +194,261 @@
     }
     #bottombar a{
       flex:1; display:flex; align-items:center; justify-content:center;
-      border-right: 1px solid rgba(11,18,32,.10);
+      border-right: 1px solid var(--stroke);
       transition: background .16s ease, color .16s ease;
-      color: rgba(11,18,32,.70);
+      color: rgba(244,240,230,.70);
       user-select:none;
     }
     #bottombar a:last-child{ border-right:none; }
-    #bottombar a:hover{ background: rgba(45,103,255,.06); color: rgba(11,18,32,.92); }
+    #bottombar a:hover{ background: rgba(244,240,230,.05); color: rgba(244,240,230,.92); }
     #bottombar a.active{
-      color: rgba(11,18,32,.92);
+      color: rgba(244,240,230,.92);
       box-shadow: inset 0 2px 0 rgba(45,103,255,.95);
     }
 
-    .fine{
+    /* Table-ish list */
+    .spec{
+      border-top: 1px solid var(--stroke);
+      margin-top: 16px;
+      padding-top: 16px;
       font-family: var(--monoFont);
       font-size: 10px;
-      letter-spacing: .14em;
+      letter-spacing: .16em;
       text-transform: uppercase;
-      color: rgba(11,18,32,.62);
+      color: rgba(244,240,230,.70);
+      line-height: 1.8;
     }
-
-    .monoSmall{
-      font-family: var(--monoFont);
-      font-size: 12px;
-      line-height: 1.85;
-      color: rgba(11,18,32,.74);
-    }
-
-    .pill{
-      display:inline-flex;
-      align-items:center;
-      gap:10px;
-      border: 1px solid rgba(11,18,32,.12);
-      background: rgba(244,240,230,.70);
-      border-radius: 999px;
-      padding: 10px 14px;
-      font-family: var(--monoFont);
-      font-size: 10px;
-      letter-spacing: .18em;
-      text-transform: uppercase;
-      color: rgba(11,18,32,.70);
-      white-space:nowrap;
-    }
-    .dot{ width:8px; height:8px; border-radius:50%; background: var(--royal); box-shadow: 0 0 18px rgba(45,103,255,.25); }
-    .dot.red{ background: var(--danger); box-shadow: 0 0 18px rgba(217,59,59,.22); }
   </style>
 </head>
 
 <body>
-  <div id="stage" aria-hidden="true"></div>
-  <div id="blueprint" aria-hidden="true"></div>
+  <div id="stage" aria-hidden="true"><canvas id="gl"></canvas></div>
+  <div id="grid" aria-hidden="true"></div>
   <div id="grain" aria-hidden="true"></div>
   <div id="cursor" aria-hidden="true"></div>
 
   <nav id="topnav" aria-label="Primary navigation">
     <div class="flex items-baseline gap-4">
-      <a href="index.html" class="font-[var(--brandFont)] font-black text-2xl italic text-[rgba(11,18,32,.95)]">CEYO</a>
-      <span class="font-mono text-[9px] tracking-[0.30em] opacity-60 uppercase text-[rgba(11,18,32,.75)]">Platform Architecture</span>
+      <a href="index.html" class="font-[var(--brandFont)] font-black text-2xl italic">CEYO</a>
+      <span class="font-mono text-[9px] tracking-[0.30em] opacity-40 uppercase">Platform Architecture</span>
     </div>
 
-    <div class="hidden md:flex routeMenu">
-      <a href="index.html" class="nav-exit">Index</a>
-      <a href="platform.html" class="active">Architecture</a>
-      <a href="trust.html" class="nav-exit">Trust</a>
-      <a href="governance.html" class="nav-exit">Governance</a>
-      <a href="contact.html" class="btn primary !py-2 !px-4 !text-[10px] !tracking-[.20em] nav-exit">Request Review</a>
+    <div class="hidden md:flex gap-8 font-mono text-[10px] tracking-widest uppercase opacity-60">
+      <a href="index.html" class="nav-exit hover:text-[var(--royal)] transition-colors">Index</a>
+      <a href="platform.html" class="hover:text-[var(--royal)] transition-colors" style="opacity:1;color:rgba(244,240,230,.92)">Platform</a>
+      <a href="trust.html" class="nav-exit hover:text-[var(--royal)] transition-colors">Trust</a>
+      <a href="governance.html" class="nav-exit hover:text-[var(--royal)] transition-colors">Governance</a>
+      <a href="contact.html" class="nav-exit hover:text-[var(--royal)] transition-colors">Contact</a>
     </div>
   </nav>
 
-  <main class="shell padTop">
-    <!-- Header -->
-    <section class="pt-10 pb-12">
-      <div class="kicker mb-5">DECOUPLED VERIFICATION ARCHITECTURE · INFERENCE-BOUNDARY ATTACHMENT</div>
+  <section class="section">
+    <div class="shell">
+      <div class="grid lg:grid-cols-2 gap-14 items-end">
+        <div>
+          <div class="kicker mb-6">DEPLOYMENT MODES · ARTIFACT PIPELINE · VERIFICATION PATH</div>
+          <h1 class="h1 mb-8">Architecture<br/>Beside Inference</h1>
 
-      <div class="grid lg:grid-cols-12 gap-8 items-start">
-        <div class="lg:col-span-7">
-          <h1 class="h1 mb-6">Verification Substrate<br/>At the Inference Boundary</h1>
-          <p class="lead max-w-2xl">
-            CEYO operates beside AI inference systems as a weight-neutral evidentiary layer. It captures policy-scoped inference-time context,
-            normalizes into canonical artifacts, applies deterministic canonicalization (RFC 8785), and seals artifacts cryptographically for later verification under constrained disclosure.
+          <p class="text-[18px] leading-[1.9] text-[var(--muted)] max-w-xl">
+            CEYO is deployed at the inference boundary as a sidecar, wrapper, gateway, or service mesh component. It captures policy-declared fields,
+            normalizes to a stable artifact schema, canonicalizes deterministically, and seals cryptographically using client-controlled keys.
           </p>
 
-          <div class="mt-8 flex flex-wrap gap-3">
-            <span class="pill"><span class="dot"></span> Canonical artifacts</span>
-            <span class="pill"><span class="dot"></span> RFC 8785 determinism</span>
-            <span class="pill"><span class="dot"></span> Hash + signature sealing</span>
-            <span class="pill"><span class="dot red"></span> Non-adjudication boundary</span>
+          <div class="mt-10 flex gap-4 flex-wrap">
+            <a class="btn primary" href="#pipeline">View Pipeline</a>
+            <a class="btn ghost" href="#modes">Deployment Modes</a>
+            <a class="btn ghost nav-exit" href="contact.html">Request Controlled Review</a>
           </div>
 
-          <div class="mt-8 flex gap-4 flex-wrap">
-            <a class="btn primary nav-exit" href="contact.html">Controlled Review</a>
-            <a class="btn ghost" href="#schematic">View Schematic</a>
-            <a class="btn ghost" href="#controls">Controls</a>
-          </div>
-        </div>
-
-        <div class="lg:col-span-5">
-          <div class="panel pad">
-            <div class="fine mb-4">Boundary Position</div>
-            <div class="monoSmall">
-              CEYO produces records. It does not evaluate outputs. It does not adjudicate compliance. It does not determine correctness, fairness, or legality.
-              Authorized institutions and operators retain responsibility for determinations.
-            </div>
-
-            <div class="mt-6 grid gap-3">
-              <div class="constraint">
-                <div class="x">× Weight mutation prohibited</div>
-                <div class="t">CEYO does not modify model weights, training state, or decision logic.</div>
-              </div>
-              <div class="constraint">
-                <div class="x">× Evidence ≠ correctness</div>
-                <div class="t">Verification confirms integrity and provenance under policy scope — not correctness of output.</div>
-              </div>
-              <div class="constraint">
-                <div class="x">× No default exposure</div>
-                <div class="t">Artifacts support validation under constrained disclosure without forcing proprietary internals by default.</div>
-              </div>
-            </div>
+          <div class="spec">
+            <div>Inserts: adjacent to inference</div>
+            <div>Outputs: canonical artifact + seal</div>
+            <div>Keys: non-custodial (client HSM/KMS/TEE)</div>
+            <div>Guarantee: integrity under declared scope</div>
           </div>
         </div>
-      </div>
-    </section>
 
-    <!-- Schematic -->
-    <section id="schematic" class="pb-14">
-      <div class="panel pad">
-        <div class="grid lg:grid-cols-12 gap-10 items-start">
-          <div class="lg:col-span-5">
-            <div class="kicker mb-4">SYSTEM SCHEMATIC</div>
-            <div class="text-[28px] leading-tight font-black uppercase italic" style="font-family:var(--brandFont);">
-              Capture → Normalize → Canonicalize → Seal
+        <div class="space-y-4">
+          <div class="module p-6" data-open="modes" onclick="toggleModule(this)">
+            <div class="flex justify-between items-center mb-4">
+              <span class="font-mono text-[10px] text-[var(--royal)] tracking-[0.20em] uppercase">01 / Deployment</span>
+              <span class="text-xs uppercase font-bold">Sidecar / Wrapper / Gateway</span>
             </div>
-            <p class="mt-6 text-[15px] leading-[1.9] text-[rgba(11,18,32,.72)]">
-              The evidentiary layer attaches at the inference boundary as a sidecar, gateway, or wrapper. Policy defines what is captured and how it is masked.
-              The artifact is canonicalized into a deterministic byte sequence (RFC 8785), hashed, signed, and retained under operator-defined posture.
-            </p>
-
-            <div class="mt-8 grid sm:grid-cols-2 gap-3">
-              <div class="pill"><span class="dot"></span> Policy ID + version embedded</div>
-              <div class="pill"><span class="dot"></span> Disclosure tier designated</div>
-              <div class="pill"><span class="dot"></span> Deterministic verification workflow</div>
-              <div class="pill"><span class="dot red"></span> Keys remain non-custodial</div>
+            <div class="content pt-4 border-t border-[var(--stroke)] text-sm leading-relaxed text-[var(--muted)]">
+              CEYO can run as a co-located sidecar, integrated wrapper library, edge gateway, or mesh filter. The operational goal is consistent:
+              capture policy-defined context at inference-time without becoming the decision engine.
             </div>
           </div>
 
-          <div class="lg:col-span-7">
-            <div class="schem">
-              <div class="grid md:grid-cols-3 gap-4">
-                <div class="node">
-                  <div class="tag">Inference System</div>
-                  <div class="mt-2 font-semibold">Model + Runtime</div>
-                  <div class="mt-2 text-[13px] leading-[1.7] text-[rgba(11,18,32,.70)]">
-                    Executes inference. Produces output. CEYO does not intervene.
-                  </div>
-                </div>
-
-                <div class="flex items-center justify-center">
-                  <div class="arrow">ATTACH @ BOUNDARY →</div>
-                </div>
-
-                <div class="node" style="border-color: rgba(45,103,255,.34);">
-                  <div class="tag">CEYO Sidecar / Gateway</div>
-                  <div class="mt-2 font-semibold">Evidentiary Layer</div>
-                  <div class="mt-2 text-[13px] leading-[1.7] text-[rgba(11,18,32,.70)]">
-                    Policy-scoped capture. Canonical artifact assembly. Sealing pipeline.
-                  </div>
-                </div>
+          <div class="module p-6" data-open="pipeline" onclick="toggleModule(this)">
+            <div class="flex justify-between items-center mb-4">
+              <span class="font-mono text-[10px] text-[var(--royal)] tracking-[0.20em] uppercase">02 / Pipeline</span>
+              <span class="text-xs uppercase font-bold">Normalize → Canon → Seal</span>
+            </div>
+            <div class="content pt-4 border-t border-[var(--stroke)] text-sm leading-relaxed text-[var(--muted)]">
+              The artifact pipeline is deterministic by design:
+              <div class="mt-3 font-mono text-[11px] uppercase tracking-wider text-[rgba(244,240,230,.72)] leading-relaxed">
+                1) Capture (policy scope) · 2) Normalize (stable schema) · 3) Canonicalize (stable bytes) · 4) Hash · 5) Sign · 6) Store/Transmit
               </div>
+            </div>
+          </div>
 
-              <div class="mt-6 grid md:grid-cols-4 gap-3">
-                <div class="node">
-                  <div class="tag">1</div>
-                  <div class="mt-2 font-semibold">Capture Scope</div>
-                  <div class="mt-2 text-[12px] leading-[1.7] text-[rgba(11,18,32,.70)]">
-                    Policy selects, excludes, masks fields pre-generation.
-                  </div>
-                </div>
-                <div class="node">
-                  <div class="tag">2</div>
-                  <div class="mt-2 font-semibold">Canonical Schema</div>
-                  <div class="mt-2 text-[12px] leading-[1.7] text-[rgba(11,18,32,.70)]">
-                    Normalize into deterministic artifact structure.
-                  </div>
-                </div>
-                <div class="node">
-                  <div class="tag">3</div>
-                  <div class="mt-2 font-semibold">RFC 8785</div>
-                  <div class="mt-2 text-[12px] leading-[1.7] text-[rgba(11,18,32,.70)]">
-                    Canonicalize JSON → stable bytes for hashing.
-                  </div>
-                </div>
-                <div class="node" style="border-color: rgba(217,59,59,.26);">
-                  <div class="tag">4</div>
-                  <div class="mt-2 font-semibold">Seal</div>
-                  <div class="mt-2 text-[12px] leading-[1.7] text-[rgba(11,18,32,.70)]">
-                    SHA-256 hash + ECDSA signature (P-256 reference).
-                  </div>
-                </div>
-              </div>
+          <div class="module p-6" data-open="tiers" onclick="toggleModule(this)">
+            <div class="flex justify-between items-center mb-4">
+              <span class="font-mono text-[10px] text-[var(--royal)] tracking-[0.20em] uppercase">03 / Disclosure</span>
+              <span class="text-xs uppercase font-bold">Public / Redacted / Controlled</span>
+            </div>
+            <div class="content pt-4 border-t border-[var(--stroke)] text-sm leading-relaxed text-[var(--muted)]">
+              Disclosure tiers are defined pre-generation by policy. Artifacts can be emitted as public summaries, redacted records, or controlled-review bundles
+              to support oversight without default exposure of proprietary internals.
+            </div>
+          </div>
 
-              <div class="mt-6 node" style="background: rgba(244,240,230,.92);">
-                <div class="tag">Key Custody</div>
-                <div class="mt-2 text-[13px] leading-[1.8] text-[rgba(11,18,32,.72)]">
-                  Signing keys remain within operator-controlled HSM/KMS/TEE. CEYO does not possess, transmit, or store private signing keys.
-                  Public verification can be performed independently using operator public keys and declared policy IDs/versions.
-                </div>
-              </div>
+          <div class="module p-6" data-open="failopen" onclick="toggleModule(this)">
+            <div class="flex justify-between items-center mb-4">
+              <span class="font-mono text-[10px] text-[var(--royal)] tracking-[0.20em] uppercase">04 / Availability</span>
+              <span class="text-xs uppercase font-bold">Fail-open</span>
+            </div>
+            <div class="content pt-4 border-t border-[var(--stroke)] text-sm leading-relaxed text-[var(--muted)]">
+              Inference continuity remains independent of sealing. If artifact generation fails, inference proceeds; the event is logged and the record is marked unsealed for review.
             </div>
           </div>
         </div>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <!-- Controls (Layered: top-level + deep expansions) -->
-    <section id="controls" class="pb-14">
-      <div class="grid lg:grid-cols-12 gap-6 items-start">
-        <div class="lg:col-span-4">
-          <div class="panel pad">
-            <div class="fine mb-4">Controls Index</div>
-            <div class="text-[14px] leading-[1.9] text-[rgba(11,18,32,.72)]">
-              Read the high-level posture, then expand for full institutional-grade specificity.
-            </div>
-            <div class="mt-6 space-y-3">
-              <a class="btn ghost w-full justify-center" href="#c-policy">Policy</a>
-              <a class="btn ghost w-full justify-center" href="#c-canonical">Canonicalization</a>
-              <a class="btn ghost w-full justify-center" href="#c-seal">Sealing</a>
-              <a class="btn ghost w-full justify-center" href="#c-verify">Verification</a>
-              <a class="btn ghost w-full justify-center" href="#c-disclosure">Disclosure</a>
-              <a class="btn ghost w-full justify-center" href="#c-availability">Availability</a>
-            </div>
-          </div>
+  <section id="modes" class="section tight">
+    <div class="shell">
+      <div class="grid lg:grid-cols-2 gap-12 items-start">
+        <div>
+          <div class="kicker mb-4">DEPLOYMENT MODES</div>
+          <h2 class="h2 mb-8">Integrate Without<br/>Becoming The Model</h2>
+          <p class="text-[18px] leading-[1.9] text-[var(--muted)]">
+            CEYO is meant to attach beside existing inference systems. It does not require model weight custody and does not require architectural disclosure
+            beyond policy scope.
+          </p>
         </div>
 
-        <div class="lg:col-span-8 space-y-4">
-          <div id="c-policy" class="data-block p-7" data-open="policy" onclick="toggleBlock(this)">
-            <div class="flex justify-between items-center mb-3">
-              <span class="font-mono text-[10px] text-[var(--royal)] tracking-[0.22em] uppercase">Policy-Scoped Capture</span>
-              <span class="text-xs uppercase font-bold">Define before you collect</span>
+        <div class="space-y-4">
+          <div class="module p-6" data-open="sidecar" onclick="toggleModule(this)">
+            <div class="flex justify-between items-center mb-4">
+              <span class="font-mono text-[10px] text-[var(--royal)] tracking-[0.20em] uppercase">Mode A</span>
+              <span class="text-xs uppercase font-bold">Sidecar</span>
             </div>
-            <div class="content pt-4 border-t border-[rgba(11,18,32,.10)] text-[14px] leading-[1.9] text-[rgba(11,18,32,.74)]">
-              <div class="font-mono text-[12px] uppercase tracking-widest opacity-70">High-level</div>
-              <div class="mt-2">
-                Artifact generation begins with explicit policy definition. Only fields declared within policy scope are captured.
-                Policy identifiers and versions are embedded within artifacts to make boundaries reviewable.
-              </div>
-
-              <div class="mt-6 font-mono text-[12px] uppercase tracking-widest opacity-70">Institutional-grade detail</div>
-              <ul class="mt-2 list-disc pl-5 space-y-2">
-                <li>Policy defines inclusion/exclusion, masking/redaction rules, and disclosure tiers prior to generation.</li>
-                <li>Policy ID + version recorded inside the artifact; artifacts are rejected as “Policy Scope Mismatch” if misaligned.</li>
-                <li>Capture minimization is structural (pre-generation), not improvised post hoc.</li>
-              </ul>
+            <div class="content pt-4 border-t border-[var(--stroke)] text-sm leading-relaxed text-[var(--muted)]">
+              Co-located process captures request/response context and runtime signals declared by policy. Strong fit for Kubernetes and service mesh environments.
             </div>
           </div>
 
-          <div id="c-canonical" class="data-block p-7" data-open="rfc8785" onclick="toggleBlock(this)">
-            <div class="flex justify-between items-center mb-3">
-              <span class="font-mono text-[10px] text-[var(--royal)] tracking-[0.22em] uppercase">RFC 8785 Canonicalization</span>
-              <span class="text-xs uppercase font-bold">Deterministic bytes</span>
+          <div class="module p-6" data-open="wrapper" onclick="toggleModule(this)">
+            <div class="flex justify-between items-center mb-4">
+              <span class="font-mono text-[10px] text-[var(--royal)] tracking-[0.20em] uppercase">Mode B</span>
+              <span class="text-xs uppercase font-bold">Wrapper SDK</span>
             </div>
-            <div class="content pt-4 border-t border-[rgba(11,18,32,.10)] text-[14px] leading-[1.9] text-[rgba(11,18,32,.74)]">
-              <div class="font-mono text-[12px] uppercase tracking-widest opacity-70">High-level</div>
-              <div class="mt-2">
-                Before hashing and signing, JSON artifacts are canonicalized using RFC 8785 to ensure logically equivalent structures yield identical byte output across environments.
-              </div>
-
-              <div class="mt-6 font-mono text-[12px] uppercase tracking-widest opacity-70">Institutional-grade detail</div>
-              <ul class="mt-2 list-disc pl-5 space-y-2">
-                <li>Canonicalization is a prerequisite for reproducible hashing across runtimes and serializers.</li>
-                <li>Verification recomputes the canonical bytes via RFC 8785 and compares derived digest + signature validity.</li>
-                <li>Canonical form reduces interpretive variance in post-incident reconstruction workflows.</li>
-              </ul>
+            <div class="content pt-4 border-t border-[var(--stroke)] text-sm leading-relaxed text-[var(--muted)]">
+              Library-level integration around inference calls (client or server). Lowest latency overhead, best for embedded or constrained deployments.
             </div>
           </div>
 
-          <div id="c-seal" class="data-block p-7" data-open="sealing" onclick="toggleBlock(this)">
-            <div class="flex justify-between items-center mb-3">
-              <span class="font-mono text-[10px] text-[var(--royal)] tracking-[0.22em] uppercase">Cryptographic Sealing</span>
-              <span class="text-xs uppercase font-bold">Hash + signature</span>
+          <div class="module p-6" data-open="gateway" onclick="toggleModule(this)">
+            <div class="flex justify-between items-center mb-4">
+              <span class="font-mono text-[10px] text-[var(--royal)] tracking-[0.20em] uppercase">Mode C</span>
+              <span class="text-xs uppercase font-bold">Gateway</span>
             </div>
-            <div class="content pt-4 border-t border-[rgba(11,18,32,.10)] text-[14px] leading-[1.9] text-[rgba(11,18,32,.74)]">
-              <div class="font-mono text-[12px] uppercase tracking-widest opacity-70">High-level</div>
-              <div class="mt-2">
-                After canonicalization, artifacts are sealed using hashing and digital signatures. Reference suite: SHA-256 and ECDSA (P-256).
-              </div>
-
-              <div class="mt-6 font-mono text-[12px] uppercase tracking-widest opacity-70">Institutional-grade detail</div>
-              <ul class="mt-2 list-disc pl-5 space-y-2">
-                <li>Digest computed over canonical bytes; signature computed over digest (or canonical bytes per suite contract).</li>
-                <li>Verification requires operator public key provenance and declared suite identifiers.</li>
-                <li>Suite selection remains configurable to meet institutional requirements; claims remain proportional to executed suite.</li>
-              </ul>
+            <div class="content pt-4 border-t border-[var(--stroke)] text-sm leading-relaxed text-[var(--muted)]">
+              Centralized boundary enforcing policy capture and tiered disclosure across multiple inference services. Strong fit for regulated environments with centralized logging controls.
             </div>
-          </div>
-
-          <div id="c-verify" class="data-block p-7" data-open="verify" onclick="toggleBlock(this)">
-            <div class="flex justify-between items-center mb-3">
-              <span class="font-mono text-[10px] text-[var(--royal)] tracking-[0.22em] uppercase">Independent Verification</span>
-              <span class="text-xs uppercase font-bold">Deterministic workflow</span>
-            </div>
-            <div class="content pt-4 border-t border-[rgba(11,18,32,.10)] text-[14px] leading-[1.9] text-[rgba(11,18,32,.74)]">
-              <div class="font-mono text-[12px] uppercase tracking-widest opacity-70">High-level</div>
-              <div class="mt-2">
-                Verification includes RFC 8785 canonicalization, hash recomputation, signature validation, and policy identifier/version alignment checks.
-              </div>
-
-              <div class="mt-6 font-mono text-[12px] uppercase tracking-widest opacity-70">Institutional-grade detail</div>
-              <ul class="mt-2 list-disc pl-5 space-y-2">
-                <li>Outcome states: Integrity Confirmed, Integrity Failed, Policy Scope Mismatch.</li>
-                <li>Verification confirms integrity + provenance under declared scope, not correctness of inference output.</li>
-                <li>Audit workflows can be executed independently without proprietary model weights by default.</li>
-              </ul>
-            </div>
-          </div>
-
-          <div id="c-disclosure" class="data-block p-7" data-open="disclosure" onclick="toggleBlock(this)">
-            <div class="flex justify-between items-center mb-3">
-              <span class="font-mono text-[10px] text-[var(--royal)] tracking-[0.22em] uppercase">Constrained Disclosure</span>
-              <span class="text-xs uppercase font-bold">Validation without exposure</span>
-            </div>
-            <div class="content pt-4 border-t border-[rgba(11,18,32,.10)] text-[14px] leading-[1.9] text-[rgba(11,18,32,.74)]">
-              <div class="font-mono text-[12px] uppercase tracking-widest opacity-70">High-level</div>
-              <div class="mt-2">
-                Artifacts support tiered disclosure so integrity can be verified without default exposure of proprietary internals.
-              </div>
-
-              <div class="mt-6 font-mono text-[12px] uppercase tracking-widest opacity-70">Institutional-grade detail</div>
-              <ul class="mt-2 list-disc pl-5 space-y-2">
-                <li>Policy defines masking rules and disclosure tiers prior to generation.</li>
-                <li>Disclosure tier is embedded to prevent ambiguity about what was included or intentionally excluded.</li>
-                <li>Controlled review can expand scope only under written agreement and revised policy versioning.</li>
-              </ul>
-            </div>
-          </div>
-
-          <div id="c-availability" class="data-block p-7" data-open="availability" onclick="toggleBlock(this)">
-            <div class="flex justify-between items-center mb-3">
-              <span class="font-mono text-[10px] text-[var(--royal)] tracking-[0.22em] uppercase">Availability Posture</span>
-              <span class="text-xs uppercase font-bold">Fail-open by design</span>
-            </div>
-            <div class="content pt-4 border-t border-[rgba(11,18,32,.10)] text-[14px] leading-[1.9] text-[rgba(11,18,32,.74)]">
-              <div class="font-mono text-[12px] uppercase tracking-widest opacity-70">High-level</div>
-              <div class="mt-2">
-                Sealing failures may be logged and flagged without interrupting inference unless explicitly configured otherwise.
-              </div>
-
-              <div class="mt-6 font-mono text-[12px] uppercase tracking-widest opacity-70">Institutional-grade detail</div>
-              <ul class="mt-2 list-disc pl-5 space-y-2">
-                <li>Availability remains an institutional decision (fail-open vs fail-closed by explicit configuration).</li>
-                <li>Unsealed or partially sealed records remain reviewable as “integrity not confirmed,” preserving transparency.</li>
-                <li>Operational metrics and overhead are deployment-dependent; no universal latency claims are made.</li>
-              </ul>
-            </div>
-          </div>
-
-        </div>
-      </div>
-    </section>
-
-    <!-- Footer Boundary -->
-    <section class="pb-28">
-      <div class="panel pad">
-        <div class="fine mb-4">Boundary Declaration · V2026.02.19</div>
-        <div class="grid md:grid-cols-2 gap-8 text-[10px] font-mono leading-relaxed uppercase text-[rgba(11,18,32,.70)]">
-          <p>Public materials are descriptive only. Technical specifics, operational details, and implementation materials are shared under controlled conditions.</p>
-          <p>Engagement does not imply certification, compliance endorsement, or regulatory authority. Verification confirms integrity and provenance under policy scope — not correctness of output.</p>
-        </div>
-
-        <div class="mt-10 pt-8 border-t border-[rgba(11,18,32,.10)] flex flex-wrap justify-between gap-6">
-          <div class="fine">© <span id="year">2026</span> CEYO · All Rights Reserved</div>
-          <div class="flex gap-8 fine">
-            <a href="terms.html" class="nav-exit hover:opacity-100 opacity-70">Terms</a>
-            <a href="privacy.html" class="nav-exit hover:opacity-100 opacity-70">Privacy</a>
-            <a href="contact.html" class="nav-exit hover:opacity-100 opacity-70">Contact</a>
           </div>
         </div>
       </div>
-    </section>
-  </main>
+    </div>
+  </section>
+
+  <section id="pipeline" class="section tight">
+    <div class="shell">
+      <div class="kicker mb-4">ARTIFACT PIPELINE</div>
+      <h2 class="h2 mb-10">From Context<br/>To Verifiable Record</h2>
+
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="module p-7" data-open="cap" onclick="toggleModule(this)">
+          <div class="font-mono text-[10px] text-[var(--royal)] tracking-[0.22em] uppercase mb-3">01 · Capture</div>
+          <div class="font-semibold text-lg mb-1 uppercase italic">Policy-scoped</div>
+          <div class="content mt-4 pt-4 border-t border-[var(--stroke)] text-[14px] leading-[1.9] text-[var(--muted)]">
+            Capture is declared before generation: inclusion, exclusion, masking, tier rules, and policy version identifiers embedded into the artifact.
+          </div>
+        </div>
+
+        <div class="module p-7" data-open="norm" onclick="toggleModule(this)">
+          <div class="font-mono text-[10px] text-[var(--royal)] tracking-[0.22em] uppercase mb-3">02 · Normalize</div>
+          <div class="font-semibold text-lg mb-1 uppercase italic">Stable schema</div>
+          <div class="content mt-4 pt-4 border-t border-[var(--stroke)] text-[14px] leading-[1.9] text-[var(--muted)]">
+            Captured fields are mapped into a deterministic artifact schema so verification can be repeated across environments without interpretive logging variance.
+          </div>
+        </div>
+
+        <div class="module p-7" data-open="canon" onclick="toggleModule(this)">
+          <div class="font-mono text-[10px] text-[var(--royal)] tracking-[0.22em] uppercase mb-3">03 · Canonicalize</div>
+          <div class="font-semibold text-lg mb-1 uppercase italic">Stable bytes</div>
+          <div class="content mt-4 pt-4 border-t border-[var(--stroke)] text-[14px] leading-[1.9] text-[var(--muted)]">
+            Canonicalization produces deterministic byte output for hashing and signature verification, independent of JSON field order or serialization differences.
+          </div>
+        </div>
+
+        <div class="module p-7" data-open="seal" onclick="toggleModule(this)">
+          <div class="font-mono text-[10px] text-[var(--royal)] tracking-[0.22em] uppercase mb-3">04 · Seal</div>
+          <div class="font-semibold text-lg mb-1 uppercase italic">Hash + signature</div>
+          <div class="content mt-4 pt-4 border-t border-[var(--stroke)] text-[14px] leading-[1.9] text-[var(--muted)]">
+            Hashing establishes tamper-evidence; signatures establish origin authenticity (suite configurable). Verification becomes independent and reproducible.
+          </div>
+        </div>
+
+        <div class="module p-7" data-open="keys" onclick="toggleModule(this)">
+          <div class="font-mono text-[10px] text-[var(--royal)] tracking-[0.22em] uppercase mb-3">05 · Keys</div>
+          <div class="font-semibold text-lg mb-1 uppercase italic">Non-custodial</div>
+          <div class="content mt-4 pt-4 border-t border-[var(--stroke)] text-[14px] leading-[1.9] text-[var(--muted)]">
+            Signing keys remain in client-controlled HSM/KMS/TEE. CEYO does not store, transmit, or possess private keys.
+          </div>
+        </div>
+
+        <div class="module p-7" data-open="verify" onclick="toggleModule(this)">
+          <div class="font-mono text-[10px] text-[var(--royal)] tracking-[0.22em] uppercase mb-3">06 · Verify</div>
+          <div class="font-semibold text-lg mb-1 uppercase italic">Independent recomputation</div>
+          <div class="content mt-4 pt-4 border-t border-[var(--stroke)] text-[14px] leading-[1.9] text-[var(--muted)]">
+            Oversight can recompute canonical bytes, validate hashes, and validate signatures under declared scope. Verification proves integrity—nothing more.
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-12 flex gap-4 flex-wrap justify-center">
+        <a class="btn ghost nav-exit" href="trust.html">Trust & Verification</a>
+        <a class="btn ghost nav-exit" href="governance.html">Governance</a>
+        <a class="btn primary nav-exit" href="contact.html">Request Controlled Review</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section tight opacity-70 hover:opacity-100 transition-opacity">
+    <div class="shell">
+      <div class="border-t border-[var(--stroke)] pt-10">
+        <div class="font-mono text-[10px] mb-6 uppercase tracking-widest">Boundary Declaration · V2026.02.19</div>
+        <div class="grid md:grid-cols-2 gap-8 text-[10px] font-mono leading-relaxed uppercase text-[rgba(244,240,230,.70)]">
+          <p>Public pages are descriptive only. Technical and operational materials are shared under controlled conditions.</p>
+          <p>Verification confirms integrity and provenance under policy scope; CEYO does not certify compliance or guarantee admissibility.</p>
+        </div>
+
+        <div class="mt-10 pt-8 border-t border-[var(--stroke)] flex flex-wrap justify-between gap-6 font-mono text-[10px] uppercase tracking-widest opacity-70">
+          <div>© <span id="year">2026</span> CEYO · All Rights Reserved</div>
+          <div class="flex gap-8">
+            <a href="terms.html" class="nav-exit hover:text-[var(--royal)] transition-colors">Terms</a>
+            <a href="privacy.html" class="nav-exit hover:text-[var(--royal)] transition-colors">Privacy</a>
+            <a href="contact.html" class="nav-exit hover:text-[var(--royal)] transition-colors">Contact</a>
+          </div>
+        </div>
+      </div>
+      <div style="height:72px"></div>
+    </div>
+  </section>
 
   <nav id="bottombar" aria-label="Site index">
     <a href="index.html" class="nav-exit">INDEX</a>
@@ -673,15 +458,20 @@
     <a href="contact.html" class="nav-exit">CONTACT</a>
   </nav>
 
+  <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+
   <script>
+    gsap.registerPlugin(ScrollTrigger);
+
     /* Cursor */
     const cursor = document.getElementById('cursor');
     if (window.matchMedia("(pointer: fine)").matches){
       document.addEventListener('mousemove', (e) => {
-        cursor.style.left = e.clientX + "px";
-        cursor.style.top = e.clientY + "px";
+        gsap.to(cursor, {x: e.clientX, y: e.clientY, duration: 0.10, overwrite:true});
       }, {passive:true});
-      document.querySelectorAll('a, button, .data-block').forEach(el => {
+      document.querySelectorAll('a, button, .module').forEach(el => {
         el.addEventListener('mouseenter', () => cursor.classList.add('big'), {passive:true});
         el.addEventListener('mouseleave', () => cursor.classList.remove('big'), {passive:true});
       });
@@ -690,44 +480,259 @@
     /* Top nav scroll */
     const topnav = document.getElementById('topnav');
     window.addEventListener('scroll', () => {
-      topnav.classList.toggle('scrolled', window.scrollY > 14);
+      topnav.classList.toggle('scrolled', window.scrollY > 18);
     }, {passive:true});
 
     /* Year */
     document.getElementById("year").textContent = new Date().getFullYear();
 
-    /* Expand blocks */
-    function toggleBlock(el){
+    /* Expand modules */
+    function toggleModule(el){
       const key = el.getAttribute('data-open');
       el.classList.toggle('expanded');
       if (key){
         history.replaceState(null, "", "#" + key);
+        focusCluster(key, true);
       }
     }
-    window.toggleBlock = toggleBlock;
+    window.toggleModule = toggleModule;
 
-    /* Deep-link open */
-    (function openFromHash(){
-      const key = (location.hash || "").replace("#","").trim();
-      if (!key) return;
-      const el = document.querySelector(`[data-open="${key}"]`);
-      if (el) el.classList.add('expanded');
-    })();
+    /* ===== THREE.JS: Blueprint “schematic swarm” (distinct from index) ===== */
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(64, window.innerWidth/window.innerHeight, 0.1, 500);
+    const renderer = new THREE.WebGLRenderer({
+      canvas: document.getElementById('gl'),
+      alpha: true,
+      antialias: true,
+      powerPreference:"high-performance"
+    });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+    camera.position.z = 22;
 
-    /* Explode-transition for cross-page nav (subtle, no 3D here) */
-    function navWithFlash(url){
-      document.body.animate(
-        [{filter:"none", transform:"none"}, {filter:"blur(2px)", transform:"scale(0.995)"}, {filter:"none", transform:"none"}],
-        {duration: 420, easing:"cubic-bezier(0.16, 1, 0.3, 1)"}
-      );
-      setTimeout(()=>{ window.location.href = url; }, 260);
+    const nodeCount = 240;
+    const bounds = 18;
+
+    const positions = new Float32Array(nodeCount * 3);
+    const velocities = new Float32Array(nodeCount * 3);
+
+    for (let i=0; i<nodeCount; i++){
+      const k=i*3;
+      positions[k+0]=(Math.random()-0.5)*bounds*2;
+      positions[k+1]=(Math.random()-0.5)*bounds*1.6;
+      positions[k+2]=(Math.random()-0.5)*bounds*1.2;
+      velocities[k+0]=(Math.random()-0.5)*0.018;
+      velocities[k+1]=(Math.random()-0.5)*0.016;
+      velocities[k+2]=(Math.random()-0.5)*0.014;
     }
-    document.querySelectorAll('a.nav-exit').forEach(a => {
-      a.addEventListener('click', (e) => {
-        const href = a.getAttribute('href');
-        if (!href || href.startsWith('#')) return;
+
+    const ptsGeo = new THREE.BufferGeometry();
+    ptsGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+
+    const ptsMat = new THREE.PointsMaterial({
+      color: 0x2D67FF,
+      size: 0.055,
+      transparent: true,
+      opacity: 0.85,
+      depthWrite: false
+    });
+
+    const points = new THREE.Points(ptsGeo, ptsMat);
+    scene.add(points);
+
+    const maxConnections = 1700;
+    const linePositions = new Float32Array(maxConnections * 2 * 3);
+    const lineGeo = new THREE.BufferGeometry();
+    lineGeo.setAttribute('position', new THREE.BufferAttribute(linePositions, 3));
+    lineGeo.setDrawRange(0, 0);
+
+    const lineMat = new THREE.LineBasicMaterial({
+      color: 0x2D67FF,
+      transparent: true,
+      opacity: 0.18,
+      depthWrite: false
+    });
+
+    const lines = new THREE.LineSegments(lineGeo, lineMat);
+    scene.add(lines);
+
+    // Schematic frame (thin wire box)
+    const boxGeo = new THREE.BoxGeometry(10.5, 6.4, 6.4);
+    const boxMat = new THREE.MeshBasicMaterial({ color: 0x2D67FF, wireframe:true, transparent:true, opacity:0.18 });
+    const box = new THREE.Mesh(boxGeo, boxMat);
+    scene.add(box);
+
+    const state = { tighten: 0.0, burst: 0.0, zoom: 0.0, orbitRadius: 7.6, clusterBoost: 0.0 };
+
+    const dirs=[];
+    for (let i=0; i<nodeCount; i++){
+      dirs.push(new THREE.Vector3((Math.random()-0.5),(Math.random()-0.5),(Math.random()-0.5)).normalize());
+    }
+
+    const maxDist = 2.35;
+    const maxDist2 = maxDist*maxDist;
+
+    function updateConnections(){
+      const pos = ptsGeo.attributes.position.array;
+      let seg=0;
+      for (let i=0; i<nodeCount; i++){
+        const ix=i*3;
+        const ax=pos[ix], ay=pos[ix+1], az=pos[ix+2];
+        for (let j=i+1; j<nodeCount; j++){
+          const jx=j*3;
+          const bx=pos[jx], by=pos[jx+1], bz=pos[jx+2];
+          const dx=ax-bx, dy=ay-by, dz=az-bz;
+          const d2=dx*dx+dy*dy+dz*dz;
+          if (d2<maxDist2){
+            const k=seg*6;
+            linePositions[k+0]=ax; linePositions[k+1]=ay; linePositions[k+2]=az;
+            linePositions[k+3]=bx; linePositions[k+4]=by; linePositions[k+5]=bz;
+            seg++; if (seg>=maxConnections) break;
+          }
+        }
+        if (seg>=maxConnections) break;
+      }
+      lineGeo.setDrawRange(0, seg*2);
+      lineGeo.attributes.position.needsUpdate=true;
+      lineMat.opacity = Math.min(0.34, 0.12 + 0.10*state.tighten + 0.10*state.zoom);
+    }
+
+    // Mouse parallax
+    let targetRotX=0, targetRotY=0;
+    if (window.matchMedia("(pointer: fine)").matches){
+      window.addEventListener('mousemove', (e)=>{
+        const nx=(e.clientX/window.innerWidth)*2-1;
+        const ny=(e.clientY/window.innerHeight)*2-1;
+        targetRotY=nx*0.14;
+        targetRotX=ny*0.08;
+      }, {passive:true});
+    }
+
+    function explodeOut(duration=0.55){
+      gsap.killTweensOf(state);
+      gsap.to(state, { burst: 1.0, tighten: 0.0, zoom: 0.0, duration, ease: "power2.out" });
+      gsap.to(camera.position, { z: 27.0, duration, ease: "power2.out" });
+      gsap.to(boxMat, { opacity: 0.10, duration, ease: "power2.out" });
+    }
+    function implodeIn(duration=0.7){
+      gsap.killTweensOf(state);
+      gsap.to(state, { burst: 0.0, tighten: 0.78, zoom: 0.65, duration, ease: "power2.out" });
+      gsap.to(camera.position, { z: 20.0, duration, ease: "power2.out" });
+      gsap.to(boxMat, { opacity: 0.18, duration, ease: "power2.out" });
+    }
+
+    // Scroll tighten around pipeline section
+    const pipeline = document.getElementById('pipeline');
+    gsap.timeline({
+      scrollTrigger:{ trigger: pipeline, start:"top 80%", end:"bottom 35%", scrub:1.1 }
+    })
+    .to(state, { tighten: 0.86, zoom: 0.70, duration:1, ease:"none" })
+    .to(camera.position, { z: 19.6, duration:1, ease:"none" }, 0);
+
+    // Cluster focus mapping (optional micro zoom)
+    const clusterMap = {
+      modes:{ camZ:20.5, boost:0.18, orbit:7.8 },
+      pipeline:{ camZ:19.8, boost:0.24, orbit:7.2 },
+      tiers:{ camZ:20.2, boost:0.20, orbit:7.5 },
+      failopen:{ camZ:20.7, boost:0.16, orbit:8.0 },
+      cap:{ camZ:19.5, boost:0.28, orbit:6.9 },
+      norm:{ camZ:19.6, boost:0.26, orbit:7.0 },
+      canon:{ camZ:19.7, boost:0.24, orbit:7.1 },
+      seal:{ camZ:19.5, boost:0.28, orbit:6.9 },
+      keys:{ camZ:19.8, boost:0.22, orbit:7.2 },
+      verify:{ camZ:19.9, boost:0.20, orbit:7.3 }
+    };
+
+    function focusCluster(key, fromClick=false){
+      const c=clusterMap[key]; if(!c) return;
+      gsap.to(camera.position, { z:c.camZ, duration: fromClick?0.75:1.0, ease:"power2.out" });
+      gsap.to(state, { clusterBoost:c.boost, orbitRadius:c.orbit, duration: fromClick?0.75:1.0, ease:"power2.out" });
+      gsap.to(state, { clusterBoost:0.0, duration:1.2, ease:"power2.out", delay:0.45 });
+    }
+    window.focusCluster = focusCluster;
+
+    // Deep-link open
+    function openFromHash(){
+      const key=(location.hash||"").replace("#","").trim();
+      if(!key) return;
+      const el=document.querySelector(`[data-open="${key}"]`);
+      if(el){ el.classList.add('expanded'); focusCluster(key,false); }
+    }
+    openFromHash();
+    window.addEventListener('hashchange', openFromHash);
+
+    function animate(){
+      requestAnimationFrame(animate);
+
+      const pos=ptsGeo.attributes.position.array;
+      points.rotation.y += (targetRotY - points.rotation.y) * 0.04;
+      points.rotation.x += (targetRotX - points.rotation.x) * 0.04;
+      lines.rotation.copy(points.rotation);
+      box.rotation.y += 0.0012;
+      box.rotation.x += 0.0007;
+
+      const t=performance.now()*0.001;
+      const tight=Math.min(1.0,(state.tighten*0.78)+(state.clusterBoost*0.82));
+      const shell=state.orbitRadius;
+      const b=state.burst;
+
+      const tmp=new THREE.Vector3();
+      const desired=new THREE.Vector3();
+      const out=new THREE.Vector3();
+
+      for(let i=0;i<nodeCount;i++){
+        const k=i*3;
+
+        pos[k+0]+=velocities[k+0]*(1.0-0.55*tight);
+        pos[k+1]+=velocities[k+1]*(1.0-0.55*tight);
+        pos[k+2]+=velocities[k+2]*(1.0-0.55*tight);
+
+        if(pos[k+0]>bounds||pos[k+0]<-bounds) velocities[k+0]*=-1;
+        if(pos[k+1]>bounds||pos[k+1]<-bounds) velocities[k+1]*=-1;
+        if(pos[k+2]>bounds||pos[k+2]<-bounds) velocities[k+2]*=-1;
+
+        if(tight>0.001){
+          tmp.set(pos[k+0],pos[k+1],pos[k+2]);
+          const dir=dirs[i];
+          const breathe=0.30*Math.sin(t+i*0.15);
+          desired.copy(dir).multiplyScalar(shell+breathe);
+          tmp.lerp(desired, 0.010 + 0.032*tight);
+          pos[k+0]=tmp.x; pos[k+1]=tmp.y; pos[k+2]=tmp.z;
+        }
+
+        if(b>0.001){
+          out.set(pos[k+0],pos[k+1],pos[k+2]).normalize().multiplyScalar(0.055*b);
+          pos[k+0]+=out.x*(1.0+i%7*0.05);
+          pos[k+1]+=out.y*(1.0+i%5*0.05);
+          pos[k+2]+=out.z*(1.0+i%3*0.05);
+        }
+      }
+
+      ptsGeo.attributes.position.needsUpdate=true;
+      updateConnections();
+      renderer.render(scene,camera);
+    }
+    animate();
+
+    // Resize
+    window.addEventListener('resize', ()=>{
+      camera.aspect=window.innerWidth/window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,2));
+    }, {passive:true});
+
+    /* Page transition: explode then navigate */
+    function navWithExplosion(url){
+      explodeOut(0.55);
+      setTimeout(()=>{ window.location.href=url; }, 520);
+    }
+    document.querySelectorAll('a.nav-exit').forEach(a=>{
+      a.addEventListener('click',(e)=>{
+        const href=a.getAttribute('href');
+        if(!href || href.startsWith('#')) return;
         e.preventDefault();
-        navWithFlash(href);
+        navWithExplosion(href);
       });
     });
   </script>
