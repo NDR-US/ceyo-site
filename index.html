@@ -7,7 +7,6 @@
   <meta name="description" content="CEYO produces deterministic, cryptographically sealed audit artifacts for independent verification under constrained disclosure."/>
   <meta name="theme-color" content="#0B0F14"/>
 
-  <!-- Typography (per your spec) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -21,9 +20,8 @@
       --lineOnInk:rgba(255,255,255,.10);
       --lineOnPaper:rgba(0,0,0,.10);
 
-      /* Accent system (your direction: institutional olive + muted amber) */
-      --accent:#3A320C;     /* olive (primary brand tone) */
-      --accent2:#C9A44A;    /* muted amber (highlight) */
+      --accent:#3A320C;
+      --accent2:#C9A44A;
 
       --maxW:1160px;
       --readW:740px;
@@ -60,7 +58,10 @@
     a{color:inherit;text-decoration:none}
     button{font:inherit}
 
-    /* ========= Background (not simplistic): neuron field + atom core ========= */
+    /* Fix anchor jumps under sticky header sitewide */
+    [id]{ scroll-margin-top: calc(var(--navH) + 24px); }
+
+    /* Background: subtle depth + neuron field canvas */
     .bg{
       position:fixed; inset:0; pointer-events:none; z-index:0;
       background:
@@ -76,11 +77,9 @@
       opacity:.95;
     }
 
-    /* Layout */
     .wrap{ position:relative; z-index:1; max-width:var(--maxW); margin:0 auto; padding:0 var(--s4); }
     @media (max-width: 640px){ .wrap{ padding:0 18px; } }
 
-    /* Sticky header */
     header.site{
       position:sticky; top:0; z-index:50;
       backdrop-filter: blur(10px);
@@ -93,10 +92,10 @@
       display:flex; align-items:center; justify-content:space-between; gap:var(--s3);
     }
 
-    /* Brand */
     .logo{
-      display:flex; align-items:center; gap:10px; min-width: 180px;
+      display:flex; align-items:center; gap:10px;
       font-weight:600; letter-spacing:-.01em;
+      flex:0 0 auto;
     }
     .logo .mark{
       display:inline-flex; align-items:center; gap:10px;
@@ -111,18 +110,19 @@
       box-shadow: 0 0 0 4px rgba(201,164,74,.12);
     }
 
-    /* Center nav (desktop) */
     nav.center{
       display:flex; gap:18px; align-items:center; justify-content:center;
       flex:1;
       font-size:14px;
       color: rgba(201,209,217,.92);
+      min-width: 0;
     }
     nav.center a{
       padding:10px 10px;
       border-radius:999px;
       border:1px solid transparent;
       transition: background .18s ease, border-color .18s ease, transform .18s ease;
+      white-space:nowrap;
     }
     nav.center a:hover{
       background: rgba(255,255,255,.03);
@@ -134,11 +134,10 @@
       background: rgba(201,164,74,.06);
     }
 
-    /* Right actions */
     .actions{
       display:flex; align-items:center; gap:10px;
-      min-width: 220px;
       justify-content:flex-end;
+      flex:0 0 auto;
     }
     .btn{
       height:48px;
@@ -162,7 +161,6 @@
     .btn .arr{ display:inline-block; margin-left:10px; transition: transform .16s ease; }
     .btn:hover .arr{ transform: translateX(3px); }
 
-    /* Mobile hamburger */
     .hamburger{
       display:none;
       height:48px; width:48px;
@@ -174,13 +172,13 @@
     }
     .hamburger:active{ transform: translateY(1px); }
 
-    @media (max-width: 980px){
+    /* Fix: switch to hamburger earlier to prevent desktop overlap */
+    @media (max-width: 1180px){
       nav.center{ display:none; }
       .actions .btn.secondary{ display:none; }
       .hamburger{ display:inline-flex; }
     }
 
-    /* Mobile drawer menu */
     .drawer{
       position:fixed; inset:0; z-index:80;
       display:none;
@@ -233,12 +231,10 @@
     }
     .drawerLinks a:hover{ transform: translateY(-1px); border-color: rgba(201,164,74,.28); }
 
-    /* Typography rules */
     .read{ max-width: var(--readW); }
     p{ margin: 0 0 14px 0; line-height: var(--lh); }
     .muted{ color: rgba(201,209,217,.78); }
 
-    /* Sections */
     main{ padding: var(--s6) 0 var(--s7); }
     section{ padding: var(--s7) 0; border-top:1px solid rgba(255,255,255,.06); }
     section:first-of-type{ border-top:none; padding-top: var(--s6); }
@@ -279,7 +275,6 @@
       h3{ font-size: 19px; }
     }
 
-    /* Proof chips */
     .chips{ display:flex; flex-wrap:wrap; gap:10px; margin-top: 16px; }
     .chip{
       height: 40px;
@@ -294,7 +289,6 @@
     .chip b{ font-weight:600; color: rgba(245,242,234,.94); }
     .chip .k{ font-family:var(--mono); font-size: 11px; letter-spacing:.12em; text-transform:uppercase; margin-right:8px; color: rgba(201,164,74,.88); }
 
-    /* Plain-language strip */
     .strip{
       border:1px solid rgba(255,255,255,.10);
       background: rgba(255,255,255,.02);
@@ -304,7 +298,6 @@
     .strip ul{ margin: 12px 0 0 0; padding: 0 0 0 18px; }
     .strip li{ margin: 8px 0; line-height:1.5; color: rgba(201,209,217,.86); }
 
-    /* 3 pillars (highlighted consistently in amber) */
     .grid3{
       display:grid;
       grid-template-columns: repeat(3, 1fr);
@@ -333,7 +326,6 @@
     }
     .card p{ color: rgba(201,209,217,.84); }
 
-    /* Who it's for (rewritten, clearer) */
     .grid4{
       display:grid;
       grid-template-columns: repeat(4, 1fr);
@@ -360,7 +352,6 @@
       color: rgba(245,242,234,.92);
     }
 
-    /* Mini diagram (with VERIFY at bottom) */
     .diagramWrap{
       margin-top: 18px;
       border:1px solid rgba(255,255,255,.10);
@@ -388,7 +379,6 @@
     .draw .line{ animation: drawLine 1.0s ease-out forwards; }
     @keyframes drawLine{ to{ stroke-dashoffset: 0; } }
 
-    /* Footer */
     footer{
       border-top:1px solid rgba(255,255,255,.06);
       padding: var(--s7) 0 var(--s6);
@@ -412,7 +402,7 @@
       font-size: 12px;
       letter-spacing: .18em;
       text-transform: uppercase;
-      color: rgba(201,164,74,.86); /* highlighted consistently */
+      color: rgba(201,164,74,.86);
       margin-bottom: 10px;
     }
     .footCol a{
@@ -435,16 +425,15 @@
       border-top:1px solid rgba(255,255,255,.06);
     }
 
-    /* Motion: Fade-up reveal */
     .reveal{ opacity:0; transform: translateY(10px); transition: opacity .55s ease, transform .55s ease; }
     .reveal.on{ opacity:1; transform: translateY(0); }
 
-    /* Reduced motion */
     @media (prefers-reduced-motion: reduce){
       html{scroll-behavior:auto;}
       .reveal{ opacity:1; transform:none; transition:none; }
       .draw .line{ animation:none; stroke-dashoffset:0; }
       nav.center a, .btn, .card, .drawerLinks a{ transition:none; }
+      canvas#neurons{ display:none; }
     }
   </style>
 </head>
@@ -476,7 +465,6 @@
     </div>
   </header>
 
-  <!-- Mobile drawer -->
   <div class="drawer" id="drawer" aria-hidden="true">
     <div class="drawerCard" role="dialog" aria-modal="true" aria-label="Menu">
       <div class="drawerHead">
@@ -500,7 +488,6 @@
   </div>
 
   <main class="wrap">
-    <!-- HERO -->
     <section style="padding-top: var(--s6);">
       <div class="read reveal">
         <div class="eyebrow">Neutral audit layer · Evidentiary records · Independent verification</div>
@@ -522,7 +509,6 @@
       </div>
     </section>
 
-    <!-- Plain-language summary strip -->
     <section id="plain">
       <div class="read reveal">
         <h2>Plain-language summary</h2>
@@ -537,7 +523,6 @@
       </div>
     </section>
 
-    <!-- 3 pillars -->
     <section id="pillars">
       <div class="read reveal">
         <h2>Record · Seal · Verify</h2>
@@ -558,7 +543,6 @@
       </div>
     </section>
 
-    <!-- Who it's for -->
     <section id="audience">
       <div class="read reveal">
         <h2>Who it’s for</h2>
@@ -589,7 +573,6 @@
       </div>
     </section>
 
-    <!-- Mini diagram (INPUT → POLICY → CANONICALIZE → SEAL → ARTIFACT, VERIFY below) -->
     <section id="flow">
       <div class="read reveal">
         <h2>Evidence flow</h2>
@@ -608,7 +591,6 @@
             <text class="lbl" x="740" y="36" text-anchor="middle">SEAL</text>
             <text class="lbl" x="920" y="36" text-anchor="middle">ARTIFACT</text>
 
-            <!-- VERIFY at bottom -->
             <text class="lbl" x="490" y="176" text-anchor="middle" style="fill: rgba(201,164,74,.88);">VERIFY</text>
             <text class="lbl" x="490" y="196" text-anchor="middle" style="fill: rgba(201,209,217,.66); letter-spacing:.06em; text-transform:none; font-size: 12px;">
               Recompute canonicalization · Recompute hash · Validate signature · Confirm policy alignment
@@ -626,7 +608,6 @@
       </div>
     </section>
 
-    <!-- Footer trust stack -->
     <footer id="footer">
       <div class="footGrid reveal">
         <div class="footCol">
@@ -667,7 +648,6 @@
   </main>
 
   <script>
-    // Year
     document.getElementById('year').textContent = new Date().getFullYear();
 
     // Mobile menu
@@ -681,23 +661,19 @@
     drawer.addEventListener('click', (e)=>{ if(e.target===drawer) closeDrawer(); });
     window.addEventListener('keydown', (e)=>{ if(e.key==='Escape' && drawer.classList.contains('open')) closeDrawer(); });
 
-    // Motion rules: Fade-up reveal + diagram line draw (respects reduced motion via CSS)
+    // Reveal + diagram draw
     const prefersReduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     const revealEls = Array.from(document.querySelectorAll('.reveal'));
     if(!prefersReduce){
       const io = new IntersectionObserver((entries)=>{
-        entries.forEach(en=>{
-          if(en.isIntersecting) en.target.classList.add('on');
-        });
+        entries.forEach(en=>{ if(en.isIntersecting) en.target.classList.add('on'); });
       }, {threshold: 0.12});
       revealEls.forEach(el=>io.observe(el));
 
       const d = document.getElementById('diagramBox');
       const dio = new IntersectionObserver((entries)=>{
-        entries.forEach(en=>{
-          if(en.isIntersecting) en.target.classList.add('draw');
-        });
+        entries.forEach(en=>{ if(en.isIntersecting) en.target.classList.add('draw'); });
       }, {threshold: 0.20});
       dio.observe(d);
     } else {
@@ -705,17 +681,10 @@
       document.getElementById('diagramBox').classList.add('draw');
     }
 
-    /* =========================
-       Neuron field + “atom core” behavior (your request):
-       - Ambient yellowish neurons floating
-       - As you scroll, they converge toward a round “atom”
-       - At a key section they “explode”
-       - Then they return/converge again
-       Colors match this page (amber/olive family).
-       Lightweight 2D canvas; no external libs.
-       ========================= */
-
+    /* Neuron field + atom core (2D canvas), respects reduced motion */
     (function(){
+      if (prefersReduce) return;
+
       const c = document.getElementById('neurons');
       const ctx = c.getContext('2d', {alpha:true});
       let w=0,h=0,dpr=1;
@@ -732,18 +701,16 @@
       resize();
       window.addEventListener('resize', resize, {passive:true});
 
-      // Particle system
-      const N = 240;                       // enough density, still light
+      const N = 240;
       const boundsPad = 40;
       const nodes = [];
+      const dirs = [];
 
       const rnd = (a,b)=> a + Math.random()*(b-a);
 
-      // Precompute target directions (for the “atom” sphere/ring)
-      const dirs = [];
       for(let i=0;i<N;i++){
         const ang = Math.random()*Math.PI*2;
-        const rad = Math.sqrt(Math.random()); // bias toward center
+        const rad = Math.sqrt(Math.random());
         dirs.push({ang, rad});
       }
 
@@ -753,64 +720,29 @@
           y: rnd(-boundsPad, h+boundsPad),
           vx: rnd(-0.18, 0.18),
           vy: rnd(-0.14, 0.14),
-          s: rnd(1.1, 2.1),       // point size
-          j: rnd(0.6, 1.4)        // jitter factor
+          s: rnd(1.1, 2.1)
         });
       }
 
-      // State (0..1)
-      const state = {
-        converge: 0.0,     // 0 = drift, 1 = atom cluster
-        burst: 0.0,        // 0 = none, 1 = explode outward
-        focus: 0.0,        // extra tightness around a section
-        coreAlpha: 0.0,    // core visibility
-      };
+      const state = { converge:0, burst:0, focus:0, coreAlpha:0 };
 
-      // Identify scroll anchors
       const anchors = {
-        hero: document.querySelector('section'),
         plain: document.getElementById('plain'),
         pillars: document.getElementById('pillars'),
         flow: document.getElementById('flow'),
         footer: document.getElementById('footer')
       };
 
-      // A small helper to get scroll progress around an element
       function inRangeProgress(el, startPct, endPct){
         if(!el) return 0;
         const r = el.getBoundingClientRect();
         const vh = window.innerHeight || 1;
         const start = vh * startPct;
         const end = vh * endPct;
-        // progress 0 when below end, 1 when above start
         const t = (end - r.top) / Math.max(1, (end - start));
         return Math.max(0, Math.min(1, t));
       }
 
-      function tickState(){
-        // Converge begins as we leave hero and enters the content
-        const p1 = inRangeProgress(anchors.plain, 0.80, 1.10);   // start converging
-        const p2 = inRangeProgress(anchors.pillars, 0.70, 1.05); // converge more
-        const baseConverge = Math.max(p1*0.65, p2);
-
-        // Burst/explosion happens around Evidence Flow section
-        const burstP = inRangeProgress(anchors.flow, 0.58, 0.95); // rises while entering
-        const burstOut = Math.sin(burstP * Math.PI);              // 0→1→0
-        state.burst = Math.max(0, burstOut * 0.95);
-
-        // Re-converge by footer (settle back into atom)
-        const settle = inRangeProgress(anchors.footer, 0.85, 1.10);
-        state.converge = Math.max(baseConverge, settle);
-
-        // Focus: tighten when pillars are on screen
-        const focusP = inRangeProgress(anchors.pillars, 0.55, 0.95);
-        state.focus = focusP;
-
-        // Core visibility tracks convergence
-        state.coreAlpha = Math.min(0.55, 0.18 + state.converge * 0.48);
-      }
-
-      // Mouse parallax (subtle)
       let mx=0.5, my=0.5;
       if(window.matchMedia("(pointer:fine)").matches){
         window.addEventListener('mousemove', (e)=>{
@@ -819,30 +751,37 @@
         }, {passive:true});
       }
 
+      function tickState(){
+        const p1 = inRangeProgress(anchors.plain, 0.80, 1.10);
+        const p2 = inRangeProgress(anchors.pillars, 0.70, 1.05);
+        const baseConverge = Math.max(p1*0.65, p2);
+
+        const burstP = inRangeProgress(anchors.flow, 0.58, 0.95);
+        const burstOut = Math.sin(burstP * Math.PI);
+        state.burst = Math.max(0, burstOut * 0.95);
+
+        const settle = inRangeProgress(anchors.footer, 0.85, 1.10);
+        state.converge = Math.max(baseConverge, settle);
+
+        const focusP = inRangeProgress(anchors.pillars, 0.55, 0.95);
+        state.focus = focusP;
+
+        state.coreAlpha = Math.min(0.55, 0.18 + state.converge * 0.48);
+      }
+
       function draw(){
         tickState();
-
         ctx.clearRect(0,0,w,h);
-
-        // Subtle vignette for readability
-        const vg = ctx.createRadialGradient(w*0.55, h*0.28, 40, w*0.5, h*0.5, Math.max(w,h)*0.9);
-        vg.addColorStop(0,'rgba(0,0,0,0.00)');
-        vg.addColorStop(1,'rgba(0,0,0,0.28)');
-        ctx.fillStyle = vg;
-        ctx.fillRect(0,0,w,h);
 
         const px = (mx - 0.5) * 22;
         const py = (my - 0.5) * 14;
 
-        // Atom core position (slightly above center)
         const cx = w*0.52 + px*0.35;
         const cy = h*0.34 + py*0.35;
 
-        // Atom radius changes with focus/converge
         const baseR = Math.min(w,h) * 0.18;
         const orbitR = baseR * (0.92 - state.focus*0.10) * (0.92 - state.converge*0.08);
 
-        // Draw core (round “atom”)
         if(state.coreAlpha > 0.01){
           ctx.save();
           ctx.globalAlpha = state.coreAlpha;
@@ -852,7 +791,6 @@
           ctx.arc(cx, cy, orbitR*0.38, 0, Math.PI*2);
           ctx.stroke();
 
-          // Outer ring
           ctx.globalAlpha = state.coreAlpha * 0.75;
           ctx.strokeStyle = 'rgba(201,164,74,0.22)';
           ctx.lineWidth = 1.0;
@@ -860,7 +798,6 @@
           ctx.arc(cx, cy, orbitR*0.78, 0, Math.PI*2);
           ctx.stroke();
 
-          // Tiny glow
           const g = ctx.createRadialGradient(cx, cy, 0, cx, cy, orbitR*1.05);
           g.addColorStop(0,'rgba(201,164,74,0.14)');
           g.addColorStop(1,'rgba(201,164,74,0.0)');
@@ -871,31 +808,25 @@
           ctx.restore();
         }
 
-        // Move & position nodes
         const maxDist = 165;
         const maxD2 = maxDist*maxDist;
 
-        // Use convergence to pull nodes toward ring/shell
         const conv = state.converge;
         const burst = state.burst;
 
         for(let i=0;i<N;i++){
           const p = nodes[i];
 
-          // Drift
           p.x += p.vx * (1 - 0.65*conv);
           p.y += p.vy * (1 - 0.65*conv);
 
-          // Wrap
           if(p.x < -boundsPad) p.x = w + boundsPad;
           if(p.x > w + boundsPad) p.x = -boundsPad;
           if(p.y < -boundsPad) p.y = h + boundsPad;
           if(p.y > h + boundsPad) p.y = -boundsPad;
 
-          // Atom target (ring-ish distribution)
           if(conv > 0.001){
             const d = dirs[i];
-            // ring position with slight radial diversity
             const ringR = orbitR * (0.62 + d.rad*0.48);
             const t = performance.now()*0.00035;
             const ang = d.ang + t * (0.20 + (i%7)*0.03);
@@ -903,12 +834,10 @@
             const tx = cx + Math.cos(ang) * ringR;
             const ty = cy + Math.sin(ang) * ringR;
 
-            // Lerp into orbit
             p.x += (tx - p.x) * (0.010 + 0.042*conv);
             p.y += (ty - p.y) * (0.010 + 0.042*conv);
           }
 
-          // Burst (explode outward from core)
           if(burst > 0.001){
             const dx = (p.x - cx);
             const dy = (p.y - cy);
@@ -921,12 +850,9 @@
           }
         }
 
-        // Connections + points
-        // (Slightly stronger when converged, subtle in drift)
         const lineAlphaBase = 0.05 + conv*0.10;
         const pointAlpha = 0.45 + conv*0.25;
 
-        // Lines
         for(let i=0;i<N;i++){
           const a = nodes[i];
           for(let j=i+1;j<N;j++){
@@ -947,7 +873,6 @@
           }
         }
 
-        // Points
         for(let i=0;i<N;i++){
           const p = nodes[i];
           ctx.fillStyle = `rgba(201,164,74,${pointAlpha})`;
@@ -959,20 +884,7 @@
         requestAnimationFrame(draw);
       }
 
-      // If reduced motion: keep a static-ish field
-      if(prefersReduce){
-        // Draw once and stop animating drift/explosion
-        state.converge = 0.35;
-        state.burst = 0.0;
-        state.coreAlpha = 0.35;
-        ctx.clearRect(0,0,w,h);
-        draw(); // will still animate; disable by returning early:
-        // hard stop: overwrite requestAnimationFrame by no-op
-        // (keeps first frame visible, avoids motion)
-        window.requestAnimationFrame = () => 0;
-      } else {
-        draw();
-      }
+      draw();
     })();
   </script>
 </body>
