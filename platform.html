@@ -68,13 +68,6 @@
       background-size: 72px 72px;
       mask-image: radial-gradient(700px 420px at 50% 20%, black 55%, transparent 100%);
     }
-    canvas#neurons{
-      position:fixed; inset:0;
-      width:100%; height:100%;
-      z-index:0;
-      pointer-events:none;
-      opacity:.55; /* intentionally reduced on Platform */
-    }
 
     .wrap{ position:relative; z-index:1; max-width:var(--maxW); margin:0 auto; padding:0 var(--s4); }
     @media (max-width: 640px){ .wrap{ padding:0 18px; } }
@@ -225,7 +218,6 @@
       h3{ font-size: 19px; }
     }
 
-    /* Platform-specific layout (not same as other pages) */
     .heroSplit{
       display:grid;
       grid-template-columns: 1.05fr 0.95fr;
@@ -242,7 +234,6 @@
       padding: 18px 18px;
     }
 
-    /* “Component map” diagram card */
     .map{
       border:1px solid rgba(201,164,74,.22);
       background: rgba(11,15,20,.60);
@@ -263,7 +254,6 @@
     .lbl{ fill: rgba(201,209,217,.86); font-family: var(--mono); font-size: 12px; letter-spacing:.10em; text-transform: uppercase; }
     .line{ stroke: rgba(201,164,74,.42); stroke-width:2; fill:none; stroke-linecap:round; }
 
-    /* Catalog with right-side detail panel */
     .catalogGrid{
       display:grid;
       grid-template-columns: 0.95fr 1.05fr;
@@ -321,7 +311,6 @@
     .detail ul{ margin: 12px 0 0 0; padding: 0 0 0 18px; }
     .detail li{ margin: 8px 0; color: rgba(201,209,217,.84); line-height: 1.55; }
 
-    /* Interface tiles (clean) */
     .tiles{
       display:grid;
       grid-template-columns: 1fr 1fr;
@@ -365,7 +354,6 @@
       white-space: pre;
     }
 
-    /* Footer */
     footer{ border-top:1px solid rgba(255,255,255,.06); padding: var(--s7) 0 var(--s6); }
     .footGrid{
       display:grid;
@@ -409,7 +397,6 @@
       border-top:1px solid rgba(255,255,255,.06);
     }
 
-    /* Motion: Fade-up reveal only */
     .reveal{ opacity:0; transform: translateY(10px); transition: opacity .55s ease, transform .55s ease; }
     .reveal.on{ opacity:1; transform: translateY(0); }
 
@@ -424,7 +411,6 @@
 <body>
   <div class="bg" aria-hidden="true"></div>
   <div class="gridOverlay" aria-hidden="true"></div>
-  <canvas id="neurons" aria-hidden="true"></canvas>
 
   <header class="site">
     <div class="wrap nav">
@@ -474,7 +460,6 @@
   </div>
 
   <main class="wrap">
-    <!-- HERO -->
     <section style="padding-top: var(--s6);">
       <div class="read reveal">
         <div class="eyebrow">Platform · Components · Interfaces</div>
@@ -527,7 +512,6 @@
       </div>
     </section>
 
-    <!-- COMPONENTS -->
     <section id="components">
       <div class="read reveal">
         <h2>Core components</h2>
@@ -606,7 +590,6 @@ tier: "controlled_review"
       </div>
     </section>
 
-    <!-- INTERFACES -->
     <section id="interfaces">
       <div class="read reveal">
         <h2>Integration surfaces</h2>
@@ -655,7 +638,6 @@ masking_rules: ["…"]</div>
       </div>
     </section>
 
-    <!-- FOOTER -->
     <footer id="footer">
       <div class="footGrid reveal">
         <div class="footCol">
@@ -841,81 +823,6 @@ retrieval_logging: true`
     });
 
     setActive('policy');
-
-    /* Platform background: faint neurons, no explode; slower drift */
-    (function(){
-      const c = document.getElementById('neurons');
-      const ctx = c.getContext('2d', {alpha:true});
-      let w=0,h=0,dpr=1;
-
-      function resize(){
-        dpr = Math.min(window.devicePixelRatio || 1, 2);
-        w = window.innerWidth; h = window.innerHeight;
-        c.width = Math.floor(w*dpr);
-        c.height = Math.floor(h*dpr);
-        c.style.width = w+'px';
-        c.style.height = h+'px';
-        ctx.setTransform(dpr,0,0,dpr,0,0);
-      }
-      resize();
-      window.addEventListener('resize', resize, {passive:true});
-
-      const N = 120;   // reduced density on platform
-      const pad = 40;
-      const nodes = [];
-      const rnd = (a,b)=> a + Math.random()*(b-a);
-
-      for(let i=0;i<N;i++){
-        nodes.push({ x:rnd(-pad,w+pad), y:rnd(-pad,h+pad), vx:rnd(-0.10,0.10), vy:rnd(-0.08,0.08), s:rnd(1.0,1.9) });
-      }
-
-      const maxDist = 150;
-      const maxD2 = maxDist*maxDist;
-
-      function draw(){
-        ctx.clearRect(0,0,w,h);
-
-        for(let i=0;i<N;i++){
-          const p = nodes[i];
-          p.x += p.vx; p.y += p.vy;
-          if(p.x < -pad) p.x = w+pad;
-          if(p.x > w+pad) p.x = -pad;
-          if(p.y < -pad) p.y = h+pad;
-          if(p.y > h+pad) p.y = -pad;
-        }
-
-        for(let i=0;i<N;i++){
-          const a = nodes[i];
-          for(let j=i+1;j<N;j++){
-            const b = nodes[j];
-            const dx=a.x-b.x, dy=a.y-b.y;
-            const d2=dx*dx+dy*dy;
-            if(d2 < maxD2){
-              const t = 1 - (d2/maxD2);
-              const alpha = Math.min(0.12, 0.04 * t);
-              ctx.strokeStyle = `rgba(201,164,74,${alpha})`;
-              ctx.lineWidth = 1;
-              ctx.beginPath();
-              ctx.moveTo(a.x,a.y);
-              ctx.lineTo(b.x,b.y);
-              ctx.stroke();
-            }
-          }
-        }
-
-        for(let i=0;i<N;i++){
-          const p = nodes[i];
-          ctx.fillStyle = `rgba(201,164,74,0.20)`;
-          ctx.beginPath();
-          ctx.arc(p.x,p.y,p.s,0,Math.PI*2);
-          ctx.fill();
-        }
-
-        if(!prefersReduce) requestAnimationFrame(draw);
-      }
-
-      if(!prefersReduce) draw();
-    })();
   </script>
 </body>
 </html>
