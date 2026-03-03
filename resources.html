@@ -1,266 +1,919 @@
-<!-- ===========================
- CEYO — resources.html
- Resources / Document Suite / Crosswalk / Playbook
- V2026.02.19
-=========================== -->
+<!-- =========================
+FILE: resources.html  (9) RESOURCES / LIBRARY
+Mode: PAPER (ivory). Same shell, inverted.
+No neurons. Maximum readability.
+========================= -->
 <!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
   <title>CEYO — Resources</title>
-  <meta name="description" content="Reference materials for institutional, legal, technical, and procurement review. Document suite and controlled disclosure posture."/>
-  <meta name="theme-color" content="#071227"/>
+  <meta name="description" content="Specs, samples, glossary, and FAQs. Downloadable materials and reference artifacts for evaluation and verification."/>
+  <meta name="theme-color" content="#F5F2EA"/>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:ital,wght@0,500;0,700;0,900;1,900&family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 
   <style>
     :root{
-      --navy:#071227; --wash:#F6F4EE; --ink:#0A1430;
-      --ivory:rgba(246,244,238,.94);
-      --muted:rgba(246,244,238,.70);
-      --muted2:rgba(246,244,238,.46);
-      --stroke:rgba(246,244,238,.14);
-      --blue:rgba(74,132,255,.85);
+      /* Paper mode */
+      --paper:#F5F2EA;
+      --textOnPaper:#12161D;
+      --mutedOnPaper:rgba(18,22,29,.68);
+      --lineOnPaper:rgba(0,0,0,.10);
 
-      --max:1180px;
-      --radius:14px; --radius2:18px;
+      --accent:#3A320C;
+      --accent2:#C9A44A;
 
-      --fontDisplay:"Styrene A","Outfit",system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
-      --fontText:"Tiempos","Inter",system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
-      --fontMono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;
+      --maxW:1160px;
+      --readW:740px;
+
+      --r-lg:18px;
+
+      --s1:8px;  --s2:16px; --s3:24px; --s4:32px; --s5:48px; --s6:64px; --s7:96px;
+
+      --lh:1.65;
+
+      --shadow:0 12px 30px rgba(0,0,0,.10);
+      --shadow2:0 22px 60px rgba(0,0,0,.14);
+
+      --mono:'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --ui:'Inter', system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+
+      --navH:72px;
     }
 
-    *{box-sizing:border-box;margin:0;padding:0}
-    html{scroll-behavior:smooth}
-    body{background:var(--navy);color:var(--ivory);font-family:var(--fontText);overflow-x:hidden;min-height:100vh;cursor:none}
+    *{box-sizing:border-box}
+    html{background:var(--paper);scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family:var(--ui);
+      color:var(--textOnPaper);
+      background:var(--paper);
+      -webkit-text-size-adjust:100%;
+      overflow-x:hidden;
+    }
     a{color:inherit;text-decoration:none}
-    ::selection{background:rgba(74,132,255,.25)}
-    h1,h2,h3{word-break:normal;overflow-wrap:break-word}
-    .br{display:block}
+    button{font:inherit}
 
-    #grain{position:fixed;inset:0;z-index:9998;pointer-events:none;opacity:.04;
-      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23f)'/%3E%3C/svg%3E");
-      background-size:220px 220px;mix-blend-mode:soft-light}
-    #spotlight{position:fixed;inset:0;z-index:1;pointer-events:none;transition:background .05s linear}
-    #cursor{position:fixed;z-index:9999;width:8px;height:8px;border-radius:999px;background:rgba(246,244,238,.95);pointer-events:none;
-      transform:translate(-50%,-50%);mix-blend-mode:exclusion;transition:width .15s,height .15s,opacity .15s}
-    #cursor.large{width:40px;height:40px;opacity:.45}
-
-    #topnav{position:fixed;top:0;left:0;right:0;z-index:800;display:flex;align-items:center;justify-content:space-between;
-      padding:0 44px;height:68px;background:rgba(7,18,39,.86);border-bottom:1px solid rgba(246,244,238,.08);backdrop-filter:blur(10px)}
-    .nav-brand{font-family:var(--fontDisplay);font-weight:900;font-style:italic;font-size:28px;letter-spacing:-0.03em;text-transform:uppercase;color:rgba(246,244,238,.96)}
-    .nav-links{display:flex;align-items:center;gap:6px}
-    .nav-links a{font-family:var(--fontMono);font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:rgba(246,244,238,.52);padding:8px 12px;border-radius:999px;transition:color .12s,background .12s}
-    .nav-links a:hover{color:rgba(246,244,238,.92);background:rgba(246,244,238,.05)}
-    .nav-links a.active{color:rgba(246,244,238,.92)}
-    .nav-cta{margin-left:10px;border:1px solid rgba(74,132,255,.35);background:rgba(74,132,255,.08);color:rgba(246,244,238,.92)!important}
-
-    #indexbar{position:fixed;bottom:0;left:0;right:0;z-index:800;display:flex;height:50px;background:rgba(5,12,26,.92);border-top:1px solid rgba(246,244,238,.10);backdrop-filter:blur(10px)}
-    .ib-item{flex:1;display:flex;align-items:center;justify-content:center;font-family:var(--fontMono);font-size:10px;letter-spacing:.20em;text-transform:uppercase;color:rgba(246,244,238,.50);border-right:1px solid rgba(246,244,238,.07);transition:color .12s,background .12s,border-top-color .12s}
-    .ib-item:last-child{border-right:none}
-    .ib-item:hover{color:rgba(246,244,238,.92);background:rgba(246,244,238,.05)}
-    .ib-item.active{color:rgba(246,244,238,.92);border-top:1px solid rgba(246,244,238,.92)}
-
-    header{position:relative;z-index:5;padding:96px 44px 26px;max-width:var(--max);margin:0 auto}
-    .kicker{font-family:var(--fontMono);font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:rgba(74,132,255,.82);display:flex;align-items:center;gap:14px;margin-bottom:14px}
-    .kicker::before{content:"";width:38px;height:1px;background:rgba(74,132,255,.78)}
-    h1{font-family:var(--fontDisplay);font-weight:900;font-style:italic;font-size:clamp(36px,6vw,64px);letter-spacing:-0.05em;text-transform:uppercase;line-height:1.02;margin-bottom:10px}
-    .lead{max-width:82ch;color:rgba(246,244,238,.72);line-height:1.85;font-size:15px}
-
-    main{position:relative;z-index:5;max-width:var(--max);margin:0 auto;padding:0 44px 104px}
-    .rows{padding-top:18px;border-top:1px solid rgba(246,244,238,.10);display:grid;grid-template-columns:1fr 1fr;gap:14px}
-    .row{
-      border:1px solid rgba(246,244,238,.14);
-      border-radius:var(--radius2);
-      background:linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.01));
-      padding:18px;
+    /* Paper background texture (subtle, premium) */
+    .bg{
+      position:fixed; inset:0; pointer-events:none; z-index:0;
+      background:
+        radial-gradient(900px 520px at 35% 0%, rgba(201,164,74,.10), transparent 60%),
+        radial-gradient(820px 520px at 82% 18%, rgba(58,50,12,.06), transparent 64%),
+        linear-gradient(180deg, #F5F2EA 0%, #F3EEDD 100%);
     }
-    .tag{font-family:var(--fontMono);font-size:9px;letter-spacing:.24em;text-transform:uppercase;color:rgba(74,132,255,.82);margin-bottom:10px}
-    h2{font-family:var(--fontDisplay);font-weight:900;font-style:italic;font-size:22px;letter-spacing:-0.03em;text-transform:uppercase;line-height:1.1;margin-bottom:10px}
-    .p{font-size:13px;line-height:1.85;color:rgba(246,244,238,.70);max-width:82ch}
-    .list{margin-top:12px;display:flex;flex-direction:column;gap:8px}
-    .li{font-family:var(--fontMono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:rgba(246,244,238,.52);padding-left:14px;position:relative;line-height:1.7}
-    .li::before{content:"·";position:absolute;left:0;color:rgba(246,244,238,.28)}
-    .cta{margin-top:14px;display:flex;gap:10px;flex-wrap:wrap}
+    .grain{
+      position:fixed; inset:0; z-index:1; pointer-events:none;
+      opacity:.06;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='320' height='320'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='320' height='320' filter='url(%23n)'/%3E%3C/svg%3E");
+      mix-blend-mode:multiply;
+    }
+
+    .wrap{ position:relative; z-index:2; max-width:var(--maxW); margin:0 auto; padding:0 var(--s4); }
+    @media (max-width: 640px){ .wrap{ padding:0 18px; } }
+
+    header.site{
+      position:sticky; top:0; z-index:50;
+      backdrop-filter: blur(10px);
+      background: rgba(245,242,234,.78);
+      border-bottom:1px solid var(--lineOnPaper);
+    }
+    .nav{
+      height: calc(var(--navH) + env(safe-area-inset-top));
+      padding-top: env(safe-area-inset-top);
+      display:flex; align-items:center; justify-content:space-between; gap:var(--s3);
+    }
+
+    .logo{ display:flex; align-items:center; gap:10px; min-width:180px; font-weight:600; letter-spacing:-.01em; }
+    .logo .mark{
+      display:inline-flex; align-items:center; gap:10px;
+      padding:10px 12px; border-radius:999px;
+      border:1px solid var(--lineOnPaper);
+      background: rgba(255,255,255,.55);
+    }
+    .logo .dot{
+      width:8px; height:8px; border-radius:50%;
+      background: var(--accent2);
+      box-shadow: 0 0 0 4px rgba(201,164,74,.18);
+    }
+
+    nav.center{
+      display:flex; gap:18px; align-items:center; justify-content:center;
+      flex:1; font-size:14px; color: rgba(18,22,29,.86);
+    }
+    nav.center a{
+      padding:10px 10px; border-radius:999px; border:1px solid transparent;
+      transition: background .18s ease, border-color .18s ease, transform .18s ease;
+    }
+    nav.center a:hover{
+      background: rgba(0,0,0,.03);
+      border-color: rgba(0,0,0,.06);
+      transform: translateY(-1px);
+    }
+    nav.center a.active{
+      border-color: rgba(201,164,74,.45);
+      background: rgba(201,164,74,.14);
+    }
+
+    .actions{ display:flex; align-items:center; gap:10px; min-width:220px; justify-content:flex-end; }
     .btn{
-      display:inline-flex;align-items:center;justify-content:center;
-      font-family:var(--fontMono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;
-      padding:13px 18px;border-radius:999px;
-      border:1px solid rgba(246,244,238,.14);
-      color:rgba(246,244,238,.70);
-      background:transparent;
-      transition:background .15s,border-color .15s,color .15s,transform .15s;
+      height:48px; padding:0 18px; border-radius:999px;
+      border:1px solid var(--lineOnPaper);
+      background: rgba(255,255,255,.55);
+      color: rgba(18,22,29,.92);
+      display:inline-flex; align-items:center; justify-content:center;
+      font-size:14px;
+      transition: transform .18s ease, border-color .18s ease, background .18s ease, box-shadow .18s ease;
+      white-space:nowrap;
     }
-    .btn:hover{border-color:rgba(246,244,238,.38);color:rgba(246,244,238,.92);background:rgba(246,244,238,.06);transform:translateY(-1px)}
-    .btn-primary{border-color:rgba(74,132,255,.40);background:rgba(74,132,255,.12);color:rgba(246,244,238,.92)}
-    .btn-primary:hover{border-color:rgba(74,132,255,.62);background:rgba(74,132,255,.18)}
-    .fine{margin-top:18px;border-top:1px solid rgba(246,244,238,.10);padding-top:18px;font-family:var(--fontMono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:rgba(246,244,238,.40);line-height:1.9}
+    .btn:hover{
+      transform: translateY(-1px);
+      border-color: rgba(201,164,74,.55);
+      box-shadow: var(--shadow);
+      background: rgba(255,255,255,.78);
+    }
+    .btn.primary{
+      border-color: rgba(201,164,74,.70);
+      background: rgba(201,164,74,.22);
+    }
+    .btn.primary:hover{ background: rgba(201,164,74,.28); }
+    .btn .arr{ display:inline-block; margin-left:10px; transition: transform .16s ease; }
+    .btn:hover .arr{ transform: translateX(3px); }
 
-    @media (max-width:980px){
-      #topnav{padding:0 22px}
-      header{padding:92px 22px 26px}
-      main{padding:0 22px 104px}
-      .rows{grid-template-columns:1fr}
+    .hamburger{
+      display:none;
+      height:48px; width:48px;
+      border-radius:999px;
+      border:1px solid var(--lineOnPaper);
+      background: rgba(255,255,255,.55);
+      color: rgba(18,22,29,.86);
+      align-items:center; justify-content:center;
     }
-    @media (max-width:600px){
-      .nav-links{display:none}
-      header{padding:86px 20px 24px}
-      main{padding:0 20px 104px}
-      .nav-brand{font-size:30px}
+    @media (max-width: 980px){
+      nav.center{ display:none; }
+      .actions .btn.secondary{ display:none; }
+      .hamburger{ display:inline-flex; }
+    }
+
+    .drawer{
+      position:fixed; inset:0; z-index:80;
+      display:none;
+      background: rgba(245,242,234,.78);
+      backdrop-filter: blur(10px);
+      padding: calc(env(safe-area-inset-top) + 12px) 18px 18px;
+    }
+    .drawer.open{ display:block; }
+    .drawerCard{
+      max-width: 680px; margin: 0 auto;
+      border:1px solid var(--lineOnPaper);
+      background: rgba(255,255,255,.78);
+      border-radius: var(--r-lg);
+      box-shadow: var(--shadow2);
+      overflow:hidden;
+    }
+    .drawerHead{
+      display:flex; align-items:center; justify-content:space-between;
+      padding: 14px 14px;
+      border-bottom:1px solid var(--lineOnPaper);
+    }
+    .drawerHead .t{
+      font-family: var(--mono);
+      font-size:12px; letter-spacing:.18em;
+      text-transform:uppercase; color: rgba(18,22,29,.72);
+    }
+    .close{
+      height:44px; padding:0 14px; border-radius:999px;
+      border:1px solid var(--lineOnPaper);
+      background: rgba(255,255,255,.55);
+      color: rgba(18,22,29,.86);
+    }
+    .drawerLinks{ display:grid; grid-template-columns: 1fr; padding: 10px; gap: 8px; }
+    .drawerLinks a{
+      padding: 14px 14px; border-radius: 14px;
+      border:1px solid rgba(0,0,0,.08);
+      background: rgba(255,255,255,.55);
+      font-size: 15px;
+      transition: transform .18s ease, border-color .18s ease;
+    }
+    .drawerLinks a:hover{ transform: translateY(-1px); border-color: rgba(201,164,74,.55); }
+
+    /* Typography */
+    .read{ max-width: var(--readW); }
+    p{ margin: 0 0 14px 0; line-height: var(--lh); }
+    .muted{ color: var(--mutedOnPaper); }
+
+    main{ padding: var(--s6) 0 var(--s7); }
+    section{ padding: var(--s7) 0; border-top:1px solid var(--lineOnPaper); }
+    section:first-of-type{ border-top:none; padding-top: var(--s6); }
+
+    .eyebrow{
+      font-family: var(--mono);
+      font-size: 12px; letter-spacing: .18em;
+      text-transform: uppercase;
+      color: rgba(58,50,12,.85);
+      margin-bottom: 12px;
+    }
+    h1{ font-size: 46px; line-height: 1.15; letter-spacing: -0.02em; margin: 0 0 14px 0; font-weight: 600; }
+    h2{ font-size: 30px; line-height: 1.20; letter-spacing: -0.01em; margin: 0 0 12px 0; font-weight: 600; }
+    h3{ font-size: 20px; line-height: 1.25; margin: 0 0 10px 0; font-weight: 600; }
+    @media (max-width: 640px){
+      h1{ font-size: 32px; }
+      h2{ font-size: 24px; }
+      h3{ font-size: 19px; }
+    }
+
+    /* Library layout */
+    .heroRow{
+      display:flex; align-items:flex-end; justify-content:space-between;
+      gap: 14px; flex-wrap:wrap;
+      margin-top: 14px;
+    }
+
+    .search{
+      display:flex; align-items:center; gap:10px;
+      padding: 12px 12px;
+      border:1px solid var(--lineOnPaper);
+      border-radius: 999px;
+      background: rgba(255,255,255,.65);
+      min-width: 320px;
+    }
+    .search input{
+      border:0; outline:none; width:100%;
+      background: transparent;
+      font-size: 14px;
+      color: var(--textOnPaper);
+    }
+    .search .tag{
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing:.12em;
+      text-transform: uppercase;
+      color: rgba(18,22,29,.58);
+      white-space:nowrap;
+    }
+    @media (max-width: 640px){
+      .search{ min-width: 100%; }
+    }
+
+    .filters{
+      display:flex; gap:10px; flex-wrap:wrap;
+      margin-top: 12px;
+    }
+    .chip{
+      border:1px solid rgba(0,0,0,.10);
+      background: rgba(255,255,255,.55);
+      border-radius: 999px;
+      padding: 10px 12px;
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing:.12em;
+      text-transform: uppercase;
+      color: rgba(18,22,29,.72);
+      cursor:pointer;
+      transition: transform .14s ease, border-color .14s ease, background .14s ease;
+      user-select:none;
+    }
+    .chip:hover{ transform: translateY(-1px); border-color: rgba(201,164,74,.55); }
+    .chip.active{
+      border-color: rgba(201,164,74,.70);
+      background: rgba(201,164,74,.20);
+      color: rgba(18,22,29,.88);
+    }
+
+    .grid{
+      margin-top: 18px;
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+    @media (max-width: 980px){ .grid{ grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 640px){ .grid{ grid-template-columns: 1fr; } }
+
+    .card{
+      border:1px solid var(--lineOnPaper);
+      background: rgba(255,255,255,.70);
+      border-radius: var(--r-lg);
+      padding: 18px 18px;
+      box-shadow: none;
+      transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+      min-height: 160px;
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+      gap: 12px;
+    }
+    .card:hover{
+      transform: translateY(-2px);
+      border-color: rgba(201,164,74,.55);
+      box-shadow: var(--shadow);
+    }
+    .metaRow{
+      display:flex; justify-content:space-between; align-items:baseline; gap: 10px; flex-wrap:wrap;
+    }
+    .pill{
+      display:inline-flex; align-items:center; gap:8px;
+      padding: 8px 10px;
+      border-radius: 999px;
+      border:1px solid rgba(201,164,74,.45);
+      background: rgba(201,164,74,.18);
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing:.10em;
+      text-transform: uppercase;
+      color: rgba(18,22,29,.84);
+      white-space:nowrap;
+    }
+    .small{
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing:.10em;
+      text-transform: uppercase;
+      color: rgba(18,22,29,.55);
+      white-space:nowrap;
+    }
+    .card b{ font-weight:600; }
+    .card p{ margin: 8px 0 0 0; color: var(--mutedOnPaper); }
+
+    .card .cta{
+      display:flex; justify-content:space-between; align-items:center; gap: 10px; flex-wrap:wrap;
+      margin-top: 6px;
+      padding-top: 12px;
+      border-top:1px solid rgba(0,0,0,.08);
+    }
+    .link{
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing:.14em;
+      text-transform: uppercase;
+      color: rgba(58,50,12,.86);
+      border-bottom:1px solid rgba(201,164,74,.70);
+      padding-bottom:2px;
+    }
+    .link:hover{ color: rgba(18,22,29,.90); }
+
+    /* Sections for glossary + FAQ */
+    .panel{
+      border:1px solid var(--lineOnPaper);
+      background: rgba(255,255,255,.70);
+      border-radius: var(--r-lg);
+      padding: 18px 18px;
+      margin-top: 18px;
+    }
+    .defGrid{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-top: 12px;
+    }
+    @media (max-width: 980px){ .defGrid{ grid-template-columns: 1fr; } }
+    .def{
+      border:1px solid rgba(0,0,0,.08);
+      background: rgba(255,255,255,.65);
+      border-radius: var(--r-lg);
+      padding: 14px 14px;
+    }
+    .def .k{
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing:.14em;
+      text-transform: uppercase;
+      color: rgba(58,50,12,.82);
+      margin-bottom: 8px;
+    }
+
+    .faq{
+      margin-top: 12px;
+      border-top:1px solid rgba(0,0,0,.08);
+    }
+    .qa{
+      padding: 14px 0;
+      border-bottom:1px solid rgba(0,0,0,.08);
+    }
+    .qbtn{
+      width:100%;
+      text-align:left;
+      border:0;
+      background: transparent;
+      padding: 0;
+      cursor:pointer;
+      display:flex;
+      justify-content:space-between;
+      align-items:baseline;
+      gap: 12px;
+      font-weight:600;
+      color: rgba(18,22,29,.92);
+    }
+    .qbtn span{
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing:.12em;
+      text-transform: uppercase;
+      color: rgba(58,50,12,.82);
+      font-weight:500;
+      white-space:nowrap;
+    }
+    .ans{
+      display:none;
+      padding-top: 10px;
+      color: var(--mutedOnPaper);
+      line-height: var(--lh);
+      font-size: 15px;
+    }
+    .qa.open .ans{ display:block; }
+    .chev{ transition: transform .16s ease; opacity:.65; }
+    .qa.open .chev{ transform: rotate(180deg); }
+
+    /* Footer */
+    footer{ border-top:1px solid var(--lineOnPaper); padding: var(--s7) 0 var(--s6); }
+    .footGrid{
+      display:grid;
+      grid-template-columns: 1.2fr 1fr 1fr 1fr;
+      gap: 14px;
+      margin-bottom: 22px;
+    }
+    @media (max-width: 980px){ .footGrid{ grid-template-columns: 1fr 1fr; } }
+    @media (max-width: 640px){ .footGrid{ grid-template-columns: 1fr; } }
+    .footCol{
+      border:1px solid var(--lineOnPaper);
+      background: rgba(255,255,255,.70);
+      border-radius: var(--r-lg);
+      padding: 18px 18px;
+    }
+    .footCol .t{
+      font-family: var(--mono);
+      font-size: 12px;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: rgba(58,50,12,.82);
+      margin-bottom: 10px;
+    }
+    .footCol a{
+      display:block;
+      padding: 10px 10px;
+      border-radius: 12px;
+      border:1px solid transparent;
+      color: rgba(18,22,29,.78);
+      transition: background .18s ease, border-color .18s ease;
+    }
+    .footCol a:hover{ background: rgba(201,164,74,.14); border-color: rgba(201,164,74,.25); }
+    .footBottom{
+      display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap;
+      font-family: var(--mono);
+      font-size: 12px;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: rgba(18,22,29,.55);
+      padding-top: 18px;
+      border-top:1px solid var(--lineOnPaper);
+    }
+
+    .reveal{ opacity:0; transform: translateY(10px); transition: opacity .55s ease, transform .55s ease; }
+    .reveal.on{ opacity:1; transform: translateY(0); }
+
+    @media (prefers-reduced-motion: reduce){
+      html{scroll-behavior:auto;}
+      .reveal{ opacity:1; transform:none; transition:none; }
+      nav.center a, .btn, .drawerLinks a, .chip, .card{ transition:none; }
+      .chev{ transition:none; }
     }
   </style>
 </head>
 
 <body>
-  <div id="grain" aria-hidden="true"></div>
-  <div id="spotlight" aria-hidden="true"></div>
-  <div id="cursor" aria-hidden="true"></div>
+  <div class="bg" aria-hidden="true"></div>
+  <div class="grain" aria-hidden="true"></div>
 
-  <nav id="topnav" aria-label="Primary navigation">
-    <a href="index.html" class="nav-brand" aria-label="CEYO Home">CEYO</a>
-    <div class="nav-links">
-      <a href="index.html">Overview</a>
-      <a href="platform.html">Architecture</a>
-      <a href="trust.html">Trust</a>
-      <a href="governance.html">Governance</a>
-      <a href="resources.html" class="active">Resources</a>
-      <a href="contact.html" class="nav-cta">Request Review</a>
+  <header class="site">
+    <div class="wrap nav">
+      <a class="logo" href="index.html" aria-label="CEYO Home">
+        <span class="mark"><span class="dot" aria-hidden="true"></span><span>CEYO</span></span>
+      </a>
+
+      <nav class="center" aria-label="Primary navigation">
+        <a href="index.html">Overview</a>
+        <a href="how.html">How It Works</a>
+        <a href="platform.html">Platform</a>
+        <a href="trust.html">Trust</a>
+        <a href="compliance.html">Compliance</a>
+        <a href="integrations.html">Integrations</a>
+        <a class="active" href="resources.html">Resources</a>
+      </nav>
+
+      <div class="actions" aria-label="Actions">
+        <a class="btn secondary" href="resources.html#sample-artifact">Sample artifacts<span class="arr">→</span></a>
+        <a class="btn primary" href="contact.html">Request walkthrough<span class="arr">→</span></a>
+        <button class="hamburger" id="openMenu" aria-label="Open menu" type="button">☰</button>
+      </div>
     </div>
-  </nav>
-
-  <header>
-    <div class="kicker">Resources</div>
-    <h1>Institutional Review Materials</h1>
-    <p class="lead">
-      Public materials describe CEYO at a high level. Technical implementation details, policy schemas, and verification contracts are available under controlled disclosure to qualified institutions and regulated operators.
-    </p>
   </header>
 
-  <main>
-    <section class="rows" aria-label="Resource modules">
-      <div class="row">
-        <div class="tag">[01] Reference Architecture</div>
-        <h2>Platform Overview</h2>
-        <p class="p">
-          Structured overview of inference boundary attachment, policy-scoped capture, canonical normalization, RFC 8785 canonicalization, cryptographic sealing, tiered disclosure, and independent verification.
-        </p>
-        <div class="list">
-          <div class="li">Technical evaluators</div>
-          <div class="li">Security engineering</div>
-          <div class="li">Infrastructure architects</div>
-          <div class="li">Procurement committees</div>
-        </div>
-        <div class="cta">
-          <a class="btn" href="platform.html">View Platform & Architecture</a>
-        </div>
+  <div class="drawer" id="drawer" aria-hidden="true">
+    <div class="drawerCard" role="dialog" aria-modal="true" aria-label="Menu">
+      <div class="drawerHead">
+        <div class="t">Menu</div>
+        <button class="close" id="closeMenu" type="button">Close</button>
       </div>
-
-      <div class="row">
-        <div class="tag">[02] Document Suite</div>
-        <h2>Controlled Technical Documentation</h2>
-        <p class="p">
-          Formal technical materials describing Phase 1 mechanics and verification procedures in operational detail. Shared under controlled review agreement.
-        </p>
-        <div class="list">
-          <div class="li">Technical Requirements Document (TRD)</div>
-          <div class="li">Capture Policy & Masking Schema</div>
-          <div class="li">Verification Contract & CLI Specification</div>
-          <div class="li">Performance & Fail-Open Benchmark Report</div>
-        </div>
-        <div class="cta">
-          <a class="btn btn-primary" href="contact.html">Request Document Suite</a>
-        </div>
+      <div class="drawerLinks">
+        <a href="index.html">Overview</a>
+        <a href="how.html">How It Works</a>
+        <a href="platform.html">Platform</a>
+        <a href="trust.html">Trust & Verification</a>
+        <a href="compliance.html">Compliance</a>
+        <a href="integrations.html">Integrations</a>
+        <a href="use-cases.html">Use Cases</a>
+        <a href="security.html">Security</a>
+        <a href="resources.html">Resources</a>
+        <a href="company.html">Company</a>
+        <a href="contact.html">Contact</a>
       </div>
+    </div>
+  </div>
 
-      <div class="row">
-        <div class="tag">[03] Compliance Crosswalk</div>
-        <h2>Regulatory Interoperability</h2>
-        <p class="p">
-          Descriptive correspondence mapping CEYO’s integrity posture to selected regulatory expectations (informational only; no certification claims).
+  <main class="wrap">
+    <!-- HERO -->
+    <section style="padding-top: var(--s6);">
+      <div class="read reveal">
+        <div class="eyebrow">Resources · Specs · Samples</div>
+        <h1>Specs, samples, and reference material.</h1>
+        <p class="muted">
+          Reference materials for institutional evaluation, technical due diligence, and verification walkthroughs.
+          Public materials are high-level. Controlled materials are shared under appropriate confidentiality boundaries.
         </p>
-        <div class="list">
-          <div class="li">EU AI Act: record-keeping, transparency, documentation</div>
-          <div class="li">NIST AI RMF: Govern · Map · Measure · Manage</div>
-        </div>
-        <div class="cta">
-          <a class="btn" href="governance.html">View Governance Posture</a>
-        </div>
-      </div>
 
-      <div class="row">
-        <div class="tag">[04] Incident Playbook</div>
-        <h2>72-Hour Reference Workflow</h2>
-        <p class="p">
-          Structured reference for first 72 hours: containment, artifact preservation, deterministic verification, review prep, and institutional engagement alignment. Informational only.
-        </p>
-        <div class="list">
-          <div class="li">Artifact preservation</div>
-          <div class="li">Deterministic verification steps</div>
-          <div class="li">Verification summary generation</div>
-          <div class="li">Disclosure tier discipline</div>
-        </div>
-        <div class="cta">
-          <a class="btn btn-primary" href="contact.html">Discuss Incident Readiness</a>
-        </div>
-      </div>
+        <div class="heroRow">
+          <div class="filters" aria-label="Resource filters">
+            <div class="chip active" data-filter="all" role="button" tabindex="0">All</div>
+            <div class="chip" data-filter="spec" role="button" tabindex="0">Specs</div>
+            <div class="chip" data-filter="sample" role="button" tabindex="0">Samples</div>
+            <div class="chip" data-filter="policy" role="button" tabindex="0">Policies</div>
+            <div class="chip" data-filter="faq" role="button" tabindex="0">FAQ</div>
+          </div>
 
-      <div class="row">
-        <div class="tag">[05] Trust Infrastructure Index</div>
-        <h2>Transparency Materials</h2>
-        <p class="p">
-          Additional posture declarations for controlled review: Key custody, privacy & civil liberties engineering, SBOM, vulnerability disclosure program, sustainability disclosure.
-        </p>
-        <div class="cta">
-          <a class="btn" href="trust.html">View Trust Center</a>
+          <div class="search" aria-label="Search resources">
+            <span class="tag">Search</span>
+            <input id="q" type="search" placeholder="Type: verification, artifact, policy, schema…" aria-label="Search input"/>
+          </div>
         </div>
-      </div>
 
-      <div class="row">
-        <div class="tag">[06] Procurement & Evaluation</div>
-        <h2>Engagement Process</h2>
-        <p class="p">
-          Institutions seeking evaluation may submit a controlled review request. Public materials do not constitute an offer to sell or license. Engagement terms are defined through written agreement.
-        </p>
-        <div class="cta">
-          <a class="btn btn-primary" href="contact.html">Submit Review Request</a>
+        <div style="margin-top:18px; display:flex; gap:10px; flex-wrap:wrap;">
+          <a class="btn primary" href="#library">Browse library<span class="arr">→</span></a>
+          <a class="btn" href="#glossary">Glossary<span class="arr">→</span></a>
+          <a class="btn" href="#faq">FAQ<span class="arr">→</span></a>
         </div>
       </div>
     </section>
 
-    <div class="fine">
-      Boundary: Documentation access does not grant license or usage rights absent executed agreement. Public pages are descriptive only.
-    </div>
+    <!-- LIBRARY -->
+    <section id="library">
+      <div class="read reveal">
+        <h2>Library</h2>
+        <p class="muted">Short, review-ready resources. Replace placeholders with your real PDFs/files when ready.</p>
+
+        <div class="grid" id="grid" aria-label="Resource cards grid">
+          <!-- SPEC -->
+          <a class="card reveal" data-kind="spec" data-title="Verification Specification" href="#" aria-label="Verification Specification">
+            <div>
+              <div class="metaRow">
+                <span class="pill">Spec</span>
+                <span class="small">PDF · Controlled</span>
+              </div>
+              <div style="margin-top:10px;"><b>Verification Specification</b></div>
+              <p>Deterministic procedure: canonicalize, recompute hash, validate signature, policy alignment.</p>
+            </div>
+            <div class="cta">
+              <span class="link">Request access</span>
+              <span class="small">V2026.02.19</span>
+            </div>
+          </a>
+
+          <a class="card reveal" data-kind="spec" data-title="Capture Policy Schema" href="#" aria-label="Capture Policy Schema">
+            <div>
+              <div class="metaRow">
+                <span class="pill">Spec</span>
+                <span class="small">PDF · Controlled</span>
+              </div>
+              <div style="margin-top:10px;"><b>Capture Policy & Masking Schema</b></div>
+              <p>Inclusion/exclusion rules, masking behavior, disclosure tiers, policy identifiers and versioning.</p>
+            </div>
+            <div class="cta">
+              <span class="link">Request access</span>
+              <span class="small">V2026.02.19</span>
+            </div>
+          </a>
+
+          <!-- SAMPLE -->
+          <a class="card reveal" id="sample-artifact" data-kind="sample" data-title="Sample Artifact" href="#" aria-label="Sample Artifact JSON">
+            <div>
+              <div class="metaRow">
+                <span class="pill">Sample</span>
+                <span class="small">JSON · Public</span>
+              </div>
+              <div style="margin-top:10px;"><b>Sample artifact (redacted)</b></div>
+              <p>Example artifact wrapper fields: policy ID/version, canonicalization, digest, signature metadata.</p>
+            </div>
+            <div class="cta">
+              <span class="link">View sample</span>
+              <span class="small">Redacted</span>
+            </div>
+          </a>
+
+          <a class="card reveal" data-kind="sample" data-title="Verification Output" href="#" aria-label="Verification Output">
+            <div>
+              <div class="metaRow">
+                <span class="pill">Sample</span>
+                <span class="small">TXT · Public</span>
+              </div>
+              <div style="margin-top:10px;"><b>Verification output states</b></div>
+              <p>PASS / FAIL / POLICY_MISMATCH examples and what each outcome means.</p>
+            </div>
+            <div class="cta">
+              <span class="link">View sample</span>
+              <span class="small">CLI</span>
+            </div>
+          </a>
+
+          <!-- POLICY -->
+          <a class="card reveal" data-kind="policy" data-title="Responsible Use" href="ethical.html" aria-label="Responsible Use Policy">
+            <div>
+              <div class="metaRow">
+                <span class="pill">Policy</span>
+                <span class="small">HTML · Public</span>
+              </div>
+              <div style="margin-top:10px;"><b>Responsible Use Policy</b></div>
+              <p>Use boundaries, operator responsibilities, prohibited deployments, escalation pathway.</p>
+            </div>
+            <div class="cta">
+              <span class="link">Open</span>
+              <span class="small">Public</span>
+            </div>
+          </a>
+
+          <a class="card reveal" data-kind="policy" data-title="Vulnerability Disclosure" href="vdp.html" aria-label="Vulnerability Disclosure Program">
+            <div>
+              <div class="metaRow">
+                <span class="pill">Policy</span>
+                <span class="small">HTML · Public</span>
+              </div>
+              <div style="margin-top:10px;"><b>Vulnerability Disclosure Program</b></div>
+              <p>Reporting channel, safe harbor, scope, and coordinated disclosure expectations.</p>
+            </div>
+            <div class="cta">
+              <span class="link">Open</span>
+              <span class="small">Public</span>
+            </div>
+          </a>
+
+          <!-- LEGAL -->
+          <a class="card reveal" data-kind="policy" data-title="Privacy" href="privacy.html" aria-label="Privacy Statement">
+            <div>
+              <div class="metaRow">
+                <span class="pill">Legal</span>
+                <span class="small">HTML · Public</span>
+              </div>
+              <div style="margin-top:10px;"><b>Privacy</b></div>
+              <p>Public site collection, contact submissions, deployment posture boundaries and requests.</p>
+            </div>
+            <div class="cta">
+              <span class="link">Open</span>
+              <span class="small">Public</span>
+            </div>
+          </a>
+
+          <a class="card reveal" data-kind="policy" data-title="Terms" href="terms.html" aria-label="Terms of Use">
+            <div>
+              <div class="metaRow">
+                <span class="pill">Legal</span>
+                <span class="small">HTML · Public</span>
+              </div>
+              <div style="margin-top:10px;"><b>Terms</b></div>
+              <p>Informational purpose, IP, disclaimers, limitation of liability, governing law.</p>
+            </div>
+            <div class="cta">
+              <span class="link">Open</span>
+              <span class="small">Public</span>
+            </div>
+          </a>
+
+          <!-- FAQ (anchor) -->
+          <a class="card reveal" data-kind="faq" data-title="FAQs" href="#faq" aria-label="FAQs">
+            <div>
+              <div class="metaRow">
+                <span class="pill">FAQ</span>
+                <span class="small">HTML · Public</span>
+              </div>
+              <div style="margin-top:10px;"><b>FAQs</b></div>
+              <p>Non-technical first. Clear boundaries. Verification workflow questions answered.</p>
+            </div>
+            <div class="cta">
+              <span class="link">Jump to FAQ</span>
+              <span class="small">Public</span>
+            </div>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- GLOSSARY -->
+    <section id="glossary">
+      <div class="read reveal">
+        <h2>Glossary</h2>
+        <p class="muted">Definitions used across CEYO pages. Keep terms consistent.</p>
+
+        <div class="panel reveal">
+          <div class="defGrid">
+            <div class="def">
+              <div class="k">Artifact</div>
+              <p class="muted">A structured record generated at inference time under policy scope, intended for later verification.</p>
+            </div>
+            <div class="def">
+              <div class="k">Policy scope</div>
+              <p class="muted">Explicit inclusion/exclusion/masking rules defined before artifact generation.</p>
+            </div>
+            <div class="def">
+              <div class="k">Canonicalization</div>
+              <p class="muted">Deterministic serialization (RFC 8785) so equivalent structures yield identical bytes for hashing.</p>
+            </div>
+            <div class="def">
+              <div class="k">Sealing</div>
+              <p class="muted">Cryptographic hashing and signatures applied to canonical bytes to enable tamper detection and provenance checks.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section id="faq">
+      <div class="read reveal">
+        <h2>FAQ</h2>
+        <p class="muted">Short answers first. Technical detail stays bounded.</p>
+
+        <div class="panel reveal">
+          <div class="faq">
+            <div class="qa">
+              <button class="qbtn" type="button">
+                <div>Does CEYO certify compliance or correctness?</div>
+                <span>Boundary</span>
+                <span class="chev">▾</span>
+              </button>
+              <div class="ans">
+                CEYO produces integrity-sealed records. It does not certify regulatory compliance, admissibility, or correctness of model output. Oversight conclusions remain institutional.
+              </div>
+            </div>
+
+            <div class="qa">
+              <button class="qbtn" type="button">
+                <div>What does verification prove?</div>
+                <span>Verify</span>
+                <span class="chev">▾</span>
+              </button>
+              <div class="ans">
+                Verification confirms that an artifact has not been modified since sealing, that the signature validates against the declared public key reference, and that policy identifiers align to expected configuration.
+              </div>
+            </div>
+
+            <div class="qa">
+              <button class="qbtn" type="button">
+                <div>Do you need access to model weights?</div>
+                <span>Disclosure</span>
+                <span class="chev">▾</span>
+              </button>
+              <div class="ans">
+                No. CEYO is designed to support verification without default exposure of proprietary weights or trade-secret architecture. Disclosure is tiered and policy-defined before artifact generation.
+              </div>
+            </div>
+
+            <div class="qa">
+              <button class="qbtn" type="button">
+                <div>Can CEYO block inference if sealing fails?</div>
+                <span>Availability</span>
+                <span class="chev">▾</span>
+              </button>
+              <div class="ans">
+                CEYO supports fail-open posture by default: inference continues if sealing fails, and failure is logged/flagged. Operators may configure stricter behavior if their environment requires it.
+              </div>
+            </div>
+          </div>
+
+          <div style="margin-top:18px; display:flex; gap:10px; flex-wrap:wrap;">
+            <a class="btn primary" href="contact.html">Request walkthrough<span class="arr">→</span></a>
+            <a class="btn" href="trust.html#verification-spec">Verification steps<span class="arr">→</span></a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer id="footer">
+      <div class="footGrid reveal">
+        <div class="footCol">
+          <div class="t">Product</div>
+          <a href="index.html">Overview</a>
+          <a href="how.html">How It Works</a>
+          <a href="platform.html">Platform</a>
+          <a href="integrations.html">Integrations</a>
+        </div>
+        <div class="footCol">
+          <div class="t">Trust</div>
+          <a href="trust.html">Trust Model</a>
+          <a href="security.html">Security</a>
+          <a href="trust.html#verification-spec">Verification Spec</a>
+          <a href="resources.html#trust-center">Trust Center</a>
+        </div>
+        <div class="footCol">
+          <div class="t">Resources</div>
+          <a href="#library">Library</a>
+          <a href="#sample-artifact">Sample Artifacts</a>
+          <a href="#glossary">Glossary</a>
+          <a href="#faq">FAQs</a>
+        </div>
+        <div class="footCol">
+          <div class="t">Legal</div>
+          <a href="privacy.html">Privacy</a>
+          <a href="terms.html">Terms</a>
+          <a href="vdp.html">Security Disclosure</a>
+          <a href="ethical.html">Responsible Use</a>
+        </div>
+      </div>
+
+      <div class="footBottom reveal">
+        <div>© <span id="year"></span> CEYO. All rights reserved.</div>
+        <div><a href="vdp.html">Vulnerability Disclosure</a></div>
+      </div>
+    </footer>
   </main>
 
-  <nav id="indexbar" aria-label="Site index">
-    <a class="ib-item" href="index.html">Index</a>
-    <a class="ib-item" href="platform.html">Arch</a>
-    <a class="ib-item" href="trust.html">Trust</a>
-    <a class="ib-item" href="governance.html">Gov</a>
-    <a class="ib-item" href="contact.html">Contact</a>
-  </nav>
-
   <script>
-    const cursor = document.getElementById('cursor');
-    const spotlight = document.getElementById('spotlight');
-    function setSpotlight(x,y){
-      spotlight.style.background =
-        `radial-gradient(circle 360px at ${x}px ${y}px, rgba(74,132,255,.16) 0%, rgba(74,132,255,.06) 34%, transparent 70%)`;
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Mobile menu
+    const drawer = document.getElementById('drawer');
+    const openMenu = document.getElementById('openMenu');
+    const closeMenu = document.getElementById('closeMenu');
+    function openDrawer(){ drawer.classList.add('open'); drawer.setAttribute('aria-hidden','false'); document.body.style.overflow='hidden'; }
+    function closeDrawer(){ drawer.classList.remove('open'); drawer.setAttribute('aria-hidden','true'); document.body.style.overflow=''; }
+    if(openMenu) openMenu.addEventListener('click', openDrawer);
+    if(closeMenu) closeMenu.addEventListener('click', closeDrawer);
+    drawer.addEventListener('click', (e)=>{ if(e.target===drawer) closeDrawer(); });
+    window.addEventListener('keydown', (e)=>{ if(e.key==='Escape' && drawer.classList.contains('open')) closeDrawer(); });
+
+    // Reveal
+    const prefersReduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const revealEls = Array.from(document.querySelectorAll('.reveal'));
+    if(!prefersReduce){
+      const io = new IntersectionObserver((entries)=>{
+        entries.forEach(en=>{ if(en.isIntersecting) en.target.classList.add('on'); });
+      }, {threshold: 0.12});
+      revealEls.forEach(el=>io.observe(el));
+    } else {
+      revealEls.forEach(el=>el.classList.add('on'));
     }
-    document.addEventListener('mousemove', e => {
-      cursor.style.left = e.clientX + 'px';
-      cursor.style.top  = e.clientY + 'px';
-      setSpotlight(e.clientX, e.clientY);
-    }, { passive:true });
-    document.addEventListener('mouseleave', () => { cursor.style.opacity='0'; spotlight.style.background='none'; });
-    document.addEventListener('mouseenter', () => { cursor.style.opacity='1'; });
-    document.querySelectorAll('a, .row').forEach(el => {
-      el.addEventListener('mouseenter', () => cursor.classList.add('large'));
-      el.addEventListener('mouseleave', () => cursor.classList.remove('large'));
+
+    // FAQ toggles
+    document.querySelectorAll('.qa').forEach(row=>{
+      const btn = row.querySelector('.qbtn');
+      btn.addEventListener('click', ()=>{
+        row.classList.toggle('open');
+      });
     });
+
+    // Filters + search (client-side)
+    const chips = Array.from(document.querySelectorAll('.chip'));
+    const cards = Array.from(document.querySelectorAll('.card'));
+    const q = document.getElementById('q');
+    let activeKind = 'all';
+
+    function apply(){
+      const term = (q.value || '').trim().toLowerCase();
+      cards.forEach(c=>{
+        const kind = c.getAttribute('data-kind') || '';
+        const title = (c.getAttribute('data-title') || '').toLowerCase();
+        const okKind = (activeKind === 'all') || (kind === activeKind);
+        const okTerm = !term || title.includes(term) || (c.textContent || '').toLowerCase().includes(term);
+        c.style.display = (okKind && okTerm) ? '' : 'none';
+      });
+    }
+
+    chips.forEach(ch=>{
+      ch.addEventListener('click', ()=>{
+        chips.forEach(x=>x.classList.remove('active'));
+        ch.classList.add('active');
+        activeKind = ch.getAttribute('data-filter');
+        apply();
+      });
+      ch.addEventListener('keydown', (e)=>{
+        if(e.key==='Enter' || e.key===' '){
+          e.preventDefault();
+          ch.click();
+        }
+      });
+    });
+
+    q.addEventListener('input', apply, {passive:true});
   </script>
 </body>
 </html>
