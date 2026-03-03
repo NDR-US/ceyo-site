@@ -1,3 +1,11 @@
+<!-- =========================
+FILE: trust.html
+Fixes:
+- Prevents header/nav overlap (same rules as Overview/How)
+- Center nav hides at <=980px (same as others)
+- No neurons (quiet proof room)
+- Everything else preserved
+========================= -->
 <!doctype html>
 <html lang="en">
 <head>
@@ -61,6 +69,7 @@
     .wrap{ position:relative; z-index:1; max-width:var(--maxW); margin:0 auto; padding:0 var(--s4); }
     @media (max-width: 640px){ .wrap{ padding:0 18px; } }
 
+    /* ===== HEADER (fixed overlap) ===== */
     header.site{
       position:sticky; top:0; z-index:50;
       backdrop-filter: blur(10px);
@@ -71,9 +80,15 @@
       height: calc(var(--navH) + env(safe-area-inset-top));
       padding-top: env(safe-area-inset-top);
       display:flex; align-items:center; justify-content:space-between; gap:var(--s3);
+      flex-wrap:nowrap; /* critical: prevents wrapping/overlap */
     }
 
-    .logo{ display:flex; align-items:center; gap:10px; min-width:180px; font-weight:600; letter-spacing:-.01em; }
+    .logo{
+      display:flex; align-items:center; gap:10px;
+      min-width:180px; /* matches other pages */
+      font-weight:600; letter-spacing:-.01em;
+      flex:0 0 auto;
+    }
     .logo .mark{
       display:inline-flex; align-items:center; gap:10px;
       padding:10px 12px; border-radius:999px;
@@ -88,11 +103,16 @@
 
     nav.center{
       display:flex; gap:18px; align-items:center; justify-content:center;
-      flex:1; font-size:14px; color: rgba(201,209,217,.92);
+      flex:1;
+      font-size:14px; color: rgba(201,209,217,.92);
+      min-width:0;
+      overflow:hidden; /* prevents visual overlap */
     }
     nav.center a{
       padding:10px 10px; border-radius:999px; border:1px solid transparent;
       transition: background .18s ease, border-color .18s ease, transform .18s ease;
+      white-space:nowrap;
+      flex:0 0 auto;
     }
     nav.center a:hover{
       background: rgba(255,255,255,.03);
@@ -104,7 +124,12 @@
       background: rgba(201,164,74,.06);
     }
 
-    .actions{ display:flex; align-items:center; gap:10px; min-width:220px; justify-content:flex-end; }
+    .actions{
+      display:flex; align-items:center; gap:10px;
+      min-width:220px; /* matches other pages */
+      justify-content:flex-end;
+      flex:0 0 auto;
+    }
     .btn{
       height:48px; padding:0 18px; border-radius:999px;
       border:1px solid rgba(255,255,255,.10);
@@ -133,7 +158,10 @@
       background: rgba(255,255,255,.02);
       color: rgba(201,209,217,.95);
       align-items:center; justify-content:center;
+      flex:0 0 auto;
     }
+
+    /* Same breakpoint as Overview/How/Platform/Compliance */
     @media (max-width: 980px){
       nav.center{ display:none; }
       .actions .btn.secondary{ display:none; }
@@ -507,7 +535,7 @@
         <p class="muted">Common integrity risks and how CEYO’s mechanics address them. Expand each for detail.</p>
 
         <div class="threatGrid" aria-label="Threat model cards">
-          <div class="threat reveal" role="group" aria-label="Tampering threat">
+          <div class="threat reveal" role="button" tabindex="0" aria-label="Tampering threat">
             <div class="thHdr">
               <b>Tampering after capture</b>
               <span>Integrity</span>
@@ -525,7 +553,7 @@
             </div>
           </div>
 
-          <div class="threat reveal" role="group" aria-label="Replay threat">
+          <div class="threat reveal" role="button" tabindex="0" aria-label="Replay threat">
             <div class="thHdr">
               <b>Replay of an artifact</b>
               <span>Provenance</span>
@@ -543,7 +571,7 @@
             </div>
           </div>
 
-          <div class="threat reveal" role="group" aria-label="Selective omission threat">
+          <div class="threat reveal" role="button" tabindex="0" aria-label="Selective omission threat">
             <div class="thHdr">
               <b>Selective omission</b>
               <span>Scope</span>
@@ -561,7 +589,7 @@
             </div>
           </div>
 
-          <div class="threat reveal" role="group" aria-label="Key compromise threat">
+          <div class="threat reveal" role="button" tabindex="0" aria-label="Key compromise threat">
             <div class="thHdr">
               <b>Key compromise</b>
               <span>Custody</span>
@@ -659,6 +687,13 @@
         e.stopPropagation();
         const open = card.classList.toggle('open');
         btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+      });
+      card.addEventListener('keydown', (e)=>{
+        if(e.key==='Enter' || e.key===' '){
+          e.preventDefault();
+          const open = card.classList.toggle('open');
+          btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+        }
       });
     });
   </script>
