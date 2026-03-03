@@ -5,11 +5,6 @@
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <title>CEYO — Evidentiary Infrastructure for Autonomous Systems</title>
   <meta name="description" content="CEYO is a weight-neutral, policy-scoped integrity layer that produces canonical artifacts representing defined inference-time decision state, sealed for institutional verification."/>
-
-  <meta property="og:title" content="CEYO — Evidentiary Infrastructure for Autonomous Systems"/>
-  <meta property="og:description" content="Weight-neutral, policy-scoped integrity layer producing canonical, sealed artifacts for institutional verification."/>
-  <meta property="og:type" content="website"/>
-
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;900&family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -102,7 +97,7 @@ a{color:inherit;text-decoration:none;}
 .principle-attribution{margin-top:24px;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted2);}
 .tech-section{display:grid;grid-template-columns:200px 1fr;gap:48px;align-items:start;}
 .tech-index{position:sticky;top:80px;display:flex;flex-direction:column;gap:2px;}
-.tech-index-item{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted2);padding:9px 14px;border-left:1px solid var(--stroke2);cursor:pointer;transition:all .12s;background:transparent;border-top:none;border-right:none;border-bottom:none;text-align:left;width:100%;}
+.tech-index-item{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted2);padding:9px 14px;border-left:1px solid var(--stroke2);cursor:pointer;transition:all .12s;}
 .tech-index-item:hover,.tech-index-item.active{color:var(--green2);border-left-color:var(--green);}
 .tech-panels{display:flex;flex-direction:column;}
 .tech-panel{padding:24px 0;border-bottom:1px solid var(--stroke2);}
@@ -124,19 +119,6 @@ a{color:inherit;text-decoration:none;}
 @keyframes cursor-blink{0%,100%{opacity:1}50%{opacity:0}}
 .typewrite-cursor::after{content:'|';animation:cursor-blink .7s ease-in-out infinite;color:var(--green);}
 
-/* Focus visibility (keyboard accessibility) */
-a:focus-visible, button:focus-visible{
-  outline:2px solid var(--ivory);
-  outline-offset:3px;
-}
-.index-item:focus-visible, .btn:focus-visible{
-  outline:2px solid var(--green2);
-  outline-offset:3px;
-}
-
-/* Touch active state (avoids stuck inline styles) */
-.touch-active{ background:var(--ivory) !important; color:var(--bg) !important; }
-
 /* Responsive layout */
 @media(max-width:880px){
   .deficit-grid,.property-row{grid-template-columns:1fr;}
@@ -144,7 +126,6 @@ a:focus-visible, button:focus-visible{
   .not-section{grid-template-columns:1fr;}
   .tech-section{grid-template-columns:1fr;}
   .tech-index{position:static;flex-direction:row;flex-wrap:wrap;}
-  .tech-index-item{width:auto;}
   .boundary-items{grid-template-columns:1fr;}
   .hero-h1{font-size:clamp(40px,9vw,72px);}
   .topnav,.section,.cta-strip{padding-left:20px;padding-right:20px;}
@@ -170,13 +151,9 @@ a:focus-visible, button:focus-visible{
 @media (hover:hover) and (pointer:fine){
   body{cursor:none;}
 }
-
 @media print{
   body{background:#fff;color:#000;cursor:auto;}
-  #cursor,#spotlight,.topnav,.index-bar,.cta-strip,.scroll-hint,body::before{display:none;}
-  .hero-sticky-wrap{height:auto;}
-  .hero-sticky{position:static;height:auto;padding:0 0 24px;}
-  .hero-sticky::after{display:none;}
+  #cursor,#spotlight,.topnav,.index-bar,.hero-sticky-wrap,.cta-strip,.scroll-hint,body::before{display:none;}
   .section{opacity:1;transform:none;}
 }
   </style>
@@ -208,8 +185,8 @@ a:focus-visible, button:focus-visible{
         <span class="pos">CEYO produces verifiable records</span>
       </div>
       <div class="hero-cta-row" id="hw4">
-        <a class="btn primary" href="contact.html">Request Controlled Review</a>
-        <a class="btn" href="platform.html">Enter Framework</a>
+        <a class="btn primary" href="platform.html">Enter Framework</a>
+        <a class="btn" href="contact.html">Request Controlled Review</a>
       </div>
     </div>
     <div class="scroll-hint" aria-hidden="true">Scroll to continue</div>
@@ -292,43 +269,18 @@ a:focus-visible, button:focus-visible{
     <h2 class="section-h2" id="tech-h">How It Works</h2>
     <div class="tech-section">
       <nav class="tech-index" aria-label="Technical property index">
-        <button class="tech-index-item active" data-target="tp-capture" type="button">01 · Capture</button>
-        <button class="tech-index-item" data-target="tp-structure" type="button">02 · Structure</button>
-        <button class="tech-index-item" data-target="tp-sealing" type="button">03 · Sealing</button>
-        <button class="tech-index-item" data-target="tp-disclosure" type="button">04 · Disclosure</button>
-        <button class="tech-index-item" data-target="tp-availability" type="button">05 · Availability</button>
+        <div class="tech-index-item active">01 · Capture</div>
+        <div class="tech-index-item">02 · Structure</div>
+        <div class="tech-index-item">03 · Sealing</div>
+        <div class="tech-index-item">04 · Disclosure</div>
+        <div class="tech-index-item">05 · Availability</div>
       </nav>
-
       <div class="tech-panels">
-        <div class="tech-panel" id="tp-capture">
-          <div class="tech-panel-num">01 · Policy-Scoped Capture</div>
-          <div class="tech-panel-title">Define Before You Collect</div>
-          <div class="tech-panel-body">Operators define what fields are included, excluded, and masked. Capture policy is explicit and versioned. Artifacts reflect declared policy scope; they do not implicitly expand beyond it.</div>
-        </div>
-
-        <div class="tech-panel" id="tp-structure">
-          <div class="tech-panel-num">02 · Canonical Structure</div>
-          <div class="tech-panel-title">Deterministic Normalization</div>
-          <div class="tech-panel-body">Captured context is normalized into a deterministic JSON artifact schema. Canonicalization is applied in accordance with RFC 8785 (JSON Canonicalization Scheme), producing a stable byte representation independent of serialization order.</div>
-        </div>
-
-        <div class="tech-panel" id="tp-sealing">
-          <div class="tech-panel-num">03 · Integrity Sealing</div>
-          <div class="tech-panel-title">Non-Custodial Key Architecture</div>
-          <div class="tech-panel-body">SHA-256 hashing and ECDSA P-256 digital signature are applied as reference implementations. Private signing keys remain within operator-controlled infrastructure — HSM or KMS environments. CEYO does not require possession, transmission, or storage of private keys.</div>
-        </div>
-
-        <div class="tech-panel" id="tp-disclosure">
-          <div class="tech-panel-num">04 · Constrained Disclosure</div>
-          <div class="tech-panel-title">Tiered Verification Access</div>
-          <div class="tech-panel-body">Artifacts may be disclosed under Public&thinsp;/&thinsp;Redacted or Controlled Review tiers. Disclosure tiering allows verification of integrity without default exposure of model weights, proprietary architecture, or trade-secret implementation.</div>
-        </div>
-
-        <div class="tech-panel" id="tp-availability">
-          <div class="tech-panel-num">05 · Fail-Open Architecture</div>
-          <div class="tech-panel-title">Inference Continuity First</div>
-          <div class="tech-panel-body">Inference continuity remains independent of artifact sealing. If artifact generation fails, inference proceeds. Seal failures are logged and flagged. CEYO is designed not to interrupt operational systems.</div>
-        </div>
+        <div class="tech-panel"><div class="tech-panel-num">01 · Policy-Scoped Capture</div><div class="tech-panel-title">Define Before You Collect</div><div class="tech-panel-body">Operators define what fields are included, excluded, and masked. Capture policy is explicit and versioned. Artifacts reflect declared policy scope; they do not implicitly expand beyond it.</div></div>
+        <div class="tech-panel"><div class="tech-panel-num">02 · Canonical Structure</div><div class="tech-panel-title">Deterministic Normalization</div><div class="tech-panel-body">Captured telemetry is normalized into a deterministic JSON artifact schema. Canonicalization is applied in accordance with RFC 8785 (JSON Canonicalization Scheme), producing a stable byte representation independent of serialization order.</div></div>
+        <div class="tech-panel"><div class="tech-panel-num">03 · Integrity Sealing</div><div class="tech-panel-title">Non-Custodial Key Architecture</div><div class="tech-panel-body">SHA-256 hashing and ECDSA P-256 digital signature are applied as reference implementations. Private signing keys remain within operator-controlled infrastructure — HSM or KMS environments. CEYO does not require possession, transmission, or storage of private keys.</div></div>
+        <div class="tech-panel"><div class="tech-panel-num">04 · Constrained Disclosure</div><div class="tech-panel-title">Tiered Verification Access</div><div class="tech-panel-body">Artifacts may be disclosed under Public&thinsp;/&thinsp;Redacted or Controlled Review tiers. Disclosure tiering allows verification of integrity without default exposure of model weights, proprietary architecture, or trade-secret implementation.</div></div>
+        <div class="tech-panel"><div class="tech-panel-num">05 · Fail-Open Architecture</div><div class="tech-panel-title">Inference Continuity First</div><div class="tech-panel-body">Inference continuity remains independent of artifact sealing. If artifact generation fails, inference proceeds. Seal failures are logged and flagged. CEYO is designed not to interrupt operational systems.</div></div>
       </div>
     </div>
   </section>
@@ -369,26 +321,22 @@ a:focus-visible, button:focus-visible{
 const cursor=document.getElementById('cursor');
 const spotlight=document.getElementById('spotlight');
 
-const canHover = window.matchMedia('(hover:hover) and (pointer:fine)').matches;
+document.addEventListener('mousemove',e=>{
+  cursor.style.left=e.clientX+'px';
+  cursor.style.top=e.clientY+'px';
 
-if(canHover){
-  document.addEventListener('mousemove',e=>{
-    cursor.style.left=e.clientX+'px';
-    cursor.style.top=e.clientY+'px';
-    spotlight.style.background=`radial-gradient(circle 300px at ${e.clientX}px ${e.clientY}px,rgba(255,255,240,0.065) 0%,transparent 70%)`;
-  });
+  const isMobile = window.matchMedia('(max-width: 600px)').matches;
+  const glow = isMobile ? 0.04 : 0.065;
 
-  document.addEventListener('mouseleave',()=>{cursor.style.opacity='0';spotlight.style.background='none';});
-  document.addEventListener('mouseenter',()=>{cursor.style.opacity='1';});
+  spotlight.style.background=`radial-gradient(circle 300px at ${e.clientX}px ${e.clientY}px,rgba(255,255,240,${glow}) 0%,transparent 70%)`;
+});
 
-  document.querySelectorAll('a,button,.deficit-cell,.prop-cell,.btn').forEach(el=>{
-    el.addEventListener('mouseenter',()=>cursor.classList.add('hover'));
-    el.addEventListener('mouseleave',()=>cursor.classList.remove('hover'));
-  });
-}else{
-  cursor.style.display='none';
-  spotlight.style.display='none';
-}
+document.addEventListener('mouseleave',()=>{cursor.style.opacity='0';spotlight.style.background='none';});
+document.addEventListener('mouseenter',()=>{cursor.style.opacity='1';});
+document.querySelectorAll('a,button,.deficit-cell,.prop-cell,.btn').forEach(el=>{
+  el.addEventListener('mouseenter',()=>cursor.classList.add('hover'));
+  el.addEventListener('mouseleave',()=>cursor.classList.remove('hover'));
+});
 
 const heroH1=document.getElementById('hero-h1');
 const heroWrap=document.querySelector('.hero-sticky-wrap');
@@ -405,7 +353,7 @@ function onScroll(){
 }
 window.addEventListener('scroll',onScroll,{passive:true});
 
-const sections=document.querySelectorAll('.section');
+const sections=document.querySelectorAll('.section,.principle-section');
 const focusObs=new IntersectionObserver(entries=>{
   entries.forEach(e=>{
     if(e.isIntersecting){e.target.classList.add('visible','focus');}
@@ -424,7 +372,6 @@ function typewrite(el,text,speed){
     if(i>=original.length){clearInterval(iv);el.classList.remove('typewrite-cursor');}
   },speed||18);
 }
-
 const typeObs=new IntersectionObserver(entries=>{
   entries.forEach(e=>{
     if(e.isIntersecting&&!e.target.dataset.typed){
@@ -446,23 +393,12 @@ const h2obs=new IntersectionObserver(entries=>{
 document.querySelectorAll('.section-h2').forEach(h=>h2obs.observe(h));
 
 document.querySelectorAll('.btn,.deficit-cell,.prop-cell,.index-item').forEach(el=>{
-  el.addEventListener('touchstart',()=>el.classList.add('touch-active'),{passive:true});
-  const clear=()=>el.classList.remove('touch-active');
-  el.addEventListener('touchend',()=>setTimeout(clear,120),{passive:true});
-  el.addEventListener('touchcancel',clear,{passive:true});
+  el.addEventListener('touchstart',()=>{el.style.background='var(--ivory)';el.style.color='var(--bg)';},{passive:true});
+  el.addEventListener('touchend',()=>{setTimeout(()=>{el.style.background='';el.style.color='';},180);},{passive:true});
 });
 
 const techPanels=document.querySelectorAll('.tech-panel');
 const techItems=document.querySelectorAll('.tech-index-item');
-
-techItems.forEach(btn=>{
-  btn.addEventListener('click',()=>{
-    const id=btn.dataset.target;
-    const target=document.getElementById(id);
-    if(target) target.scrollIntoView({behavior:'smooth', block:'start'});
-  });
-});
-
 const techObs=new IntersectionObserver(entries=>{
   entries.forEach(e=>{
     if(e.isIntersecting){
