@@ -1,18 +1,3 @@
-Keep Overview and How It Works exactly as-is.
-
-For Trust, the best move is:
-	•	Keep the same layout + content modules (Guarantees vs Non-guarantees + Threat model + Verification steps).
-	•	Remove the neurons canvas entirely (Trust should feel like a “quiet proof room”).
-	•	Keep the same gradient atmosphere so it stays cohesive.
-This will immediately reduce repetition without changing the structure you already like.
-
-Below is the full copy/paste trust.html with:
-	•	Same layout as the original trust page I made
-	•	Neurons removed
-	•	Everything else preserved (nav, mobile menu, modules, footer, reveal)
-
-Save as: trust.html
-
 <!doctype html>
 <html lang="en">
 <head>
@@ -511,7 +496,7 @@ Save as: trust.html
 
         <div style="margin-top:18px; display:flex; gap:10px; flex-wrap:wrap;">
           <a class="btn primary" href="contact.html">Request verification walkthrough<span class="arr">→</span></a>
-          <a class="btn" href="resources.html#verification-spec">Download spec (placeholder)<span class="arr">→</span></a>
+          <a class="btn" href="resources.html#library">Resources<span class="arr">→</span></a>
         </div>
       </div>
     </section>
@@ -522,7 +507,7 @@ Save as: trust.html
         <p class="muted">Common integrity risks and how CEYO’s mechanics address them. Expand each for detail.</p>
 
         <div class="threatGrid" aria-label="Threat model cards">
-          <div class="threat reveal" role="button" tabindex="0" aria-label="Tampering threat">
+          <div class="threat reveal" role="group" aria-label="Tampering threat">
             <div class="thHdr">
               <b>Tampering after capture</b>
               <span>Integrity</span>
@@ -540,7 +525,7 @@ Save as: trust.html
             </div>
           </div>
 
-          <div class="threat reveal" role="button" tabindex="0" aria-label="Replay threat">
+          <div class="threat reveal" role="group" aria-label="Replay threat">
             <div class="thHdr">
               <b>Replay of an artifact</b>
               <span>Provenance</span>
@@ -558,7 +543,7 @@ Save as: trust.html
             </div>
           </div>
 
-          <div class="threat reveal" role="button" tabindex="0" aria-label="Selective omission threat">
+          <div class="threat reveal" role="group" aria-label="Selective omission threat">
             <div class="thHdr">
               <b>Selective omission</b>
               <span>Scope</span>
@@ -576,7 +561,7 @@ Save as: trust.html
             </div>
           </div>
 
-          <div class="threat reveal" role="button" tabindex="0" aria-label="Key compromise threat">
+          <div class="threat reveal" role="group" aria-label="Key compromise threat">
             <div class="thHdr">
               <b>Key compromise</b>
               <span>Custody</span>
@@ -674,13 +659,6 @@ Save as: trust.html
         e.stopPropagation();
         const open = card.classList.toggle('open');
         btn.setAttribute('aria-expanded', open ? 'true' : 'false');
-      });
-      card.addEventListener('keydown', (e)=>{
-        if(e.key==='Enter' || e.key===' '){
-          e.preventDefault();
-          const open = card.classList.toggle('open');
-          btn.setAttribute('aria-expanded', open ? 'true' : 'false');
-        }
       });
     });
   </script>
