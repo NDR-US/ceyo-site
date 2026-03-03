@@ -40,11 +40,7 @@
     }
 
     *{box-sizing:border-box}
-    html{
-      background:var(--paper);
-      scroll-behavior:smooth;
-      scroll-padding-top: calc(var(--navH) + 24px);
-    }
+    html{background:var(--paper);scroll-behavior:smooth}
     body{
       margin:0;
       font-family:var(--ui);
@@ -55,6 +51,8 @@
     }
     a{color:inherit;text-decoration:none}
     button{font:inherit}
+
+    /* Anchor offset for sticky header */
     [id]{ scroll-margin-top: calc(var(--navH) + 24px); }
 
     .bg{
@@ -74,6 +72,7 @@
     .wrap{ position:relative; z-index:2; max-width:var(--maxW); margin:0 auto; padding:0 var(--s4); }
     @media (max-width: 640px){ .wrap{ padding:0 18px; } }
 
+    /* ===== HEADER (MATCHES OTHER PAGES: same structure + breakpoint) ===== */
     header.site{
       position:sticky; top:0; z-index:50;
       backdrop-filter: blur(10px);
@@ -84,10 +83,14 @@
       height: calc(var(--navH) + env(safe-area-inset-top));
       padding-top: env(safe-area-inset-top);
       display:flex; align-items:center; justify-content:space-between; gap:var(--s3);
-      min-width:0;
+      flex-wrap:nowrap; /* prevent wrap/overlap */
     }
 
-    .logo{ display:flex; align-items:center; gap:10px; font-weight:600; letter-spacing:-.01em; flex:0 0 auto; }
+    .logo{
+      display:flex; align-items:center; gap:10px;
+      min-width:180px; /* matches other pages */
+      font-weight:600; letter-spacing:-.01em;
+    }
     .logo .mark{
       display:inline-flex; align-items:center; gap:10px;
       padding:10px 12px; border-radius:999px;
@@ -102,14 +105,16 @@
 
     nav.center{
       display:flex; gap:18px; align-items:center; justify-content:center;
-      flex:1; font-size:14px; color: rgba(18,22,29,.86);
+      flex:1;
+      font-size:14px; color: rgba(18,22,29,.86);
       min-width:0;
-      overflow:hidden;
+      overflow:hidden; /* prevents visual overlap */
     }
     nav.center a{
       padding:10px 10px; border-radius:999px; border:1px solid transparent;
       transition: background .18s ease, border-color .18s ease, transform .18s ease;
       white-space:nowrap;
+      flex:0 0 auto;
     }
     nav.center a:hover{
       background: rgba(0,0,0,.03);
@@ -121,7 +126,12 @@
       background: rgba(201,164,74,.14);
     }
 
-    .actions{ display:flex; align-items:center; gap:10px; justify-content:flex-end; flex:0 0 auto; }
+    .actions{
+      display:flex; align-items:center; gap:10px;
+      min-width:220px; /* matches other pages */
+      justify-content:flex-end;
+      flex:0 0 auto;
+    }
     .btn{
       height:48px; padding:0 18px; border-radius:999px;
       border:1px solid var(--lineOnPaper);
@@ -154,11 +164,11 @@
       background: rgba(255,255,255,.55);
       color: rgba(18,22,29,.86);
       align-items:center; justify-content:center;
-      cursor:pointer;
+      flex:0 0 auto;
     }
 
-    /* Prevent header overlap (hide center nav earlier) */
-    @media (max-width: 1180px){
+    /* Same breakpoint behavior as other pages */
+    @media (max-width: 980px){
       nav.center{ display:none; }
       .actions .btn.secondary{ display:none; }
       .hamburger{ display:inline-flex; }
@@ -195,7 +205,6 @@
       border:1px solid var(--lineOnPaper);
       background: rgba(255,255,255,.55);
       color: rgba(18,22,29,.86);
-      cursor:pointer;
     }
     .drawerLinks{ display:grid; grid-template-columns: 1fr; padding: 10px; gap: 8px; }
     .drawerLinks a{
@@ -206,21 +215,15 @@
       transition: transform .18s ease, border-color .18s ease;
     }
     .drawerLinks a:hover{ transform: translateY(-1px); border-color: rgba(201,164,74,.55); }
-    .drawerLinks a.active{
-      border-color: rgba(201,164,74,.60);
-      background: rgba(201,164,74,.20);
-    }
 
+    /* ===== CONTENT ===== */
     .read{ max-width: var(--readW); }
     p{ margin: 0 0 14px 0; line-height: var(--lh); }
     .muted{ color: var(--mutedOnPaper); }
 
-    main{
-      padding-top: calc(var(--navH) + var(--s4));
-      padding-bottom: var(--s7);
-    }
+    main{ padding: var(--s6) 0 var(--s7); }
     section{ padding: var(--s7) 0; border-top:1px solid var(--lineOnPaper); }
-    section:first-of-type{ border-top:none; padding-top: 0; }
+    section:first-of-type{ border-top:none; padding-top: var(--s6); }
 
     .eyebrow{
       font-family: var(--mono);
@@ -475,17 +478,6 @@
     }
     .copyBtn:hover{ transform: translateY(-1px); border-color: rgba(201,164,74,.55); }
 
-    /* Hidden raw JSON source for accurate copying (no HTML escaping) */
-    .sr{
-      position:absolute;
-      left:-99999px;
-      top:auto;
-      width:1px;
-      height:1px;
-      overflow:hidden;
-      white-space:pre;
-    }
-
     .defGrid{
       display:grid;
       grid-template-columns: 1fr 1fr;
@@ -648,7 +640,7 @@
         <a href="integrations.html">Integrations</a>
         <a href="use-cases.html">Use Cases</a>
         <a href="security.html">Security</a>
-        <a class="active" href="resources.html">Resources</a>
+        <a href="resources.html">Resources</a>
         <a href="company.html">Company</a>
         <a href="contact.html">Contact</a>
       </div>
@@ -656,12 +648,12 @@
   </div>
 
   <main class="wrap">
-    <section>
+    <section style="padding-top: var(--s6);">
       <div class="read reveal">
         <div class="eyebrow">Resources · Specs · Samples</div>
         <h1>Reference material for evaluation and verification.</h1>
         <p class="muted">
-          Public resources show structure and boundaries. Additional materials may be provided under controlled review.
+          Public resources show structure and boundaries. Controlled resources may be shared under appropriate confidentiality terms for qualified review.
         </p>
 
         <div class="heroRow">
@@ -716,7 +708,7 @@
                 <span class="small">PDF · Controlled</span>
               </div>
               <div style="margin-top:10px;"><b>Capture policy & masking schema</b></div>
-              <p>Inclusion/exclusion rules, masking behavior, disclosure tiers, identifiers and versioning.</p>
+              <p>Inclusion/exclusion rules, masking behavior, disclosure tiers, policy identifiers and versioning.</p>
             </div>
             <div class="cta">
               <span class="link">Request access</span>
@@ -799,14 +791,14 @@
             </div>
           </a>
 
-          <a class="card reveal" data-kind="faq" data-title="Frequently asked questions" href="#faq" aria-label="FAQ">
+          <a class="card reveal" data-kind="faq" data-title="FAQ" href="#faq" aria-label="FAQ">
             <div>
               <div class="metaRow">
                 <span class="pill">FAQ</span>
                 <span class="small">HTML · Public</span>
               </div>
               <div style="margin-top:10px;"><b>Frequently asked questions</b></div>
-              <p>Common questions about scope, verification, keys, and failure modes.</p>
+              <p>Common questions from non-technical and institutional reviewers.</p>
             </div>
             <div class="cta">
               <span class="link">Open</span>
@@ -820,62 +812,9 @@
     <section id="sample-artifact">
       <div class="read reveal">
         <h2>Sample artifacts & verification reports</h2>
-        <p class="muted">Public examples with redacted fields.</p>
-
-        <!-- Hidden raw JSON for accurate copy -->
-        <textarea class="sr" id="raw_artifact">{
-  "artifact_id": "a1b2c3d4e5f6g7h8i9j0",
-  "timestamp": "2023-06-10T14:30:00Z",
-  "policy_id": "p_pub_v1",
-  "policy_version": "1.2",
-  "disclosure_tier": "public",
-  "input_hash": "<REDACTED>",
-  "output": {
-    "decision": "Approve",
-    "confidence": 0.95,
-    "factors": ["<REDACTED>", "<REDACTED>", "<REDACTED>"]
-  },
-  "model_id": "<REDACTED>",
-  "model_version": "<REDACTED>",
-  "environment": "<REDACTED>",
-  "hashing_algorithm": "SHA-256",
-  "signature_algorithm": "ECDSA",
-  "signature": "<REDACTED>"
-}</textarea>
-
-        <textarea class="sr" id="raw_pass">{
-  "artifact_id": "a1b2c3d4e5f6g7h8i9j0",
-  "verification_timestamp": "2023-06-10T15:00:00Z",
-  "policy_id": "p_pub_v1",
-  "policy_version": "1.2",
-  "disclosure_tier": "public",
-  "hashing_algorithm": "SHA-256",
-  "signature_algorithm": "ECDSA",
-  "verification_steps": [
-    { "step": "Canonicalization", "standard": "RFC 8785", "result": "PASS" },
-    { "step": "Hash Recomputation", "computed_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855", "result": "PASS" },
-    { "step": "Signature Verification", "result": "PASS" },
-    { "step": "Policy Alignment", "result": "PASS" }
-  ],
-  "overall_result": "PASS - Artifact integrity confirmed"
-}</textarea>
-
-        <textarea class="sr" id="raw_fail">{
-  "artifact_id": "z9y8x7w6v5u4t3s2r1q0",
-  "verification_timestamp": "2023-06-10T16:30:00Z",
-  "policy_id": "p_pub_v1",
-  "policy_version": "1.2",
-  "disclosure_tier": "public",
-  "hashing_algorithm": "SHA-256",
-  "signature_algorithm": "ECDSA",
-  "verification_steps": [
-    { "step": "Canonicalization", "standard": "RFC 8785", "result": "PASS" },
-    { "step": "Hash Recomputation", "computed_hash": "f6e0b1e2d3c4a5b6c7d8e9f0a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0", "result": "FAIL - Hash mismatch" },
-    { "step": "Signature Verification", "result": "NOT ATTEMPTED" },
-    { "step": "Policy Alignment", "result": "NOT ATTEMPTED" }
-  ],
-  "overall_result": "FAIL - Artifact integrity compromised"
-}</textarea>
+        <p class="muted">
+          These are public examples with redacted fields. “Redacted” here means removed or masked for public sharing (not “classified”).
+        </p>
 
         <div class="panel reveal">
           <div class="sampleGrid" aria-label="Sample JSON panels">
@@ -883,10 +822,10 @@
             <details class="sample" open>
               <summary class="sampleSum">
                 <div class="sumLeft">
-                  <div class="sumTitle">Public artifact sample</div>
+                  <div class="sumTitle">Public artifact sample (redacted fields)</div>
                   <div class="sumTag">Artifact</div>
                 </div>
-                <div class="sumRight">Tier: public</div>
+                <div class="sumRight">Disclosure tier: public</div>
               </summary>
               <div class="codeWrap">
                 <pre class="code" id="code_artifact">{
@@ -909,8 +848,8 @@
   "signature": "&lt;REDACTED&gt;"
 }</pre>
                 <div class="noteRow">
-                  <div><b>Purpose:</b> demonstrate wrapper structure without disclosing sensitive fields.</div>
-                  <button class="copyBtn" data-copy="raw_artifact" type="button">Copy JSON</button>
+                  <div><b>Purpose:</b> demonstrate wrapper structure without exposing proprietary or sensitive fields.</div>
+                  <button class="copyBtn" data-copy="code_artifact" type="button">Copy JSON</button>
                 </div>
               </div>
             </details>
@@ -933,16 +872,30 @@
   "hashing_algorithm": "SHA-256",
   "signature_algorithm": "ECDSA",
   "verification_steps": [
-    { "step": "Canonicalization", "standard": "RFC 8785", "result": "PASS" },
-    { "step": "Hash Recomputation", "computed_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855", "result": "PASS" },
-    { "step": "Signature Verification", "result": "PASS" },
-    { "step": "Policy Alignment", "result": "PASS" }
+    {
+      "step": "Canonicalization",
+      "standard": "RFC 8785",
+      "result": "PASS"
+    },
+    {
+      "step": "Hash Recomputation",
+      "computed_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "result": "PASS"
+    },
+    {
+      "step": "Signature Verification",
+      "result": "PASS"
+    },
+    {
+      "step": "Policy Alignment",
+      "result": "PASS"
+    }
   ],
   "overall_result": "PASS - Artifact integrity confirmed"
 }</pre>
                 <div class="noteRow">
                   <div><b>Interpretation:</b> integrity and provenance checks succeeded under declared policy scope.</div>
-                  <button class="copyBtn" data-copy="raw_pass" type="button">Copy JSON</button>
+                  <button class="copyBtn" data-copy="code_pass" type="button">Copy JSON</button>
                 </div>
               </div>
             </details>
@@ -965,16 +918,30 @@
   "hashing_algorithm": "SHA-256",
   "signature_algorithm": "ECDSA",
   "verification_steps": [
-    { "step": "Canonicalization", "standard": "RFC 8785", "result": "PASS" },
-    { "step": "Hash Recomputation", "computed_hash": "f6e0b1e2d3c4a5b6c7d8e9f0a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0", "result": "FAIL - Hash mismatch" },
-    { "step": "Signature Verification", "result": "NOT ATTEMPTED" },
-    { "step": "Policy Alignment", "result": "NOT ATTEMPTED" }
+    {
+      "step": "Canonicalization",
+      "standard": "RFC 8785",
+      "result": "PASS"
+    },
+    {
+      "step": "Hash Recomputation",
+      "computed_hash": "f6e0b1e2d3c4a5b6c7d8e9f0a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0",
+      "result": "FAIL - Hash mismatch"
+    },
+    {
+      "step": "Signature Verification",
+      "result": "NOT ATTEMPTED"
+    },
+    {
+      "step": "Policy Alignment",
+      "result": "NOT ATTEMPTED"
+    }
   ],
   "overall_result": "FAIL - Artifact integrity compromised"
 }</pre>
                 <div class="noteRow">
                   <div><b>Interpretation:</b> hash mismatch indicates alteration or mismatch; signature checks are not meaningful after hash failure.</div>
-                  <button class="copyBtn" data-copy="raw_fail" type="button">Copy JSON</button>
+                  <button class="copyBtn" data-copy="code_fail" type="button">Copy JSON</button>
                 </div>
               </div>
             </details>
@@ -1019,8 +986,8 @@
 
     <section id="faq">
       <div class="read reveal">
-        <h2>Frequently asked questions</h2>
-        <p class="muted">Scope, verification, keys, and failure modes.</p>
+        <h2>FAQ</h2>
+        <p class="muted">Common questions for evaluators, operators, and institutional reviewers.</p>
 
         <div class="panel reveal">
           <div class="faq">
@@ -1038,7 +1005,7 @@
             <div class="qa">
               <button class="qbtn" type="button">
                 <div>Does CEYO require access to model weights or proprietary internals?</div>
-                <span>Scope</span>
+                <span>Disclosure</span>
                 <span class="chev">▾</span>
               </button>
               <div class="ans">
@@ -1049,7 +1016,7 @@
             <div class="qa">
               <button class="qbtn" type="button">
                 <div>What happens if sealing fails during an inference event?</div>
-                <span>Fail-open</span>
+                <span>Availability</span>
                 <span class="chev">▾</span>
               </button>
               <div class="ans">
@@ -1070,7 +1037,7 @@
 
             <div class="qa">
               <button class="qbtn" type="button">
-                <div>Is a CEYO artifact guaranteed to be admissible or accepted by regulators?</div>
+                <div>Is a CEYO artifact guaranteed to be admissible in court or accepted by regulators?</div>
                 <span>Legal</span>
                 <span class="chev">▾</span>
               </button>
@@ -1193,11 +1160,11 @@
 
     q.addEventListener('input', apply, {passive:true});
 
-    // Copy buttons (copy raw JSON from hidden textareas)
+    // Copy buttons for samples
     async function copyFrom(id){
       const el = document.getElementById(id);
       if(!el) return;
-      const txt = el.value || el.textContent || '';
+      const txt = el.textContent || '';
       try{
         await navigator.clipboard.writeText(txt);
       }catch(e){
@@ -1209,7 +1176,6 @@
         ta.remove();
       }
     }
-
     document.querySelectorAll('.copyBtn').forEach(btn=>{
       btn.addEventListener('click', async ()=>{
         const id = btn.getAttribute('data-copy');
