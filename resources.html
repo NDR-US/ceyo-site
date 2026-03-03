@@ -72,23 +72,25 @@
     .wrap{ position:relative; z-index:2; max-width:var(--maxW); margin:0 auto; padding:0 var(--s4); }
     @media (max-width: 640px){ .wrap{ padding:0 18px; } }
 
-    /* ===== HEADER (MATCHES OTHER PAGES: same structure + breakpoint) ===== */
     header.site{
       position:sticky; top:0; z-index:50;
       backdrop-filter: blur(10px);
       background: rgba(245,242,234,.78);
       border-bottom:1px solid var(--lineOnPaper);
     }
+
+    /* ===== TOP BAR (FIXED) ===== */
     .nav{
       height: calc(var(--navH) + env(safe-area-inset-top));
       padding-top: env(safe-area-inset-top);
       display:flex; align-items:center; justify-content:space-between; gap:var(--s3);
-      flex-wrap:nowrap; /* prevent wrap/overlap */
+      flex-wrap:nowrap; /* prevent wrapping/overlap */
     }
 
     .logo{
       display:flex; align-items:center; gap:10px;
-      min-width:180px; /* matches other pages */
+      min-width:180px;
+      flex:0 0 auto;
       font-weight:600; letter-spacing:-.01em;
     }
     .logo .mark{
@@ -106,9 +108,10 @@
     nav.center{
       display:flex; gap:18px; align-items:center; justify-content:center;
       flex:1;
-      font-size:14px; color: rgba(18,22,29,.86);
-      min-width:0;
-      overflow:hidden; /* prevents visual overlap */
+      min-width:0;            /* allow shrink */
+      overflow:hidden;        /* prevent overlap */
+      font-size:14px;
+      color: rgba(18,22,29,.86);
     }
     nav.center a{
       padding:10px 10px; border-radius:999px; border:1px solid transparent;
@@ -128,7 +131,7 @@
 
     .actions{
       display:flex; align-items:center; gap:10px;
-      min-width:220px; /* matches other pages */
+      min-width:220px;
       justify-content:flex-end;
       flex:0 0 auto;
     }
@@ -164,10 +167,9 @@
       background: rgba(255,255,255,.55);
       color: rgba(18,22,29,.86);
       align-items:center; justify-content:center;
-      flex:0 0 auto;
     }
 
-    /* Same breakpoint behavior as other pages */
+    /* IMPORTANT: match the other pages */
     @media (max-width: 980px){
       nav.center{ display:none; }
       .actions .btn.secondary{ display:none; }
@@ -216,7 +218,7 @@
     }
     .drawerLinks a:hover{ transform: translateY(-1px); border-color: rgba(201,164,74,.55); }
 
-    /* ===== CONTENT ===== */
+    /* ===== PAGE TYPOGRAPHY / LAYOUT ===== */
     .read{ max-width: var(--readW); }
     p{ margin: 0 0 14px 0; line-height: var(--lh); }
     .muted{ color: var(--mutedOnPaper); }
