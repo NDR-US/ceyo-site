@@ -52,6 +52,7 @@
     a{color:inherit;text-decoration:none}
     button{font:inherit}
 
+    /* Sticky header anchor offset */
     [id]{ scroll-margin-top: calc(var(--navH) + 24px); }
 
     .bg{
@@ -71,31 +72,25 @@
     .wrap{ position:relative; z-index:2; max-width:var(--maxW); margin:0 auto; padding:0 var(--s4); }
     @media (max-width: 640px){ .wrap{ padding:0 18px; } }
 
-    /* Menu-only header (light) */
+    /* ===== Header: Menu-only (matches index behavior) ===== */
     header.site{
       position:sticky; top:0; z-index:50;
       backdrop-filter: blur(10px);
-      background: rgba(245,242,234,.82);
+      background: rgba(245,242,234,.84);
       border-bottom:1px solid var(--lineOnPaper);
     }
     .nav{
       height: calc(var(--navH) + env(safe-area-inset-top));
       padding-top: env(safe-area-inset-top);
-      display:flex; align-items:center; justify-content:space-between; gap:var(--s2);
-      min-width:0;
+      display:flex; align-items:center; justify-content:space-between; gap:var(--s3);
     }
 
-    .logo{
-      display:flex; align-items:center; gap:10px;
-      font-weight:600; letter-spacing:-.01em;
-      min-width:0;
-    }
+    .logo{ display:flex; align-items:center; gap:10px; font-weight:600; letter-spacing:-.01em; min-width: 160px; }
     .logo .mark{
       display:inline-flex; align-items:center; gap:10px;
       padding:10px 12px; border-radius:999px;
       border:1px solid var(--lineOnPaper);
       background: rgba(255,255,255,.55);
-      white-space:nowrap;
     }
     .logo .dot{
       width:8px; height:8px; border-radius:50%;
@@ -103,7 +98,26 @@
       box-shadow: 0 0 0 4px rgba(201,164,74,.18);
     }
 
-    .actions{ display:flex; align-items:center; gap:10px; justify-content:flex-end; min-width:0; }
+    .centerSlot{
+      flex:1;
+      min-width: 0;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap: 10px;
+      color: rgba(18,22,29,.72);
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing:.14em;
+      text-transform: uppercase;
+      white-space: nowrap;
+      overflow:hidden;
+      text-overflow: ellipsis;
+    }
+    @media (max-width: 760px){ .centerSlot{ display:none; } }
+
+    .actions{ display:flex; align-items:center; gap:10px; justify-content:flex-end; min-width: 220px; }
+
     .btn{
       height:48px; padding:0 18px; border-radius:999px;
       border:1px solid var(--lineOnPaper);
@@ -128,36 +142,65 @@
     .btn .arr{ display:inline-block; margin-left:10px; transition: transform .16s ease; }
     .btn:hover .arr{ transform: translateX(3px); }
 
+    /* Menu button ALWAYS visible (desktop + mobile) */
     .menuBtn{
-      height:48px; width:48px;
+      height:48px;
+      padding: 0 16px;
       border-radius:999px;
       border:1px solid var(--lineOnPaper);
       background: rgba(255,255,255,.55);
       color: rgba(18,22,29,.86);
-      display:inline-flex; align-items:center; justify-content:center;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
       cursor:pointer;
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing:.14em;
+      text-transform: uppercase;
+      white-space:nowrap;
+      transition: transform .18s ease, border-color .18s ease, background .18s ease, box-shadow .18s ease;
     }
-    .menuBtn:active{ transform: translateY(1px); }
+    .menuBtn:hover{
+      transform: translateY(-1px);
+      border-color: rgba(201,164,74,.55);
+      background: rgba(255,255,255,.78);
+      box-shadow: var(--shadow);
+    }
+    .menuIcon{
+      width: 14px; height: 14px; display:inline-block;
+      position:relative;
+    }
+    .menuIcon::before, .menuIcon::after, .menuIcon span{
+      content:"";
+      position:absolute; left:0; right:0;
+      height:2px; border-radius: 2px;
+      background: rgba(18,22,29,.72);
+    }
+    .menuIcon::before{ top:1px; }
+    .menuIcon span{ top:6px; }
+    .menuIcon::after{ top:11px; }
 
-    @media (max-width: 760px){
+    /* Hide secondary button on small screens */
+    @media (max-width: 980px){
       .actions .btn.secondary{ display:none; }
-      .btn{ padding:0 14px; height:46px; }
-      .menuBtn{ height:46px; width:46px; }
-      .logo .mark{ padding:9px 11px; }
+      .actions{ min-width:auto; }
     }
 
+    /* Drawer */
     .drawer{
       position:fixed; inset:0; z-index:80;
       display:none;
-      background: rgba(245,242,234,.82);
+      background: rgba(245,242,234,.86);
       backdrop-filter: blur(10px);
       padding: calc(env(safe-area-inset-top) + 12px) 18px 18px;
     }
     .drawer.open{ display:block; }
     .drawerCard{
-      max-width: 720px; margin: 0 auto;
+      max-width: 740px; margin: 0 auto;
       border:1px solid var(--lineOnPaper);
-      background: rgba(255,255,255,.78);
+      background: rgba(255,255,255,.82);
       border-radius: var(--r-lg);
       box-shadow: var(--shadow2);
       overflow:hidden;
@@ -179,16 +222,47 @@
       color: rgba(18,22,29,.86);
       cursor:pointer;
     }
-    .drawerLinks{ display:grid; grid-template-columns: 1fr; padding: 10px; gap: 8px; }
-    .drawerLinks a{
-      padding: 14px 14px; border-radius: 14px;
-      border:1px solid rgba(0,0,0,.08);
-      background: rgba(255,255,255,.55);
-      font-size: 15px;
-      transition: transform .18s ease, border-color .18s ease;
+    .drawerGrid{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      padding: 12px;
     }
-    .drawerLinks a:hover{ transform: translateY(-1px); border-color: rgba(201,164,74,.55); }
+    @media (max-width: 760px){ .drawerGrid{ grid-template-columns: 1fr; } }
+    .drawerLinks{
+      border:1px solid rgba(0,0,0,.08);
+      background: rgba(255,255,255,.65);
+      border-radius: 14px;
+      padding: 10px;
+    }
+    .drawerLinks .k{
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing:.14em;
+      text-transform: uppercase;
+      color: rgba(58,50,12,.82);
+      margin: 6px 8px 10px;
+    }
+    .drawerLinks a{
+      display:block;
+      padding: 12px 12px;
+      border-radius: 12px;
+      border:1px solid transparent;
+      color: rgba(18,22,29,.86);
+      transition: background .18s ease, border-color .18s ease, transform .18s ease;
+      font-size: 15px;
+    }
+    .drawerLinks a:hover{
+      background: rgba(201,164,74,.14);
+      border-color: rgba(201,164,74,.25);
+      transform: translateY(-1px);
+    }
+    .drawerLinks a.active{
+      background: rgba(201,164,74,.20);
+      border-color: rgba(201,164,74,.35);
+    }
 
+    /* Typography + layout */
     .read{ max-width: var(--readW); }
     p{ margin: 0 0 14px 0; line-height: var(--lh); }
     .muted{ color: var(--mutedOnPaper); }
@@ -213,10 +287,16 @@
       h3{ font-size: 19px; }
     }
 
-    /* Cards / modules (same as your file, only copy changes below) */
-    .heroRow{ display:flex; align-items:flex-end; justify-content:space-between; gap: 14px; flex-wrap:wrap; margin-top: 14px; }
+    .heroRow{
+      display:flex; align-items:flex-end; justify-content:space-between;
+      gap: 14px; flex-wrap:wrap;
+      margin-top: 14px;
+    }
 
-    .filters{ display:flex; gap:10px; flex-wrap:wrap; margin-top: 12px; }
+    .filters{
+      display:flex; gap:10px; flex-wrap:wrap;
+      margin-top: 12px;
+    }
     .chip{
       border:1px solid rgba(0,0,0,.10);
       background: rgba(255,255,255,.55);
@@ -232,7 +312,11 @@
       user-select:none;
     }
     .chip:hover{ transform: translateY(-1px); border-color: rgba(201,164,74,.55); }
-    .chip.active{ border-color: rgba(201,164,74,.70); background: rgba(201,164,74,.20); color: rgba(18,22,29,.88); }
+    .chip.active{
+      border-color: rgba(201,164,74,.70);
+      background: rgba(201,164,74,.20);
+      color: rgba(18,22,29,.88);
+    }
 
     .search{
       display:flex; align-items:center; gap:10px;
@@ -274,10 +358,19 @@
       padding: 18px 18px;
       transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
       min-height: 170px;
-      display:flex; flex-direction:column; justify-content:space-between; gap: 12px;
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+      gap: 12px;
     }
-    .card:hover{ transform: translateY(-2px); border-color: rgba(201,164,74,.55); box-shadow: var(--shadow); }
-    .metaRow{ display:flex; justify-content:space-between; align-items:baseline; gap: 10px; flex-wrap:wrap; }
+    .card:hover{
+      transform: translateY(-2px);
+      border-color: rgba(201,164,74,.55);
+      box-shadow: var(--shadow);
+    }
+    .metaRow{
+      display:flex; justify-content:space-between; align-items:baseline; gap: 10px; flex-wrap:wrap;
+    }
     .pill{
       display:inline-flex; align-items:center; gap:8px;
       padding: 8px 10px;
@@ -291,13 +384,22 @@
       color: rgba(18,22,29,.84);
       white-space:nowrap;
     }
-    .small{ font-family: var(--mono); font-size: 11px; letter-spacing:.10em; text-transform: uppercase; color: rgba(18,22,29,.55); white-space:nowrap; }
+    .small{
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing:.10em;
+      text-transform: uppercase;
+      color: rgba(18,22,29,.55);
+      white-space:nowrap;
+    }
     .card b{ font-weight:600; }
     .card p{ margin: 8px 0 0 0; color: var(--mutedOnPaper); }
 
     .card .cta{
       display:flex; justify-content:space-between; align-items:center; gap: 10px; flex-wrap:wrap;
-      margin-top: 6px; padding-top: 12px; border-top:1px solid rgba(0,0,0,.08);
+      margin-top: 6px;
+      padding-top: 12px;
+      border-top:1px solid rgba(0,0,0,.08);
     }
     .link{
       font-family: var(--mono);
@@ -308,6 +410,7 @@
       border-bottom:1px solid rgba(201,164,74,.70);
       padding-bottom:2px;
     }
+    .link:hover{ color: rgba(18,22,29,.90); }
 
     .panel{
       border:1px solid var(--lineOnPaper);
@@ -315,6 +418,14 @@
       border-radius: var(--r-lg);
       padding: 18px 18px;
       margin-top: 18px;
+    }
+
+    /* Samples */
+    .sampleGrid{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+      margin-top: 12px;
     }
 
     details.sample{
@@ -334,8 +445,16 @@
       gap: 12px;
     }
     summary.sampleSum::-webkit-details-marker{ display:none; }
-    .sumLeft{ display:flex; align-items:baseline; gap: 10px; flex-wrap:wrap; }
-    .sumTitle{ font-weight:600; color: rgba(18,22,29,.92); }
+    .sumLeft{
+      display:flex;
+      align-items:baseline;
+      gap: 10px;
+      flex-wrap:wrap;
+    }
+    .sumTitle{
+      font-weight:600;
+      color: rgba(18,22,29,.92);
+    }
     .sumTag{
       font-family: var(--mono);
       font-size: 11px;
@@ -348,8 +467,18 @@
       background: rgba(201,164,74,.18);
       white-space:nowrap;
     }
-    .sumRight{ font-family: var(--mono); font-size: 11px; letter-spacing:.12em; text-transform: uppercase; color: rgba(18,22,29,.55); white-space:nowrap; }
-    .codeWrap{ border-top:1px solid rgba(0,0,0,.08); padding: 12px 12px 14px; }
+    .sumRight{
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing:.12em;
+      text-transform: uppercase;
+      color: rgba(18,22,29,.55);
+      white-space:nowrap;
+    }
+    .codeWrap{
+      border-top:1px solid rgba(0,0,0,.08);
+      padding: 12px 12px 14px;
+    }
     pre.code{
       margin:0;
       padding: 12px 12px;
@@ -364,10 +493,18 @@
       white-space: pre;
     }
     .noteRow{
-      display:flex; justify-content:space-between; gap: 12px; flex-wrap:wrap;
-      margin-top: 10px; color: rgba(18,22,29,.62); font-size: 14px;
+      display:flex;
+      justify-content:space-between;
+      gap: 12px;
+      flex-wrap:wrap;
+      margin-top: 10px;
+      color: rgba(18,22,29,.62);
+      font-size: 14px;
     }
-    .noteRow b{ color: rgba(18,22,29,.86); font-weight:600; }
+    .noteRow b{
+      color: rgba(18,22,29,.86);
+      font-weight:600;
+    }
     .copyBtn{
       height: 40px;
       padding: 0 14px;
@@ -385,7 +522,13 @@
     }
     .copyBtn:hover{ transform: translateY(-1px); border-color: rgba(201,164,74,.55); }
 
-    .defGrid{ display:grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 12px; }
+    /* Glossary */
+    .defGrid{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-top: 12px;
+    }
     @media (max-width: 980px){ .defGrid{ grid-template-columns: 1fr; } }
     .def{
       border:1px solid rgba(0,0,0,.08);
@@ -402,8 +545,15 @@
       margin-bottom: 8px;
     }
 
-    .faq{ margin-top: 12px; border-top:1px solid rgba(0,0,0,.08); }
-    .qa{ padding: 14px 0; border-bottom:1px solid rgba(0,0,0,.08); }
+    /* FAQ */
+    .faq{
+      margin-top: 12px;
+      border-top:1px solid rgba(0,0,0,.08);
+    }
+    .qa{
+      padding: 14px 0;
+      border-bottom:1px solid rgba(0,0,0,.08);
+    }
     .qbtn{
       width:100%;
       text-align:left;
@@ -438,7 +588,39 @@
     .chev{ transition: transform .16s ease; opacity:.65; }
     .qa.open .chev{ transform: rotate(180deg); }
 
+    /* Footer */
     footer{ border-top:1px solid var(--lineOnPaper); padding: var(--s7) 0 var(--s6); }
+    .footGrid{
+      display:grid;
+      grid-template-columns: 1.2fr 1fr 1fr 1fr;
+      gap: 14px;
+      margin-bottom: 22px;
+    }
+    @media (max-width: 980px){ .footGrid{ grid-template-columns: 1fr 1fr; } }
+    @media (max-width: 640px){ .footGrid{ grid-template-columns: 1fr; } }
+    .footCol{
+      border:1px solid var(--lineOnPaper);
+      background: rgba(255,255,255,.70);
+      border-radius: var(--r-lg);
+      padding: 18px 18px;
+    }
+    .footCol .t{
+      font-family: var(--mono);
+      font-size: 12px;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: rgba(58,50,12,.82);
+      margin-bottom: 10px;
+    }
+    .footCol a{
+      display:block;
+      padding: 10px 10px;
+      border-radius: 12px;
+      border:1px solid transparent;
+      color: rgba(18,22,29,.78);
+      transition: background .18s ease, border-color .18s ease;
+    }
+    .footCol a:hover{ background: rgba(201,164,74,.14); border-color: rgba(201,164,74,.25); }
     .footBottom{
       display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap;
       font-family: var(--mono);
@@ -456,8 +638,8 @@
     @media (prefers-reduced-motion: reduce){
       html{scroll-behavior:auto;}
       .reveal{ opacity:1; transform:none; transition:none; }
-      .btn, .drawerLinks a, .chip, .card{ transition:none; }
       .chev{ transition:none; }
+      .chip, .card, .btn, .menuBtn, .drawerLinks a{ transition:none; }
     }
   </style>
 </head>
@@ -472,32 +654,47 @@
         <span class="mark"><span class="dot" aria-hidden="true"></span><span>CEYO</span></span>
       </a>
 
+      <div class="centerSlot" aria-hidden="true">Resources · Specs · Samples</div>
+
       <div class="actions" aria-label="Actions">
-        <a class="btn secondary" href="#sample-artifact">Samples<span class="arr">→</span></a>
+        <a class="btn secondary" href="#sample-artifact">Sample artifacts<span class="arr">→</span></a>
         <a class="btn primary" href="contact.html">Request walkthrough<span class="arr">→</span></a>
-        <button class="menuBtn" id="openMenu" aria-label="Open menu" type="button">☰</button>
+        <button class="menuBtn" id="openMenu" type="button" aria-label="Open menu">
+          <span class="menuIcon" aria-hidden="true"><span></span></span>
+          Menu
+        </button>
       </div>
     </div>
   </header>
 
+  <!-- Drawer menu (sitewide links) -->
   <div class="drawer" id="drawer" aria-hidden="true">
     <div class="drawerCard" role="dialog" aria-modal="true" aria-label="Menu">
       <div class="drawerHead">
         <div class="t">Menu</div>
         <button class="close" id="closeMenu" type="button">Close</button>
       </div>
-      <div class="drawerLinks">
-        <a href="index.html">Overview</a>
-        <a href="how.html">How It Works</a>
-        <a href="platform.html">Platform</a>
-        <a href="trust.html">Trust & Verification</a>
-        <a href="compliance.html">Compliance</a>
-        <a href="integrations.html">Integrations</a>
-        <a href="use-cases.html">Use Cases</a>
-        <a href="security.html">Security</a>
-        <a href="resources.html">Resources</a>
-        <a href="company.html">Company</a>
-        <a href="contact.html">Contact</a>
+
+      <div class="drawerGrid">
+        <div class="drawerLinks">
+          <div class="k">Product</div>
+          <a href="index.html">Overview</a>
+          <a href="how.html">How It Works</a>
+          <a href="platform.html">Platform</a>
+          <a href="trust.html">Trust</a>
+          <a href="compliance.html">Compliance</a>
+          <a href="integrations.html">Integrations</a>
+          <a class="active" href="resources.html">Resources</a>
+          <a href="contact.html">Contact</a>
+        </div>
+
+        <div class="drawerLinks">
+          <div class="k">Legal</div>
+          <a href="ethical.html">Responsible Use</a>
+          <a href="vdp.html">Vulnerability Disclosure</a>
+          <a href="privacy.html">Privacy</a>
+          <a href="terms.html">Terms</a>
+        </div>
       </div>
     </div>
   </div>
@@ -505,24 +702,27 @@
   <main class="wrap">
     <section style="padding-top: var(--s6);">
       <div class="read reveal">
-        <div class="eyebrow">Resources · Specs · Samples</div>
+        <div class="eyebrow">Resources</div>
         <h1>Reference material for evaluation and verification.</h1>
         <p class="muted">
-          Public resources show structure and boundaries. Controlled resources are available for qualified review under appropriate confidentiality terms.
+          Public resources show structure and boundaries. Controlled documents are available to qualified reviewers under appropriate confidentiality terms.
         </p>
 
         <div class="heroRow">
           <div class="filters" aria-label="Resource filters">
             <div class="chip active" data-filter="all" role="button" tabindex="0">All</div>
+            <div class="chip" data-filter="brief" role="button" tabindex="0">Briefs</div>
             <div class="chip" data-filter="spec" role="button" tabindex="0">Specs</div>
+            <div class="chip" data-filter="trd" role="button" tabindex="0">TRD</div>
             <div class="chip" data-filter="sample" role="button" tabindex="0">Samples</div>
             <div class="chip" data-filter="policy" role="button" tabindex="0">Policies</div>
+            <div class="chip" data-filter="legal" role="button" tabindex="0">Legal</div>
             <div class="chip" data-filter="faq" role="button" tabindex="0">FAQ</div>
           </div>
 
           <div class="search" aria-label="Search resources">
             <span class="tag">Search</span>
-            <input id="q" type="search" placeholder="Search: verification, artifact, policy, schema…" aria-label="Search input"/>
+            <input id="q" type="search" placeholder="Search: verification, artifact, policy, scope…" aria-label="Search input"/>
           </div>
         </div>
 
@@ -538,9 +738,87 @@
     <section id="library">
       <div class="read reveal">
         <h2>Library</h2>
-        <p class="muted">Documents and materials commonly requested during review.</p>
+        <p class="muted">Documents commonly requested during evaluation and institutional review.</p>
 
         <div class="grid" id="grid" aria-label="Resource cards grid">
+
+          <!-- ===== Controlled briefs (Request access) ===== -->
+          <a class="card reveal" data-kind="brief" data-title="Executive Brief" href="contact.html" aria-label="Request Executive Brief">
+            <div>
+              <div class="metaRow">
+                <span class="pill">Brief</span>
+                <span class="small">PDF · Controlled</span>
+              </div>
+              <div style="margin-top:10px;"><b>Executive brief</b></div>
+              <p>Framing, boundaries, governance posture, roadmap state, and disclosure model.</p>
+            </div>
+            <div class="cta">
+              <span class="link">Request access</span>
+              <span class="small">V2026.02.19</span>
+            </div>
+          </a>
+
+          <a class="card reveal" data-kind="brief" data-title="IP / Technical Brief" href="contact.html" aria-label="Request IP Technical Brief">
+            <div>
+              <div class="metaRow">
+                <span class="pill">Brief</span>
+                <span class="small">PDF · Controlled</span>
+              </div>
+              <div style="margin-top:10px;"><b>IP / technical brief</b></div>
+              <p>Mechanics chain, canonicalization, sealing, disclosure tiers, verification procedure.</p>
+            </div>
+            <div class="cta">
+              <span class="link">Request access</span>
+              <span class="small">V2026.02.19</span>
+            </div>
+          </a>
+
+          <a class="card reveal" data-kind="brief" data-title="Operational Brief" href="contact.html" aria-label="Request Operational Brief">
+            <div>
+              <div class="metaRow">
+                <span class="pill">Brief</span>
+                <span class="small">PDF · Controlled</span>
+              </div>
+              <div style="margin-top:10px;"><b>Operational brief</b></div>
+              <p>Integration patterns, chain-of-custody workflow posture, review board orientation.</p>
+            </div>
+            <div class="cta">
+              <span class="link">Request access</span>
+              <span class="small">V2026.02.19</span>
+            </div>
+          </a>
+
+          <a class="card reveal" data-kind="brief" data-title="Minimal Disclosure Brief" href="contact.html" aria-label="Request Minimal Disclosure Brief">
+            <div>
+              <div class="metaRow">
+                <span class="pill">Brief</span>
+                <span class="small">PDF · Controlled</span>
+              </div>
+              <div style="margin-top:10px;"><b>Minimal disclosure brief</b></div>
+              <p>What CEYO is and is not, non-interference affirmations, operator responsibility boundaries.</p>
+            </div>
+            <div class="cta">
+              <span class="link">Request access</span>
+              <span class="small">V2026.02.19</span>
+            </div>
+          </a>
+
+          <a class="card reveal" data-kind="trd" data-title="Technical Requirements Document (Phase 1)" href="contact.html" aria-label="Request TRD Phase 1">
+            <div>
+              <div class="metaRow">
+                <span class="pill">TRD</span>
+                <span class="small">PDF · Controlled</span>
+              </div>
+              <div style="margin-top:10px;"><b>Technical requirements (Phase 1)</b></div>
+              <p>Build-ready requirements for Stages 1–3: intercept, canonicalize, seal, fail-open.</p>
+            </div>
+            <div class="cta">
+              <span class="link">Request access</span>
+              <span class="small">V2026.02.19</span>
+            </div>
+          </a>
+
+          <!-- ===== Public specs (optional: keep as controlled if you want) ===== -->
           <a class="card reveal" data-kind="spec" data-title="Verification Specification" href="contact.html" aria-label="Request Verification Specification">
             <div>
               <div class="metaRow">
@@ -548,7 +826,7 @@
                 <span class="small">PDF · Controlled</span>
               </div>
               <div style="margin-top:10px;"><b>Verification specification</b></div>
-              <p>Deterministic procedure: canonicalize, recompute hash, validate signature, policy alignment.</p>
+              <p>Canonicalize, recompute hash, validate signature, confirm policy alignment. PASS/FAIL states.</p>
             </div>
             <div class="cta">
               <span class="link">Request access</span>
@@ -563,7 +841,7 @@
                 <span class="small">PDF · Controlled</span>
               </div>
               <div style="margin-top:10px;"><b>Capture policy & masking schema</b></div>
-              <p>Inclusion/exclusion rules, masking behavior, disclosure tiers, identifiers and versioning.</p>
+              <p>Inclusion/exclusion rules, masking behavior, disclosure tiers, and policy versioning.</p>
             </div>
             <div class="cta">
               <span class="link">Request access</span>
@@ -571,6 +849,7 @@
             </div>
           </a>
 
+          <!-- ===== Public policies/legal ===== -->
           <a class="card reveal" data-kind="policy" data-title="Responsible Use Policy" href="ethical.html" aria-label="Responsible Use Policy">
             <div>
               <div class="metaRow">
@@ -578,7 +857,7 @@
                 <span class="small">HTML · Public</span>
               </div>
               <div style="margin-top:10px;"><b>Responsible use policy</b></div>
-              <p>Use boundaries, operator responsibilities, prohibited deployments, escalation pathway.</p>
+              <p>Human rights and lawful use boundaries, operator obligations, prohibited deployments.</p>
             </div>
             <div class="cta">
               <span class="link">Open</span>
@@ -593,7 +872,7 @@
                 <span class="small">HTML · Public</span>
               </div>
               <div style="margin-top:10px;"><b>Vulnerability disclosure</b></div>
-              <p>Reporting channel, safe harbor, scope, coordinated disclosure expectations.</p>
+              <p>Reporting channel, safe harbor, scope, and coordinated disclosure expectations.</p>
             </div>
             <div class="cta">
               <span class="link">Open</span>
@@ -601,14 +880,14 @@
             </div>
           </a>
 
-          <a class="card reveal" data-kind="policy" data-title="Privacy Statement" href="privacy.html" aria-label="Privacy statement">
+          <a class="card reveal" data-kind="legal" data-title="Privacy Statement" href="privacy.html" aria-label="Privacy statement">
             <div>
               <div class="metaRow">
                 <span class="pill">Legal</span>
                 <span class="small">HTML · Public</span>
               </div>
               <div style="margin-top:10px;"><b>Privacy</b></div>
-              <p>Public site collection, contact submissions, and boundary disclosures.</p>
+              <p>Public site collection, contact submissions, and boundary statements for deployment posture.</p>
             </div>
             <div class="cta">
               <span class="link">Open</span>
@@ -616,7 +895,7 @@
             </div>
           </a>
 
-          <a class="card reveal" data-kind="policy" data-title="Terms of Use" href="terms.html" aria-label="Terms of use">
+          <a class="card reveal" data-kind="legal" data-title="Terms of Use" href="terms.html" aria-label="Terms of use">
             <div>
               <div class="metaRow">
                 <span class="pill">Legal</span>
@@ -631,6 +910,7 @@
             </div>
           </a>
 
+          <!-- ===== Samples + FAQ anchors ===== -->
           <a class="card reveal" data-kind="sample" data-title="Sample Artifacts and Verification Reports" href="#sample-artifact" aria-label="Sample artifacts and verification reports">
             <div>
               <div class="metaRow">
@@ -653,7 +933,7 @@
                 <span class="small">HTML · Public</span>
               </div>
               <div style="margin-top:10px;"><b>Frequently asked questions</b></div>
-              <p>Common questions from reviewers, operators, and evaluators.</p>
+              <p>Common questions from non-technical and institutional reviewers.</p>
             </div>
             <div class="cta">
               <span class="link">Open</span>
@@ -667,19 +947,21 @@
     <section id="sample-artifact">
       <div class="read reveal">
         <h2>Sample artifacts & verification reports</h2>
-        <p class="muted">Public samples include masked fields for public sharing.</p>
+        <p class="muted">Public examples with redacted fields.</p>
 
         <div class="panel reveal">
-          <details class="sample" open>
-            <summary class="sampleSum">
-              <div class="sumLeft">
-                <div class="sumTitle">Public artifact sample (masked fields)</div>
-                <div class="sumTag">Artifact</div>
-              </div>
-              <div class="sumRight">Tier: public</div>
-            </summary>
-            <div class="codeWrap">
-              <pre class="code" id="code_artifact">{
+          <div class="sampleGrid" aria-label="Sample JSON panels">
+
+            <details class="sample" open>
+              <summary class="sampleSum">
+                <div class="sumLeft">
+                  <div class="sumTitle">Public artifact sample</div>
+                  <div class="sumTag">Artifact</div>
+                </div>
+                <div class="sumRight">Disclosure tier: public</div>
+              </summary>
+              <div class="codeWrap">
+                <pre class="code" id="code_artifact">{
   "artifact_id": "a1b2c3d4e5f6g7h8i9j0",
   "timestamp": "2023-06-10T14:30:00Z",
   "policy_id": "p_pub_v1",
@@ -698,23 +980,23 @@
   "signature_algorithm": "ECDSA",
   "signature": "&lt;REDACTED&gt;"
 }</pre>
-              <div class="noteRow">
-                <div><b>Purpose:</b> demonstrate wrapper structure without exposing sensitive fields.</div>
-                <button class="copyBtn" data-copy="code_artifact" type="button">Copy JSON</button>
+                <div class="noteRow">
+                  <div><b>Purpose:</b> demonstrate structure without exposing proprietary or sensitive fields.</div>
+                  <button class="copyBtn" data-copy="code_artifact" type="button">Copy JSON</button>
+                </div>
               </div>
-            </div>
-          </details>
+            </details>
 
-          <details class="sample">
-            <summary class="sampleSum">
-              <div class="sumLeft">
-                <div class="sumTitle">Verification report (PASS)</div>
-                <div class="sumTag">Verify</div>
-              </div>
-              <div class="sumRight">Overall: PASS</div>
-            </summary>
-            <div class="codeWrap">
-              <pre class="code" id="code_pass">{
+            <details class="sample">
+              <summary class="sampleSum">
+                <div class="sumLeft">
+                  <div class="sumTitle">Verification report (PASS)</div>
+                  <div class="sumTag">Verify</div>
+                </div>
+                <div class="sumRight">Overall: PASS</div>
+              </summary>
+              <div class="codeWrap">
+                <pre class="code" id="code_pass">{
   "artifact_id": "a1b2c3d4e5f6g7h8i9j0",
   "verification_timestamp": "2023-06-10T15:00:00Z",
   "policy_id": "p_pub_v1",
@@ -723,30 +1005,30 @@
   "hashing_algorithm": "SHA-256",
   "signature_algorithm": "ECDSA",
   "verification_steps": [
-    {"step":"Canonicalization","standard":"RFC 8785","result":"PASS"},
-    {"step":"Hash Recomputation","computed_hash":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855","result":"PASS"},
-    {"step":"Signature Verification","result":"PASS"},
-    {"step":"Policy Alignment","result":"PASS"}
+    { "step": "Canonicalization", "standard": "RFC 8785", "result": "PASS" },
+    { "step": "Hash Recomputation", "computed_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855", "result": "PASS" },
+    { "step": "Signature Verification", "result": "PASS" },
+    { "step": "Policy Alignment", "result": "PASS" }
   ],
   "overall_result": "PASS - Artifact integrity confirmed"
 }</pre>
-              <div class="noteRow">
-                <div><b>Interpretation:</b> integrity and provenance checks succeeded under declared policy scope.</div>
-                <button class="copyBtn" data-copy="code_pass" type="button">Copy JSON</button>
+                <div class="noteRow">
+                  <div><b>Interpretation:</b> integrity and provenance checks succeeded under declared policy scope.</div>
+                  <button class="copyBtn" data-copy="code_pass" type="button">Copy JSON</button>
+                </div>
               </div>
-            </div>
-          </details>
+            </details>
 
-          <details class="sample">
-            <summary class="sampleSum">
-              <div class="sumLeft">
-                <div class="sumTitle">Verification report (FAIL)</div>
-                <div class="sumTag">Verify</div>
-              </div>
-              <div class="sumRight">Overall: FAIL</div>
-            </summary>
-            <div class="codeWrap">
-              <pre class="code" id="code_fail">{
+            <details class="sample">
+              <summary class="sampleSum">
+                <div class="sumLeft">
+                  <div class="sumTitle">Verification report (FAIL)</div>
+                  <div class="sumTag">Verify</div>
+                </div>
+                <div class="sumRight">Overall: FAIL</div>
+              </summary>
+              <div class="codeWrap">
+                <pre class="code" id="code_fail">{
   "artifact_id": "z9y8x7w6v5u4t3s2r1q0",
   "verification_timestamp": "2023-06-10T16:30:00Z",
   "policy_id": "p_pub_v1",
@@ -755,19 +1037,21 @@
   "hashing_algorithm": "SHA-256",
   "signature_algorithm": "ECDSA",
   "verification_steps": [
-    {"step":"Canonicalization","standard":"RFC 8785","result":"PASS"},
-    {"step":"Hash Recomputation","computed_hash":"f6e0b1e2d3c4a5b6c7d8e9f0a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0","result":"FAIL - Hash mismatch"},
-    {"step":"Signature Verification","result":"NOT ATTEMPTED"},
-    {"step":"Policy Alignment","result":"NOT ATTEMPTED"}
+    { "step": "Canonicalization", "standard": "RFC 8785", "result": "PASS" },
+    { "step": "Hash Recomputation", "computed_hash": "f6e0b1e2d3c4a5b6c7d8e9f0a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0", "result": "FAIL - Hash mismatch" },
+    { "step": "Signature Verification", "result": "NOT ATTEMPTED" },
+    { "step": "Policy Alignment", "result": "NOT ATTEMPTED" }
   ],
   "overall_result": "FAIL - Artifact integrity compromised"
 }</pre>
-              <div class="noteRow">
-                <div><b>Interpretation:</b> hash mismatch indicates alteration or mismatch; signature checks are not meaningful after hash failure.</div>
-                <button class="copyBtn" data-copy="code_fail" type="button">Copy JSON</button>
+                <div class="noteRow">
+                  <div><b>Interpretation:</b> hash mismatch indicates alteration or mismatch; signature checks are not meaningful after hash failure.</div>
+                  <button class="copyBtn" data-copy="code_fail" type="button">Copy JSON</button>
+                </div>
               </div>
-            </div>
-          </details>
+            </details>
+
+          </div>
 
           <div style="margin-top:18px; display:flex; gap:10px; flex-wrap:wrap;">
             <a class="btn primary" href="trust.html#verification-spec">Verification steps<span class="arr">→</span></a>
@@ -808,7 +1092,7 @@
     <section id="faq">
       <div class="read reveal">
         <h2>FAQ</h2>
-        <p class="muted">Common questions from reviewers and operators.</p>
+        <p class="muted">Common questions for evaluators, operators, and institutional reviewers.</p>
 
         <div class="panel reveal">
           <div class="faq">
@@ -818,25 +1102,32 @@
                 <span>Verify</span>
                 <span class="chev">▾</span>
               </button>
-              <div class="ans">Integrity and provenance under declared policy scope. Verification does not confirm correctness, legality, or compliance conclusions.</div>
+              <div class="ans">
+                Integrity and provenance under declared policy scope: canonicalize → recompute hash → validate signature → confirm policy alignment.
+                Verification does not confirm correctness, fairness, legality, or compliance conclusions.
+              </div>
             </div>
 
             <div class="qa">
               <button class="qbtn" type="button">
-                <div>Does CEYO require access to model weights?</div>
+                <div>Does CEYO require access to model weights or proprietary internals?</div>
                 <span>Disclosure</span>
                 <span class="chev">▾</span>
               </button>
-              <div class="ans">No by default. Capture scope is policy-defined and can exclude proprietary internals. Tiers support verification without default exposure of weights.</div>
+              <div class="ans">
+                No by default. Capture scope is policy-defined and can exclude proprietary internals. Disclosure tiers support verification without default exposure of weights or trade-secret implementation.
+              </div>
             </div>
 
             <div class="qa">
               <button class="qbtn" type="button">
-                <div>What happens if sealing fails?</div>
+                <div>What happens if sealing fails during an inference event?</div>
                 <span>Availability</span>
                 <span class="chev">▾</span>
               </button>
-              <div class="ans">Fail-open by default: inference continues; failure is logged/flagged; artifact can be marked unsealed for review.</div>
+              <div class="ans">
+                CEYO supports fail-open posture by default: inference continues, the failure is logged/flagged, and the artifact is marked unsealed (reviewable).
+              </div>
             </div>
 
             <div class="qa">
@@ -845,16 +1136,20 @@
                 <span>Keys</span>
                 <span class="chev">▾</span>
               </button>
-              <div class="ans">Operators retain keys in HSM/KMS/TEE environments. CEYO is non-custodial and does not store private keys.</div>
+              <div class="ans">
+                Operators retain signing keys in their own HSM/KMS/TEE environments. CEYO is non-custodial: it does not possess, transmit, or store private signing keys.
+              </div>
             </div>
 
             <div class="qa">
               <button class="qbtn" type="button">
-                <div>Is a CEYO artifact guaranteed admissible?</div>
+                <div>Are CEYO artifacts guaranteed to be admissible or accepted by regulators?</div>
                 <span>Legal</span>
                 <span class="chev">▾</span>
               </button>
-              <div class="ans">No guarantee. CEYO supports integrity and provenance; admissibility and sufficiency are authority-determined.</div>
+              <div class="ans">
+                No guarantee. CEYO supports integrity and provenance arguments. Admissibility and regulatory sufficiency are determined by the relevant authority and institutional procedures.
+              </div>
             </div>
           </div>
 
@@ -866,7 +1161,38 @@
       </div>
     </section>
 
-    <footer>
+    <footer id="footer">
+      <div class="footGrid reveal">
+        <div class="footCol">
+          <div class="t">Product</div>
+          <a href="index.html">Overview</a>
+          <a href="how.html">How It Works</a>
+          <a href="platform.html">Platform</a>
+          <a href="integrations.html">Integrations</a>
+        </div>
+        <div class="footCol">
+          <div class="t">Trust</div>
+          <a href="trust.html">Trust Model</a>
+          <a href="security.html">Security</a>
+          <a href="trust.html#verification-spec">Verification Spec</a>
+          <a href="resources.html">Resources</a>
+        </div>
+        <div class="footCol">
+          <div class="t">Resources</div>
+          <a href="#library">Library</a>
+          <a href="#sample-artifact">Sample Artifacts</a>
+          <a href="#glossary">Glossary</a>
+          <a href="#faq">FAQ</a>
+        </div>
+        <div class="footCol">
+          <div class="t">Legal</div>
+          <a href="privacy.html">Privacy</a>
+          <a href="terms.html">Terms</a>
+          <a href="vdp.html">Security Disclosure</a>
+          <a href="ethical.html">Responsible Use</a>
+        </div>
+      </div>
+
       <div class="footBottom reveal">
         <div>© <span id="year"></span> CEYO. All rights reserved.</div>
         <div><a href="vdp.html">Vulnerability Disclosure</a></div>
@@ -877,14 +1203,24 @@
   <script>
     document.getElementById('year').textContent = new Date().getFullYear();
 
-    // Menu drawer
+    // Drawer menu
     const drawer = document.getElementById('drawer');
     const openMenu = document.getElementById('openMenu');
     const closeMenu = document.getElementById('closeMenu');
-    function openDrawer(){ drawer.classList.add('open'); drawer.setAttribute('aria-hidden','false'); document.body.style.overflow='hidden'; }
-    function closeDrawer(){ drawer.classList.remove('open'); drawer.setAttribute('aria-hidden','true'); document.body.style.overflow=''; }
-    openMenu.addEventListener('click', openDrawer);
-    closeMenu.addEventListener('click', closeDrawer);
+
+    function openDrawer(){
+      drawer.classList.add('open');
+      drawer.setAttribute('aria-hidden','false');
+      document.body.style.overflow='hidden';
+    }
+    function closeDrawer(){
+      drawer.classList.remove('open');
+      drawer.setAttribute('aria-hidden','true');
+      document.body.style.overflow='';
+    }
+
+    if(openMenu) openMenu.addEventListener('click', openDrawer);
+    if(closeMenu) closeMenu.addEventListener('click', closeDrawer);
     drawer.addEventListener('click', (e)=>{ if(e.target===drawer) closeDrawer(); });
     window.addEventListener('keydown', (e)=>{ if(e.key==='Escape' && drawer.classList.contains('open')) closeDrawer(); });
 
@@ -931,12 +1267,16 @@
         apply();
       });
       ch.addEventListener('keydown', (e)=>{
-        if(e.key==='Enter' || e.key===' '){ e.preventDefault(); ch.click(); }
+        if(e.key==='Enter' || e.key===' '){
+          e.preventDefault();
+          ch.click();
+        }
       });
     });
+
     q.addEventListener('input', apply, {passive:true});
 
-    // Copy buttons
+    // Copy buttons for samples
     async function copyFrom(id){
       const el = document.getElementById(id);
       if(!el) return;
