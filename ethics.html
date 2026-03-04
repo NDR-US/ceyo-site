@@ -4,7 +4,7 @@
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
   <title>CEYO — Responsible Use</title>
-  <meta name="description" content="Use boundaries and operator obligations. CEYO is record infrastructure; it supports oversight and does not adjudicate decisions."/>
+  <meta name="description" content="CEYO Human Rights & Lawful Use Policy. Deployment boundaries governing use of CEYO evidentiary infrastructure."/>
   <meta name="theme-color" content="#F5F2EA"/>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -13,95 +13,158 @@
 
   <style>
     :root{
-      --paper:#F5F2EA; --paper2:#F3EEDD;
-      --text:#12161D; --muted:rgba(18,22,29,.68); --line:rgba(0,0,0,.10);
+      --paper:#F5F2EA; --text:#12161D; --muted:rgba(18,22,29,.68); --line:rgba(0,0,0,.10);
       --accent:#3A320C; --accent2:#C9A44A;
-      --maxW:1160px; --readW:760px;
-      --r-lg:18px;
+      --maxW:1160px; --readW:780px; --r-lg:18px;
       --s1:8px; --s2:16px; --s3:24px; --s4:32px; --s5:48px; --s6:64px; --s7:96px;
-      --lh:1.65;
+      --lh:1.70;
       --shadow:0 12px 30px rgba(0,0,0,.10); --shadow2:0 22px 60px rgba(0,0,0,.14);
-      --mono:'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono","Courier New", monospace;
+      --mono:'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
       --ui:'Inter', system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
       --navH:72px;
     }
     *{box-sizing:border-box}
     html{background:var(--paper);scroll-behavior:smooth}
-    body{margin:0;font-family:var(--ui);color:var(--text);background:var(--paper);-webkit-text-size-adjust:100%;overflow-x:hidden;}
-    a{color:inherit;text-decoration:none} button{font:inherit}
+    body{margin:0;font-family:var(--ui);color:var(--text);background:var(--paper);-webkit-text-size-adjust:100%;overflow-x:hidden}
+    a{color:inherit;text-decoration:none}
+    button{font:inherit}
     [id]{ scroll-margin-top: calc(var(--navH) + 24px); }
 
-    .bg{position:fixed;inset:0;pointer-events:none;z-index:0;background:
-      radial-gradient(900px 520px at 35% 0%, rgba(201,164,74,.10), transparent 60%),
-      radial-gradient(820px 520px at 82% 18%, rgba(58,50,12,.06), transparent 64%),
-      linear-gradient(180deg, var(--paper) 0%, var(--paper2) 100%);}
-    .grain{position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.06;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='320' height='320'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='320' height='320' filter='url(%23n)'/%3E%3C/svg%3E");mix-blend-mode:multiply;}
-
-    .wrap{position:relative;z-index:2;max-width:var(--maxW);margin:0 auto;padding:0 var(--s4);}
-    @media (max-width:640px){.wrap{padding:0 18px;}}
-
-    header.site{position:sticky;top:0;z-index:50;backdrop-filter:blur(10px);background:rgba(245,242,234,.78);border-bottom:1px solid var(--line);}
-    .nav{height:calc(var(--navH) + env(safe-area-inset-top));padding-top:env(safe-area-inset-top);display:flex;align-items:center;justify-content:space-between;gap:var(--s3);}
-
-    .logo{display:flex;align-items:center;gap:10px;min-width:180px;font-weight:600;letter-spacing:-.01em;}
-    .logo .mark{display:inline-flex;align-items:center;gap:10px;padding:10px 12px;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.55);}
-    .logo .dot{width:8px;height:8px;border-radius:50%;background:var(--accent2);box-shadow:0 0 0 4px rgba(201,164,74,.18);}
-
-    .actions{display:flex;align-items:center;gap:10px;justify-content:flex-end;min-width:240px;}
-    .btn{height:48px;padding:0 18px;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.55);color:rgba(18,22,29,.92);display:inline-flex;align-items:center;justify-content:center;font-size:14px;transition:transform .18s ease,border-color .18s ease,background .18s ease,box-shadow .18s ease;white-space:nowrap;}
-    .btn:hover{transform:translateY(-1px);border-color:rgba(201,164,74,.55);box-shadow:var(--shadow);background:rgba(255,255,255,.78);}
-    .btn.primary{border-color:rgba(201,164,74,.70);background:rgba(201,164,74,.22);}
-    .btn.primary:hover{background:rgba(201,164,74,.28);}
-    .btn .arr{display:inline-block;margin-left:10px;transition:transform .16s ease;}
-    .btn:hover .arr{transform:translateX(3px);}
-
-    .menuBtn{height:48px;width:48px;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.55);color:rgba(18,22,29,.86);display:inline-flex;align-items:center;justify-content:center;cursor:pointer;transition:transform .16s ease,border-color .16s ease,background .16s ease;}
-    .menuBtn:hover{transform:translateY(-1px);border-color:rgba(201,164,74,.55);background:rgba(255,255,255,.78);}
-
-    @media (max-width:860px){.actions .btn.secondary{display:none;}.logo{min-width:150px;}}
-    @media (max-width:520px){.actions .btn{padding:0 14px;height:46px;}.menuBtn{height:46px;width:46px;}.logo .mark{padding:9px 10px;}}
-
-    .drawer{position:fixed;inset:0;z-index:80;display:none;background:rgba(245,242,234,.78);backdrop-filter:blur(10px);padding:calc(env(safe-area-inset-top) + 12px) 18px 18px;}
-    .drawer.open{display:block;}
-    .drawerCard{max-width:720px;margin:0 auto;border:1px solid var(--line);background:rgba(255,255,255,.78);border-radius:var(--r-lg);box-shadow:var(--shadow2);overflow:hidden;}
-    .drawerHead{display:flex;align-items:center;justify-content:space-between;padding:14px 14px;border-bottom:1px solid var(--line);}
-    .drawerHead .t{font-family:var(--mono);font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:rgba(18,22,29,.72);}
-    .close{height:44px;padding:0 14px;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.55);color:rgba(18,22,29,.86);cursor:pointer;}
-    .drawerGrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:10px;}
-    @media (max-width:720px){.drawerGrid{grid-template-columns:1fr;}}
-    .drawerGrid a{padding:14px 14px;border-radius:14px;border:1px solid rgba(0,0,0,.08);background:rgba(255,255,255,.55);font-size:15px;transition:transform .18s ease,border-color .18s ease;}
-    .drawerGrid a:hover{transform:translateY(-1px);border-color:rgba(201,164,74,.55);}
-
-    main{padding:var(--s6) 0 var(--s7);}
-    section{padding:var(--s7) 0;border-top:1px solid var(--line);}
-    section:first-of-type{border-top:none;padding-top:var(--s6);}
-
-    .read{max-width:var(--readW);}
-    p{margin:0 0 14px 0;line-height:var(--lh);color:var(--muted);}
-    .eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:rgba(58,50,12,.85);margin-bottom:12px;}
-    h1{font-size:44px;line-height:1.15;letter-spacing:-0.02em;margin:0 0 14px 0;font-weight:600;color:var(--text);}
-    h2{font-size:28px;line-height:1.20;letter-spacing:-0.01em;margin:0 0 10px 0;font-weight:600;color:var(--text);}
-    @media (max-width:640px){h1{font-size:30px;}h2{font-size:22px;}}
-
-    .panel{border:1px solid var(--line);background:rgba(255,255,255,.70);border-radius:var(--r-lg);padding:18px 18px;box-shadow:var(--shadow);margin-top:14px;}
-    .panel .k{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:rgba(58,50,12,.82);margin-bottom:10px;}
-    .list{margin:0;padding:0 0 0 18px;}
-    .list li{margin:8px 0;color:var(--muted);line-height:1.55;}
-
-    .callout{margin-top:14px;border:1px solid rgba(201,164,74,.35);background:rgba(201,164,74,.14);border-radius:var(--r-lg);padding:16px 16px;}
-    .callout b{color:rgba(18,22,29,.92);}
-
-    footer{border-top:1px solid var(--line);padding:var(--s7) 0 var(--s6);}
-    .footBottom{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:rgba(18,22,29,.55);padding-top:18px;border-top:1px solid var(--line);margin-top:18px;}
-
-    .reveal{opacity:0;transform:translateY(10px);transition:opacity .55s ease,transform .55s ease;}
-    .reveal.on{opacity:1;transform:translateY(0);}
-
-    @media (prefers-reduced-motion: reduce){
-      html{scroll-behavior:auto;}
-      .reveal{opacity:1;transform:none;transition:none;}
-      .btn,.menuBtn,.drawerGrid a{transition:none;}
+    .bg{
+      position:fixed; inset:0; pointer-events:none; z-index:0;
+      background:
+        radial-gradient(900px 520px at 35% 0%, rgba(201,164,74,.10), transparent 60%),
+        radial-gradient(820px 520px at 82% 18%, rgba(58,50,12,.06), transparent 64%),
+        linear-gradient(180deg, #F5F2EA 0%, #F3EEDD 100%);
     }
+    .grain{
+      position:fixed; inset:0; z-index:1; pointer-events:none;
+      opacity:.06;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='320' height='320'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='320' height='320' filter='url(%23n)'/%3E%3C/svg%3E");
+      mix-blend-mode:multiply;
+    }
+    .wrap{ position:relative; z-index:2; max-width:var(--maxW); margin:0 auto; padding:0 var(--s4); }
+    @media (max-width: 640px){ .wrap{ padding:0 18px; } }
+
+    header.site{
+      position:sticky; top:0; z-index:50;
+      backdrop-filter: blur(10px);
+      background: rgba(245,242,234,.78);
+      border-bottom:1px solid var(--line);
+    }
+    .nav{
+      height: calc(var(--navH) + env(safe-area-inset-top));
+      padding-top: env(safe-area-inset-top);
+      display:flex; align-items:center; justify-content:space-between; gap:var(--s3);
+    }
+    .logo{ display:flex; align-items:center; gap:10px; font-weight:600; letter-spacing:-.01em; min-width:170px; }
+    .logo .mark{
+      display:inline-flex; align-items:center; gap:10px;
+      padding:10px 12px; border-radius:999px;
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.55);
+    }
+    .logo .dot{ width:8px; height:8px; border-radius:50%; background:var(--accent2); box-shadow:0 0 0 4px rgba(201,164,74,.18); }
+
+    .actions{ display:flex; align-items:center; gap:10px; justify-content:flex-end; }
+    .btn{
+      height:48px; padding:0 18px; border-radius:999px;
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.55);
+      color: rgba(18,22,29,.92);
+      display:inline-flex; align-items:center; justify-content:center;
+      font-size:14px;
+      transition: transform .18s ease, border-color .18s ease, background .18s ease, box-shadow .18s ease;
+      white-space:nowrap;
+    }
+    .btn:hover{ transform: translateY(-1px); border-color: rgba(201,164,74,.55); box-shadow:var(--shadow); background: rgba(255,255,255,.78); }
+    .btn.primary{ border-color: rgba(201,164,74,.70); background: rgba(201,164,74,.22); }
+    .btn.primary:hover{ background: rgba(201,164,74,.28); }
+
+    .hamburger{
+      height:48px; width:48px; border-radius:999px;
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.55);
+      color: rgba(18,22,29,.86);
+      display:inline-flex; align-items:center; justify-content:center;
+      cursor:pointer;
+      transition: transform .16s ease, border-color .16s ease, background .16s ease;
+    }
+    .hamburger:hover{ transform: translateY(-1px); border-color: rgba(201,164,74,.55); background: rgba(255,255,255,.78); }
+
+    .drawer{
+      position:fixed; inset:0; z-index:80;
+      display:none;
+      background: rgba(245,242,234,.78);
+      backdrop-filter: blur(10px);
+      padding: calc(env(safe-area-inset-top) + 12px) 18px 18px;
+    }
+    .drawer.open{ display:block; }
+    .drawerCard{
+      max-width: 720px; margin: 0 auto;
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.78);
+      border-radius: var(--r-lg);
+      box-shadow: var(--shadow2);
+      overflow:hidden;
+    }
+    .drawerHead{ display:flex; align-items:center; justify-content:space-between; padding:14px; border-bottom:1px solid var(--line); }
+    .drawerHead .t{ font-family:var(--mono); font-size:12px; letter-spacing:.18em; text-transform:uppercase; color:rgba(18,22,29,.72); }
+    .close{ height:44px; padding:0 14px; border-radius:999px; border:1px solid var(--line); background: rgba(255,255,255,.55); color:rgba(18,22,29,.86); cursor:pointer; }
+    .drawerLinks{ display:grid; grid-template-columns:1fr; padding:10px; gap:8px; }
+    .drawerLinks a{ padding:14px; border-radius:14px; border:1px solid rgba(0,0,0,.08); background: rgba(255,255,255,.55); font-size:15px; transition: transform .18s ease, border-color .18s ease; }
+    .drawerLinks a:hover{ transform: translateY(-1px); border-color: rgba(201,164,74,.55); }
+
+    main{ padding: var(--s6) 0 var(--s7); }
+    .read{ max-width: var(--readW); }
+    p{ margin:0 0 14px 0; line-height:var(--lh); color:var(--muted); }
+    ul{ margin: 0 0 14px 0; padding: 0 0 0 18px; color: var(--muted); line-height: var(--lh); }
+    li{ margin: 8px 0; }
+    h1{ font-size:44px; line-height:1.15; letter-spacing:-0.02em; margin:0 0 12px 0; font-weight:600; color:var(--text); }
+    h2{ font-size:26px; line-height:1.25; margin:28px 0 10px 0; font-weight:600; color:var(--text); }
+    .eyebrow{ font-family:var(--mono); font-size:12px; letter-spacing:.18em; text-transform:uppercase; color:rgba(58,50,12,.85); margin-bottom:12px; }
+    @media (max-width:640px){ h1{font-size:32px;} h2{font-size:22px;} }
+
+    .doc{
+      margin-top:18px;
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.70);
+      border-radius: var(--r-lg);
+      padding: 22px 22px;
+      box-shadow: var(--shadow);
+    }
+    .callout{
+      margin: 18px 0 0 0;
+      border:1px solid rgba(201,164,74,.55);
+      background: rgba(201,164,74,.16);
+      border-radius: var(--r-lg);
+      padding: 14px 14px;
+      color: rgba(18,22,29,.78);
+    }
+    .callout b{ color: rgba(18,22,29,.90); }
+
+    .meta{
+      display:flex; gap:12px; flex-wrap:wrap; align-items:baseline;
+      font-family: var(--mono);
+      font-size: 11px; letter-spacing:.12em;
+      text-transform: uppercase;
+      color: rgba(18,22,29,.62);
+      margin-top: 10px;
+      padding-top: 14px;
+      border-top:1px solid rgba(0,0,0,.08);
+    }
+
+    footer{
+      border-top:1px solid var(--line);
+      padding: var(--s6) 0;
+      margin-top: var(--s7);
+      color: rgba(18,22,29,.55);
+      font-family: var(--mono);
+      font-size: 12px;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+    }
+    .foot{ display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap; }
   </style>
 </head>
 
@@ -116,9 +179,8 @@
       </a>
 
       <div class="actions" aria-label="Actions">
-        <a class="btn secondary" href="trust.html">Trust<span class="arr">→</span></a>
-        <a class="btn primary" href="contact.html">Contact<span class="arr">→</span></a>
-        <button class="menuBtn" id="openMenu" aria-label="Open menu" type="button">☰</button>
+        <a class="btn primary" href="contact.html">Request walkthrough</a>
+        <button class="hamburger" id="openMenu" aria-label="Open menu" type="button">☰</button>
       </div>
     </div>
   </header>
@@ -129,15 +191,13 @@
         <div class="t">Menu</div>
         <button class="close" id="closeMenu" type="button">Close</button>
       </div>
-      <div class="drawerGrid">
+      <div class="drawerLinks">
         <a href="index.html">Overview</a>
         <a href="how.html">How It Works</a>
         <a href="platform.html">Platform</a>
-        <a href="trust.html">Trust & Verification</a>
+        <a href="trust.html">Trust</a>
         <a href="compliance.html">Compliance</a>
         <a href="integrations.html">Integrations</a>
-        <a href="use-cases.html">Use Cases</a>
-        <a href="security.html">Security</a>
         <a href="resources.html">Resources</a>
         <a href="company.html">Company</a>
         <a href="contact.html">Contact</a>
@@ -150,103 +210,101 @@
   </div>
 
   <main class="wrap">
-    <section style="padding-top: var(--s6);">
-      <div class="read reveal">
-        <div class="eyebrow">Responsible use</div>
-        <h1>Human rights & lawful use boundaries</h1>
-        <p>
-          CEYO is record infrastructure. It supports oversight processes by producing integrity-sealed artifacts under explicit policy scope.
-          CEYO does not adjudicate outcomes, certify compliance, or determine lawfulness.
-        </p>
+    <section class="read">
+      <div class="eyebrow">Policy · Public</div>
+      <h1>Human Rights & Lawful Use Policy</h1>
 
-        <div class="callout reveal">
-          <b>Principle:</b> Evidence infrastructure must remain separate from decision authority.
+      <div class="doc">
+        <h2>1. Purpose</h2>
+        <p>This policy establishes the human rights and lawful use boundaries governing deployment of CEYO evidentiary infrastructure. CEYO is record infrastructure. It does not adjudicate decisions, certify compliance, or determine lawfulness. This policy defines the intended design posture of CEYO infrastructure and the obligations of operators who deploy it.</p>
+
+        <h2>2. Foundational commitments</h2>
+        <p>CEYO is designed to support accountability, not circumvent it. Deployment is intended to strengthen oversight processes, not replace, delay, or obscure them.</p>
+        <ul>
+          <li><b>Oversight primacy:</b> deployments that materially restrict legitimate review are outside intended use.</li>
+          <li><b>Human authorization:</b> CEYO does not make decisions. Independent human authorization controls must exist for consequential outcomes.</li>
+          <li><b>Proportionality:</b> capture scope must be proportionate to the defined oversight purpose.</li>
+          <li><b>Non-discrimination:</b> CEYO must not be deployed to systematically target protected groups without lawful basis.</li>
+        </ul>
+
+        <h2>3. Lawful use requirements</h2>
+        <p>Operators deploying CEYO represent and warrant that:</p>
+        <ul>
+          <li>Deployment is authorized under applicable law and institutional policy.</li>
+          <li>Use of CEYO artifacts complies with applicable domestic law and, where relevant, international humanitarian law.</li>
+          <li>Capture scope has been reviewed for compliance with applicable privacy and data protection requirements.</li>
+          <li>Independent human authorization controls exist for any deployment involving consequential decisions.</li>
+        </ul>
+        <p>CEYO does not independently verify operator compliance with these representations. If an operator’s representations are materially false or deployment is found inconsistent with this policy, CEYO may terminate access or decline engagement pursuant to Section 6.</p>
+
+        <h2>4. Defense & national security deployments</h2>
+        <p>CEYO may be deployed in defense and national security contexts for integrity verification and forensic reconstruction workflows. Such deployments are subject to additional boundaries:</p>
+        <ul>
+          <li>Artifacts are intended to support oversight boards, accountability procedures, and institutional review workflows.</li>
+          <li>CEYO does not replace operational command authority or legal review functions.</li>
+          <li>Operators remain responsible for compliance with applicable rules of engagement, international humanitarian law where relevant, DoD Directive 3000.09 (or equivalent), and export controls including ITAR/EAR where applicable.</li>
+          <li>CEYO does not certify that any decision, action, or outcome was lawful, proportionate, or compliant.</li>
+          <li>CEYO does not guarantee that artifacts satisfy evidentiary sufficiency standards; that determination rests with the relevant authority.</li>
+        </ul>
+
+        <h2>5. Prohibited deployments</h2>
+        <p>CEYO must not be deployed to:</p>
+        <ul>
+          <li>Circumvent, obscure, or materially impede legitimate oversight processes.</li>
+          <li>Automate consequential decisions without independent human authorization controls.</li>
+          <li>Target individuals based on protected characteristics without lawful basis.</li>
+          <li>Support deployments prohibited under applicable export control law.</li>
+          <li>Generate artifacts intended to misrepresent decision context or provenance.</li>
+        </ul>
+
+        <h2>6. Operator obligations</h2>
+        <p>Operators assume full responsibility for ensuring deployment is lawful, authorized, and consistent with this policy. CEYO does not monitor deployments in real time. Material violations may constitute grounds for termination of access or refusal of continued services under applicable agreement terms.</p>
+
+        <h2>7. Escalation & review</h2>
+        <p>Concerns regarding deployment consistency with this policy may be directed to: <b style="color:rgba(18,22,29,.86)">contact@ceyo.ai</b></p>
+        <p>CEYO reserves the right to decline or terminate engagements inconsistent with this policy at its sole discretion.</p>
+
+        <h2>8. Boundary declaration</h2>
+        <div class="callout">
+          <p><b>CEYO produces integrity-sealed records to support oversight processes.</b> CEYO does not certify compliance, determine legality, validate decision correctness, guarantee inference reproducibility, certify that artifacts satisfy any specific legal or regulatory proceeding, or substitute for institutional review.</p>
+          <p>This policy does not constitute legal advice. Operators should consult appropriate counsel regarding their deployment context.</p>
+        </div>
+
+        <h2>9. Version control</h2>
+        <p>This policy is versioned and subject to revision. The current version identifier appears in the document header. Operators are responsible for confirming reference to the current version prior to deployment.</p>
+
+        <div class="meta">
+          <div>Version V2026.02.19</div>
+          <div>San Diego, California</div>
+          <div>© <span id="year"></span> CEYO</div>
         </div>
       </div>
     </section>
 
-    <section id="commitments">
-      <div class="read reveal">
-        <h2>Foundational commitments</h2>
-        <div class="panel">
-          <div class="k">Commitments</div>
-          <ul class="list">
-            <li><b>Oversight primacy:</b> deployments intended to support legitimate review.</li>
-            <li><b>Human authorization:</b> consequential decisions require independent human controls.</li>
-            <li><b>Proportionality:</b> capture scope must be limited to defined oversight purpose.</li>
-            <li><b>Non-discrimination:</b> deployments must not target protected classes without lawful basis.</li>
-          </ul>
-        </div>
-      </div>
-    </section>
-
-    <section id="prohibited">
-      <div class="read reveal">
-        <h2>Prohibited deployments</h2>
-        <div class="panel">
-          <div class="k">Not permitted</div>
-          <ul class="list">
-            <li>Circumventing, obscuring, or materially impeding legitimate oversight.</li>
-            <li>Automating consequential decisions without independent human authorization controls.</li>
-            <li>Generating artifacts intended to misrepresent decision context or provenance.</li>
-            <li>Deployments prohibited under applicable export control law.</li>
-          </ul>
-        </div>
-      </div>
-    </section>
-
-    <section id="operator">
-      <div class="read reveal">
-        <h2>Operator obligations</h2>
-        <div class="panel">
-          <div class="k">Operator responsibilities</div>
-          <ul class="list">
-            <li>Ensure deployment is authorized under applicable law and institutional policy.</li>
-            <li>Define and version capture policy prior to deployment.</li>
-            <li>Maintain chain-of-custody integrity outside the sealing boundary.</li>
-            <li>Align disclosure tiers with authorization and handling requirements.</li>
-          </ul>
-        </div>
-      </div>
-    </section>
-
-    <section id="escalation">
-      <div class="read reveal">
-        <h2>Escalation</h2>
-        <p>Concerns regarding deployment consistency with this policy may be directed through the contact channel.</p>
-        <div style="margin-top:14px;">
-          <a class="btn primary" href="contact.html">Contact<span class="arr">→</span></a>
-        </div>
-      </div>
-    </section>
-
-    <footer id="footer">
-      <div class="footBottom reveal">
-        <div>© <span id="year"></span> CEYO. All rights reserved.</div>
-        <div><a href="terms.html">Terms</a></div>
+    <footer>
+      <div class="foot">
+        <div>© <span id="year2"></span> CEYO. All rights reserved.</div>
+        <div><a href="vdp.html">Security Disclosure</a></div>
       </div>
     </footer>
   </main>
 
   <script>
-    document.getElementById('year').textContent = new Date().getFullYear();
+    const y = new Date().getFullYear();
+    document.getElementById('year').textContent = y;
+    document.getElementById('year2').textContent = y;
 
     const drawer = document.getElementById('drawer');
     const openMenu = document.getElementById('openMenu');
     const closeMenu = document.getElementById('closeMenu');
+
     function openDrawer(){ drawer.classList.add('open'); drawer.setAttribute('aria-hidden','false'); document.body.style.overflow='hidden'; }
     function closeDrawer(){ drawer.classList.remove('open'); drawer.setAttribute('aria-hidden','true'); document.body.style.overflow=''; }
-    if(openMenu) openMenu.addEventListener('click', openDrawer);
-    if(closeMenu) closeMenu.addEventListener('click', closeDrawer);
+
+    openMenu.addEventListener('click', openDrawer);
+    closeMenu.addEventListener('click', closeDrawer);
     drawer.addEventListener('click', (e)=>{ if(e.target===drawer) closeDrawer(); });
     window.addEventListener('keydown', (e)=>{ if(e.key==='Escape' && drawer.classList.contains('open')) closeDrawer(); });
-
-    const prefersReduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const revealEls = Array.from(document.querySelectorAll('.reveal'));
-    if(!prefersReduce){
-      const io = new IntersectionObserver((entries)=>{ entries.forEach(en=>{ if(en.isIntersecting) en.target.classList.add('on'); }); }, {threshold:0.12});
-      revealEls.forEach(el=>io.observe(el));
-    } else { revealEls.forEach(el=>el.classList.add('on')); }
   </script>
 </body>
 </html>
