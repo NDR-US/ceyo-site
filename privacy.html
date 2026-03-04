@@ -4,7 +4,7 @@
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
   <title>CEYO — Privacy</title>
-  <meta name="description" content="Privacy statement for the CEYO public site and communications. CEYO is record infrastructure; deployments are operator-controlled."/>
+  <meta name="description" content="Privacy statement for the CEYO public website."/>
   <meta name="theme-color" content="#F5F2EA"/>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -14,13 +14,12 @@
   <style>
     :root{
       --paper:#F5F2EA;
-      --paper2:#F3EEDD;
       --text:#12161D;
       --muted:rgba(18,22,29,.68);
       --line:rgba(0,0,0,.10);
 
-      --accent:#3A320C;
-      --accent2:#C9A44A;
+      --accent:#3A320C;   /* olive */
+      --accent2:#C9A44A;  /* muted amber */
 
       --maxW:1160px;
       --readW:760px;
@@ -28,7 +27,7 @@
       --r-lg:18px;
 
       --s1:8px;  --s2:16px; --s3:24px; --s4:32px; --s5:48px; --s6:64px; --s7:96px;
-      --lh:1.65;
+      --lh:1.70;
 
       --shadow:0 12px 30px rgba(0,0,0,.10);
       --shadow2:0 22px 60px rgba(0,0,0,.14);
@@ -42,10 +41,8 @@
     *{box-sizing:border-box}
     html{background:var(--paper);scroll-behavior:smooth}
     body{
-      margin:0;
-      font-family:var(--ui);
-      color:var(--text);
-      background:var(--paper);
+      margin:0; font-family:var(--ui);
+      color:var(--text); background:var(--paper);
       -webkit-text-size-adjust:100%;
       overflow-x:hidden;
     }
@@ -54,13 +51,12 @@
 
     [id]{ scroll-margin-top: calc(var(--navH) + 24px); }
 
-    /* Background (light, quiet) */
     .bg{
       position:fixed; inset:0; pointer-events:none; z-index:0;
       background:
         radial-gradient(900px 520px at 35% 0%, rgba(201,164,74,.10), transparent 60%),
         radial-gradient(820px 520px at 82% 18%, rgba(58,50,12,.06), transparent 64%),
-        linear-gradient(180deg, var(--paper) 0%, var(--paper2) 100%);
+        linear-gradient(180deg, #F5F2EA 0%, #F3EEDD 100%);
     }
     .grain{
       position:fixed; inset:0; z-index:1; pointer-events:none;
@@ -72,7 +68,6 @@
     .wrap{ position:relative; z-index:2; max-width:var(--maxW); margin:0 auto; padding:0 var(--s4); }
     @media (max-width: 640px){ .wrap{ padding:0 18px; } }
 
-    /* Header (MENU-ONLY) */
     header.site{
       position:sticky; top:0; z-index:50;
       backdrop-filter: blur(10px);
@@ -85,7 +80,7 @@
       display:flex; align-items:center; justify-content:space-between; gap:var(--s3);
     }
 
-    .logo{ display:flex; align-items:center; gap:10px; min-width: 180px; font-weight:600; letter-spacing:-.01em; }
+    .logo{ display:flex; align-items:center; gap:10px; font-weight:600; letter-spacing:-.01em; min-width: 170px; }
     .logo .mark{
       display:inline-flex; align-items:center; gap:10px;
       padding:10px 12px; border-radius:999px;
@@ -98,11 +93,7 @@
       box-shadow: 0 0 0 4px rgba(201,164,74,.18);
     }
 
-    .actions{
-      display:flex; align-items:center; gap:10px;
-      justify-content:flex-end;
-      min-width: 240px;
-    }
+    .actions{ display:flex; align-items:center; gap:10px; justify-content:flex-end; }
     .btn{
       height:48px; padding:0 18px; border-radius:999px;
       border:1px solid var(--line);
@@ -124,10 +115,9 @@
       background: rgba(201,164,74,.22);
     }
     .btn.primary:hover{ background: rgba(201,164,74,.28); }
-    .btn .arr{ display:inline-block; margin-left:10px; transition: transform .16s ease; }
-    .btn:hover .arr{ transform: translateX(3px); }
 
-    .menuBtn{
+    /* MENU button always visible (desktop + mobile) */
+    .hamburger{
       height:48px; width:48px;
       border-radius:999px;
       border:1px solid var(--line);
@@ -137,19 +127,8 @@
       cursor:pointer;
       transition: transform .16s ease, border-color .16s ease, background .16s ease;
     }
-    .menuBtn:hover{ transform: translateY(-1px); border-color: rgba(201,164,74,.55); background: rgba(255,255,255,.78); }
+    .hamburger:hover{ transform: translateY(-1px); border-color: rgba(201,164,74,.55); background: rgba(255,255,255,.78); }
 
-    @media (max-width: 860px){
-      .actions .btn.secondary{ display:none; }
-      .logo{ min-width: 150px; }
-    }
-    @media (max-width: 520px){
-      .actions .btn{ padding:0 14px; height:46px; }
-      .menuBtn{ height:46px; width:46px; }
-      .logo .mark{ padding:9px 10px; }
-    }
-
-    /* Drawer */
     .drawer{
       position:fixed; inset:0; z-index:80;
       display:none;
@@ -183,29 +162,21 @@
       color: rgba(18,22,29,.86);
       cursor:pointer;
     }
-    .drawerGrid{
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 8px;
-      padding: 10px;
-    }
-    @media (max-width: 720px){ .drawerGrid{ grid-template-columns: 1fr; } }
-    .drawerGrid a{
+    .drawerLinks{ display:grid; grid-template-columns: 1fr; padding: 10px; gap: 8px; }
+    .drawerLinks a{
       padding: 14px 14px; border-radius: 14px;
       border:1px solid rgba(0,0,0,.08);
       background: rgba(255,255,255,.55);
       font-size: 15px;
       transition: transform .18s ease, border-color .18s ease;
     }
-    .drawerGrid a:hover{ transform: translateY(-1px); border-color: rgba(201,164,74,.55); }
+    .drawerLinks a:hover{ transform: translateY(-1px); border-color: rgba(201,164,74,.55); }
 
-    /* Content */
     main{ padding: var(--s6) 0 var(--s7); }
-    section{ padding: var(--s7) 0; border-top:1px solid var(--line); }
-    section:first-of-type{ border-top:none; padding-top: var(--s6); }
-
     .read{ max-width: var(--readW); }
     p{ margin: 0 0 14px 0; line-height: var(--lh); color: var(--muted); }
+    h1{ font-size: 44px; line-height: 1.15; letter-spacing: -0.02em; margin: 0 0 12px 0; font-weight: 600; color: var(--text); }
+    h2{ font-size: 26px; line-height: 1.25; margin: 28px 0 10px 0; font-weight: 600; color: var(--text); }
     .eyebrow{
       font-family: var(--mono);
       font-size: 12px; letter-spacing: .18em;
@@ -213,62 +184,42 @@
       color: rgba(58,50,12,.85);
       margin-bottom: 12px;
     }
-    h1{ font-size: 44px; line-height: 1.15; letter-spacing: -0.02em; margin: 0 0 14px 0; font-weight: 600; color: var(--text); }
-    h2{ font-size: 28px; line-height: 1.20; letter-spacing: -0.01em; margin: 0 0 10px 0; font-weight: 600; color: var(--text); }
-    h3{ font-size: 19px; line-height: 1.25; margin: 0 0 10px 0; font-weight: 600; color: var(--text); }
     @media (max-width: 640px){
-      h1{ font-size: 30px; }
+      h1{ font-size: 32px; }
       h2{ font-size: 22px; }
     }
 
-    .panel{
+    .doc{
+      margin-top: 18px;
       border:1px solid var(--line);
       background: rgba(255,255,255,.70);
       border-radius: var(--r-lg);
-      padding: 18px 18px;
+      padding: 22px 22px;
       box-shadow: var(--shadow);
-      margin-top: 14px;
     }
-    .panel .k{
+    .meta{
+      display:flex; gap:12px; flex-wrap:wrap; align-items:baseline;
       font-family: var(--mono);
-      font-size: 11px;
-      letter-spacing:.14em;
+      font-size: 11px; letter-spacing:.12em;
       text-transform: uppercase;
-      color: rgba(58,50,12,.82);
-      margin-bottom: 10px;
+      color: rgba(18,22,29,.62);
+      margin-top: 10px;
+      padding-top: 14px;
+      border-top:1px solid rgba(0,0,0,.08);
     }
-    .list{ margin: 0; padding: 0 0 0 18px; }
-    .list li{ margin: 8px 0; color: var(--muted); line-height: 1.55; }
 
-    .callout{
-      margin-top: 14px;
-      border:1px solid rgba(201,164,74,.35);
-      background: rgba(201,164,74,.14);
-      border-radius: var(--r-lg);
-      padding: 16px 16px;
-    }
-    .callout b{ color: rgba(18,22,29,.92); }
-
-    footer{ border-top:1px solid var(--line); padding: var(--s7) 0 var(--s6); }
-    .footBottom{
-      display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap;
+    footer{
+      border-top:1px solid var(--line);
+      padding: var(--s6) 0;
+      margin-top: var(--s7);
+      color: rgba(18,22,29,.55);
       font-family: var(--mono);
       font-size: 12px;
       letter-spacing: .14em;
       text-transform: uppercase;
-      color: rgba(18,22,29,.55);
-      padding-top: 18px;
-      border-top:1px solid var(--line);
-      margin-top: 18px;
     }
-
-    .reveal{ opacity:0; transform: translateY(10px); transition: opacity .55s ease, transform .55s ease; }
-    .reveal.on{ opacity:1; transform: translateY(0); }
-
-    @media (prefers-reduced-motion: reduce){
-      html{scroll-behavior:auto;}
-      .reveal{ opacity:1; transform:none; transition:none; }
-      .btn, .menuBtn, .drawerGrid a{ transition:none; }
+    .foot{
+      display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap;
     }
   </style>
 </head>
@@ -284,9 +235,8 @@
       </a>
 
       <div class="actions" aria-label="Actions">
-        <a class="btn secondary" href="contact.html">Contact<span class="arr">→</span></a>
-        <a class="btn primary" href="contact.html">Request walkthrough<span class="arr">→</span></a>
-        <button class="menuBtn" id="openMenu" aria-label="Open menu" type="button">☰</button>
+        <a class="btn primary" href="contact.html">Request walkthrough</a>
+        <button class="hamburger" id="openMenu" aria-label="Open menu" type="button">☰</button>
       </div>
     </div>
   </header>
@@ -297,15 +247,13 @@
         <div class="t">Menu</div>
         <button class="close" id="closeMenu" type="button">Close</button>
       </div>
-      <div class="drawerGrid">
+      <div class="drawerLinks">
         <a href="index.html">Overview</a>
         <a href="how.html">How It Works</a>
         <a href="platform.html">Platform</a>
-        <a href="trust.html">Trust & Verification</a>
+        <a href="trust.html">Trust</a>
         <a href="compliance.html">Compliance</a>
         <a href="integrations.html">Integrations</a>
-        <a href="use-cases.html">Use Cases</a>
-        <a href="security.html">Security</a>
         <a href="resources.html">Resources</a>
         <a href="company.html">Company</a>
         <a href="contact.html">Contact</a>
@@ -318,114 +266,75 @@
   </div>
 
   <main class="wrap">
-    <section style="padding-top: var(--s6);">
-      <div class="read reveal">
-        <div class="eyebrow">Privacy</div>
-        <h1>Privacy statement</h1>
-        <p>
-          This statement describes how CEYO handles information on the public website and in communications.
-          CEYO is record infrastructure. Deployment data is operator-controlled and governed by the operator’s policy, systems, and law.
-        </p>
+    <section class="read">
+      <div class="eyebrow">Legal · Public</div>
+      <h1>Privacy statement</h1>
+      <div class="doc">
+        <h2 id="purpose">1. Purpose</h2>
+        <p>This statement describes how the CEYO public website handles information.</p>
 
-        <div class="callout reveal">
-          <b>Summary:</b> The public website is designed to minimize collection. Do not submit sensitive personal or confidential operational data through the contact form.
+        <h2 id="collection">2. Information collected</h2>
+        <p><b style="color:rgba(18,22,29,.86)">Contact submissions:</b> name, email, message content, and any information you choose to provide.</p>
+        <p><b style="color:rgba(18,22,29,.86)">Basic technical logs:</b> standard server logs may include IP address, user agent, and request metadata for security and reliability.</p>
+
+        <h2 id="use">3. How information is used</h2>
+        <p>Respond to inquiries and controlled review requests. Maintain security and prevent abuse.</p>
+
+        <h2 id="sharing">4. Sharing</h2>
+        <p>CEYO does not sell personal information. CEYO may share information with service providers strictly to operate the site and communications, subject to confidentiality obligations, or as required by law.</p>
+
+        <h2 id="retention">5. Data retention</h2>
+        <p>Contact submissions are retained as necessary to respond and maintain business records. Security logs are retained for a limited period consistent with security operations needs.</p>
+
+        <h2 id="security">6. Security</h2>
+        <p>Do not submit sensitive personal data or classified information through the public contact form.</p>
+
+        <h2 id="updates">7. Updates</h2>
+        <p>This statement is versioned and may be updated. The current version appears in the header.</p>
+
+        <h2 id="contact">8. Contact</h2>
+        <p>contact@ceyo.ai</p>
+
+        <div class="meta">
+          <div>Version V2026.02.19</div>
+          <div>San Diego, California</div>
+          <div>© <span id="year"></span> CEYO</div>
         </div>
       </div>
     </section>
 
-    <section id="site">
-      <div class="read reveal">
-        <h2>Public site data</h2>
-        <div class="panel">
-          <div class="k">What we may collect</div>
-          <ul class="list">
-            <li>Basic logs necessary to operate and secure the site (e.g., request metadata, error logs).</li>
-            <li>Information you choose to submit via contact (name, email, organization, message).</li>
-          </ul>
-        </div>
-
-        <div class="panel">
-          <div class="k">What we do not seek</div>
-          <ul class="list">
-            <li>Sensitive personal information.</li>
-            <li>Operational secrets, credentials, or proprietary payloads.</li>
-            <li>Customer datasets or inference inputs/outputs.</li>
-          </ul>
-        </div>
-      </div>
-    </section>
-
-    <section id="contact">
-      <div class="read reveal">
-        <h2>Contact submissions</h2>
-        <div class="panel">
-          <div class="k">Purpose</div>
-          <ul class="list">
-            <li>Respond to inquiries and coordinate evaluation or controlled review.</li>
-            <li>Maintain basic correspondence records for continuity and security.</li>
-          </ul>
-        </div>
-      </div>
-    </section>
-
-    <section id="deployments">
-      <div class="read reveal">
-        <h2>Deployments</h2>
-        <p>
-          CEYO deployments are operated by the deploying organization. Capture scope is policy-defined and can be configured to exclude or mask fields.
-          Operators are responsible for lawful collection, privacy compliance, and retention controls.
-        </p>
-        <div class="panel">
-          <div class="k">Boundary</div>
-          <ul class="list">
-            <li>CEYO does not require custody of private signing keys.</li>
-            <li>CEYO does not determine legality or correctness of outcomes.</li>
-            <li>Artifact sufficiency for any proceeding is authority-determined.</li>
-          </ul>
-        </div>
-      </div>
-    </section>
-
-    <section id="updates">
-      <div class="read reveal">
-        <h2>Updates</h2>
-        <p>This statement may be revised. The current version is the one published on this page.</p>
-      </div>
-    </section>
-
-    <footer id="footer">
-      <div class="footBottom reveal">
-        <div>© <span id="year"></span> CEYO. All rights reserved.</div>
-        <div><a href="contact.html">Contact</a></div>
+    <footer>
+      <div class="foot">
+        <div>© <span id="year2"></span> CEYO. All rights reserved.</div>
+        <div><a href="terms.html">Terms</a></div>
       </div>
     </footer>
   </main>
 
   <script>
-    document.getElementById('year').textContent = new Date().getFullYear();
+    const y = new Date().getFullYear();
+    document.getElementById('year').textContent = y;
+    document.getElementById('year2').textContent = y;
 
-    // Drawer
     const drawer = document.getElementById('drawer');
     const openMenu = document.getElementById('openMenu');
     const closeMenu = document.getElementById('closeMenu');
-    function openDrawer(){ drawer.classList.add('open'); drawer.setAttribute('aria-hidden','false'); document.body.style.overflow='hidden'; }
-    function closeDrawer(){ drawer.classList.remove('open'); drawer.setAttribute('aria-hidden','true'); document.body.style.overflow=''; }
-    if(openMenu) openMenu.addEventListener('click', openDrawer);
-    if(closeMenu) closeMenu.addEventListener('click', closeDrawer);
+
+    function openDrawer(){
+      drawer.classList.add('open');
+      drawer.setAttribute('aria-hidden','false');
+      document.body.style.overflow='hidden';
+    }
+    function closeDrawer(){
+      drawer.classList.remove('open');
+      drawer.setAttribute('aria-hidden','true');
+      document.body.style.overflow='';
+    }
+
+    openMenu.addEventListener('click', openDrawer);
+    closeMenu.addEventListener('click', closeDrawer);
     drawer.addEventListener('click', (e)=>{ if(e.target===drawer) closeDrawer(); });
     window.addEventListener('keydown', (e)=>{ if(e.key==='Escape' && drawer.classList.contains('open')) closeDrawer(); });
-
-    // Reveal
-    const prefersReduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const revealEls = Array.from(document.querySelectorAll('.reveal'));
-    if(!prefersReduce){
-      const io = new IntersectionObserver((entries)=>{
-        entries.forEach(en=>{ if(en.isIntersecting) en.target.classList.add('on'); });
-      }, {threshold: 0.12});
-      revealEls.forEach(el=>io.observe(el));
-    } else {
-      revealEls.forEach(el=>el.classList.add('on'));
-    }
   </script>
 </body>
 </html>
