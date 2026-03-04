@@ -1,353 +1,586 @@
-<!-- =========================
-  contact.html (CONTACT)
-  Clean, high-clarity. Light (ivory) variant like Governance family, but distinct layout.
-========================= -->
 <!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
   <title>CEYO — Contact</title>
-  <meta name="description" content="Request a controlled review of CEYO. Contact for institutional evaluation, verification discussions, and deployment posture review."/>
-  <meta name="theme-color" content="#F4F0E6"/>
+  <meta name="description" content="Request a verification walkthrough or controlled review. Contact CEYO."/>
+  <meta name="theme-color" content="#0B0F14"/>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@300;400;500;600&family=Outfit:ital,wght@0,700;0,900;1,900&display=swap" rel="stylesheet">
-  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 
   <style>
     :root{
-      --navy:#060A13;
-      --ink:#0B1220;
-      --ivory:#F4F0E6;
-      --royal:#2D67FF;
+      --ink:#0B0F14;
+      --textOnInk:#C9D1D9;
 
-      --text: rgba(11,18,32,.92);
-      --muted: rgba(11,18,32,.62);
-      --stroke: rgba(11,18,32,.12);
+      --accent:#3A320C;
+      --accent2:#C9A44A;
 
-      --brandFont:'Outfit', system-ui, sans-serif;
-      --monoFont:'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-      --bodyFont:'Inter', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      --maxW:1160px;
+      --readW:740px;
+
+      --r-lg:18px;
+
+      --s1:8px;  --s2:16px; --s3:24px; --s4:32px; --s5:48px; --s6:64px; --s7:96px;
+
+      --lh:1.65;
+      --shadow:0 10px 30px rgba(0,0,0,.25);
+      --shadow2:0 18px 60px rgba(0,0,0,.35);
+
+      --mono:'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --ui:'Inter', system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+
+      --navH:72px;
     }
 
-    html{scroll-behavior:smooth; background:var(--ivory);}
+    *{box-sizing:border-box}
+    html{background:var(--ink);scroll-behavior:smooth}
     body{
-      margin:0; background:var(--ivory); color:var(--text);
-      font-family:var(--bodyFont); overflow-x:hidden; cursor:none;
+      margin:0;
+      font-family:var(--ui);
+      color:var(--textOnInk);
+      background:var(--ink);
+      -webkit-text-size-adjust:100%;
+      overflow-x:hidden;
     }
-    @media (pointer: coarse){ body{ cursor:auto; } #cursor{ display:none; } }
+    a{color:inherit;text-decoration:none}
+    button,input,textarea,select{font:inherit}
+    [id]{ scroll-margin-top: calc(var(--navH) + 24px); }
 
-    /* Background: quiet paper + corner stamp */
-    #stage{
-      position:fixed; inset:0; z-index:0; pointer-events:none;
+    .bg{
+      position:fixed; inset:0; pointer-events:none; z-index:0;
       background:
-        radial-gradient(900px 520px at 20% 10%, rgba(45,103,255,.09), transparent 62%),
-        radial-gradient(900px 520px at 85% 78%, rgba(11,18,32,.06), transparent 68%),
-        linear-gradient(180deg, rgba(244,240,230,1), rgba(244,240,230,.96));
-    }
-    #rules{
-      position:fixed; inset:0; z-index:1; pointer-events:none; opacity:.55;
-      background-image: linear-gradient(to bottom, rgba(11,18,32,.06) 1px, transparent 1px);
-      background-size: 100% 46px;
-      mask-image: radial-gradient(520px 360px at 50% 18%, #000 38%, transparent 78%);
-    }
-    #grain{
-      position:fixed; inset:0; z-index:2; pointer-events:none; opacity:.06;
-      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='320' height='320'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='320' height='320' filter='url(%23n)'/%3E%3C/svg%3E");
+        radial-gradient(900px 520px at 40% 10%, rgba(58,50,12,.22), transparent 62%),
+        radial-gradient(820px 520px at 82% 34%, rgba(201,164,74,.10), transparent 64%),
+        linear-gradient(180deg, #0B0F14 0%, #0A0D12 40%, #0B0F14 100%);
     }
 
-    /* Cursor */
-    #cursor{
-      position:fixed; z-index:9999; width:10px; height:10px; border-radius:50%;
-      background:var(--ink); mix-blend-mode:multiply; pointer-events:none;
-      transform:translate(-50%,-50%);
-      transition: width .16s ease, height .16s ease, opacity .16s ease;
-      opacity:.85;
-    }
-    #cursor.big{ width:42px; height:42px; opacity:.22; background: var(--royal); mix-blend-mode:normal; }
+    .wrap{ position:relative; z-index:1; max-width:var(--maxW); margin:0 auto; padding:0 var(--s4); }
+    @media (max-width: 640px){ .wrap{ padding:0 18px; } }
 
-    /* Nav */
-    #topnav{
-      position:fixed; top:0; left:0; right:0; z-index:60;
-      padding: 18px 28px;
-      display:flex; justify-content:space-between; align-items:center;
-      transition: background .25s ease, border-color .25s ease, backdrop-filter .25s ease;
-      border-bottom:1px solid transparent;
+    header.site{
+      position:sticky; top:0; z-index:50;
+      backdrop-filter: blur(10px);
+      background: rgba(11,15,20,.72);
+      border-bottom:1px solid rgba(255,255,255,.06);
     }
-    #topnav.scrolled{
-      background: rgba(244,240,230,.78);
-      backdrop-filter: blur(14px);
-      border-bottom-color: rgba(11,18,32,.10);
+    .nav{
+      height: calc(var(--navH) + env(safe-area-inset-top));
+      padding-top: env(safe-area-inset-top);
+      display:flex; align-items:center; justify-content:space-between; gap:var(--s3);
     }
-    .routeMenu{
-      display:flex; gap:16px; align-items:center;
-      font-family: var(--monoFont);
-      font-size: 10px;
+
+    .logo{ display:flex; align-items:center; gap:10px; min-width:180px; font-weight:600; letter-spacing:-.01em; }
+    .logo .mark{
+      display:inline-flex; align-items:center; gap:10px;
+      padding:10px 12px; border-radius:999px;
+      border:1px solid rgba(255,255,255,.08);
+      background: rgba(255,255,255,.02);
+    }
+    .logo .dot{
+      width:8px; height:8px; border-radius:50%;
+      background: var(--accent2);
+      box-shadow: 0 0 0 4px rgba(201,164,74,.12);
+    }
+
+    /* MENU ONLY */
+    .actions{ display:flex; align-items:center; justify-content:flex-end; gap:10px; min-width:120px; }
+    .menuBtn{
+      height:48px; padding:0 16px; border-radius:999px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.02);
+      color: rgba(201,209,217,.95);
+      display:inline-flex; align-items:center; justify-content:center;
+      gap:10px;
+      cursor:pointer;
+      transition: transform .18s ease, border-color .18s ease, background .18s ease;
+      white-space:nowrap;
+    }
+    .menuBtn:hover{ transform: translateY(-1px); border-color: rgba(201,164,74,.35); background: rgba(255,255,255,.04); }
+    .menuBtn .lab{
+      font-family: var(--mono);
+      font-size: 12px;
+      letter-spacing:.18em;
+      text-transform: uppercase;
+    }
+    .menuBtn .icon{ width:18px; height:18px; display:inline-block; opacity:.90; }
+
+    .drawer{
+      position:fixed; inset:0; z-index:80;
+      display:none;
+      background: rgba(11,15,20,.72);
+      backdrop-filter: blur(10px);
+      padding: calc(env(safe-area-inset-top) + 12px) 18px 18px;
+    }
+    .drawer.open{ display:block; }
+    .drawerCard{
+      max-width: 680px; margin: 0 auto;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.03);
+      border-radius: var(--r-lg);
+      box-shadow: var(--shadow2);
+      overflow:hidden;
+    }
+    .drawerHead{
+      display:flex; align-items:center; justify-content:space-between;
+      padding: 14px 14px;
+      border-bottom:1px solid rgba(255,255,255,.08);
+    }
+    .drawerHead .t{
+      font-family: var(--mono);
+      font-size:12px; letter-spacing:.18em;
+      text-transform:uppercase; color: rgba(201,209,217,.82);
+    }
+    .close{
+      height:44px; padding:0 14px; border-radius:999px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.02);
+      color: rgba(201,209,217,.92);
+      cursor:pointer;
+    }
+    .drawerLinks{ display:grid; grid-template-columns: 1fr; padding: 10px; gap: 8px; }
+    .drawerLinks a{
+      padding: 14px 14px; border-radius: 14px;
+      border:1px solid rgba(255,255,255,.06);
+      background: rgba(255,255,255,.02);
+      font-size: 15px;
+      transition: transform .18s ease, border-color .18s ease;
+    }
+    .drawerLinks a:hover{ transform: translateY(-1px); border-color: rgba(201,164,74,.28); }
+    .drawerLinks a.active{
+      border-color: rgba(201,164,74,.35);
+      background: rgba(201,164,74,.08);
+    }
+
+    .read{ max-width: var(--readW); }
+    p{ margin: 0 0 14px 0; line-height: var(--lh); }
+    .muted{ color: rgba(201,209,217,.78); }
+
+    main{ padding: var(--s6) 0 var(--s7); }
+    section{ padding: var(--s7) 0; border-top:1px solid rgba(255,255,255,.06); }
+    section:first-of-type{ border-top:none; padding-top: var(--s6); }
+
+    .eyebrow{
+      font-family: var(--mono);
+      font-size: 12px; letter-spacing: .18em;
+      text-transform: uppercase;
+      color: rgba(201,164,74,.92);
+      margin-bottom: 12px;
+    }
+    h1{ font-size: 46px; line-height: 1.15; letter-spacing: -0.02em; margin: 0 0 14px 0; font-weight: 600; }
+    h2{ font-size: 30px; line-height: 1.20; letter-spacing: -0.01em; margin: 0 0 12px 0; font-weight: 600; }
+    h3{ font-size: 20px; line-height: 1.25; margin: 0 0 10px 0; font-weight: 600; }
+    @media (max-width: 640px){
+      h1{ font-size: 32px; }
+      h2{ font-size: 24px; }
+      h3{ font-size: 19px; }
+    }
+
+    /* Contact layout */
+    .grid{
+      display:grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 14px;
+      margin-top: 18px;
+      align-items:start;
+    }
+    @media (max-width: 980px){ .grid{ grid-template-columns: 1fr; } }
+
+    .panel{
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.02);
+      border-radius: var(--r-lg);
+      padding: 18px 18px;
+    }
+
+    label{
+      display:block;
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing:.14em;
+      text-transform: uppercase;
+      color: rgba(201,164,74,.86);
+      margin: 0 0 8px 0;
+    }
+    .field{ margin-top: 14px; }
+    input, textarea, select{
+      width:100%;
+      border-radius: var(--r-lg);
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(11,15,20,.62);
+      color: rgba(201,209,217,.92);
+      padding: 12px 12px;
+      outline:none;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+    textarea{ min-height: 140px; resize: vertical; }
+    input:focus, textarea:focus, select:focus{ border-color: rgba(201,164,74,.35); }
+
+    .row2{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    @media (max-width: 640px){ .row2{ grid-template-columns: 1fr; } }
+
+    .submitRow{
+      display:flex; gap:10px; flex-wrap:wrap; margin-top: 16px; align-items:center;
+    }
+    .btn{
+      height:48px; padding:0 18px; border-radius:999px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.02);
+      color: rgba(201,209,217,.98);
+      display:inline-flex; align-items:center; justify-content:center;
+      font-size:14px;
+      cursor:pointer;
+      transition: transform .18s ease, border-color .18s ease, background .18s ease;
+      white-space:nowrap;
+    }
+    .btn:hover{ transform: translateY(-1px); border-color: rgba(201,164,74,.35); background: rgba(255,255,255,.04); }
+    .btn.primary{
+      border-color: rgba(201,164,74,.50);
+      background: rgba(201,164,74,.10);
+      color: rgba(245,242,234,.96);
+    }
+    .btn.primary:hover{ background: rgba(201,164,74,.16); }
+    .btn .arr{ display:inline-block; margin-left:10px; transition: transform .16s ease; }
+    .btn:hover .arr{ transform: translateX(3px); }
+
+    .note{
+      margin-top: 10px;
+      color: rgba(201,209,217,.70);
+      font-size: 14px;
+      line-height: 1.6;
+    }
+    .note b{ color: rgba(245,242,234,.92); font-weight:600; }
+
+    .steps{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+      margin-top: 12px;
+    }
+    .step{
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.02);
+      border-radius: var(--r-lg);
+      padding: 14px 14px;
+    }
+    .step .k{
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing:.14em;
+      text-transform: uppercase;
+      color: rgba(201,164,74,.86);
+      margin-bottom: 6px;
+    }
+
+    .trustBox{
+      border:1px solid rgba(201,164,74,.22);
+      background: rgba(11,15,20,.60);
+      border-radius: var(--r-lg);
+      padding: 14px 14px;
+      margin-top: 14px;
+    }
+    .trustBox .k{
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing:.14em;
+      text-transform: uppercase;
+      color: rgba(201,164,74,.86);
+      margin-bottom: 10px;
+    }
+    .trustBox ul{ margin: 0; padding: 0 0 0 18px; }
+    .trustBox li{ margin: 8px 0; color: rgba(201,209,217,.84); line-height: 1.55; }
+
+    footer{ border-top:1px solid rgba(255,255,255,.06); padding: var(--s7) 0 var(--s6); }
+    .footGrid{
+      display:grid;
+      grid-template-columns: 1.2fr 1fr 1fr 1fr;
+      gap: 14px;
+      margin-bottom: 22px;
+    }
+    @media (max-width: 980px){ .footGrid{ grid-template-columns: 1fr 1fr; } }
+    @media (max-width: 640px){ .footGrid{ grid-template-columns: 1fr; } }
+    .footCol{
+      border:1px solid rgba(255,255,255,.08);
+      background: rgba(255,255,255,.02);
+      border-radius: var(--r-lg);
+      padding: 18px 18px;
+    }
+    .footCol .t{
+      font-family: var(--mono);
+      font-size: 12px;
       letter-spacing: .18em;
       text-transform: uppercase;
-      color: rgba(11,18,32,.60);
+      color: rgba(201,164,74,.86);
+      margin-bottom: 10px;
     }
-    .routeMenu a{ opacity:.86; transition: opacity .14s ease, color .14s ease; }
-    .routeMenu a:hover{ opacity:1; color: rgba(11,18,32,.92); }
-    .routeMenu a.active{ opacity:1; color: rgba(11,18,32,.92); }
-
-    .shell{ max-width: 1180px; margin:0 auto; padding: 0 24px; position:relative; z-index:10; }
-    .section{ padding-top: 124px; padding-bottom: 110px; position:relative; }
-    @media (max-width: 640px){ .section{ padding-top: 110px; padding-bottom: 98px; } #topnav{ padding: 16px 18px; } }
-
-    .kicker{
-      font-family: var(--monoFont);
-      font-size: 10px;
-      letter-spacing: .40em;
-      text-transform: uppercase;
-      color: rgba(11,18,32,.58);
+    .footCol a{
+      display:block;
+      padding: 10px 10px;
+      border-radius: 12px;
+      border:1px solid transparent;
+      color: rgba(201,209,217,.84);
+      transition: background .18s ease, border-color .18s ease;
     }
-    .h1{
-      font-family: var(--brandFont);
-      font-weight: 900;
-      font-style: italic;
-      font-size: clamp(44px, 7.8vw, 92px);
-      line-height: 0.92;
-      letter-spacing: -0.05em;
-      text-transform: uppercase;
-      color: rgba(11,18,32,.96);
-    }
-    .panel{
-      border: 1px solid rgba(11,18,32,.12);
-      background: rgba(244,240,230,.72);
-      backdrop-filter: blur(10px);
-      border-radius: 22px;
-      box-shadow: 0 22px 60px rgba(0,0,0,.10);
-    }
-    .panel.pad{ padding: 28px; }
-    @media (min-width:768px){ .panel.pad{ padding: 44px; } }
-
-    .btn{
-      display:inline-flex; align-items:center; justify-content:center;
-      font-family:var(--monoFont);
-      font-size:10px; letter-spacing:.20em; text-transform:uppercase;
-      border-radius:999px; padding: 14px 24px;
-      border:1px solid rgba(11,18,32,.14);
-      transition: transform .18s ease, box-shadow .18s ease, background .18s ease, border-color .18s ease, color .18s ease;
-      user-select:none; white-space:nowrap;
-      color: rgba(11,18,32,.88);
-      background: rgba(244,240,230,.62);
-    }
-    .btn.primary{ background: var(--royal); border-color: rgba(45,103,255,.85); color:#fff; }
-    .btn:hover{ transform: translateY(-1px); box-shadow: 0 0 26px rgba(45,103,255,0.26); border-color: rgba(45,103,255,.60); }
-    .btn.ghost{ background: rgba(244,240,230,.46); }
-    .btn.ghost:hover{ background: rgba(11,18,32,.06); }
-
-    .fine{
-      font-family: var(--monoFont);
-      font-size: 10px;
+    .footCol a:hover{ background: rgba(255,255,255,.03); border-color: rgba(255,255,255,.06); }
+    .footBottom{
+      display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap;
+      font-family: var(--mono);
+      font-size: 12px;
       letter-spacing: .14em;
       text-transform: uppercase;
-      color: rgba(11,18,32,.58);
-    }
-    .rule{
-      height:1px;
-      background: linear-gradient(90deg, rgba(11,18,32,.14), rgba(45,103,255,.22), rgba(11,18,32,.14));
-      opacity:.9;
-    }
-    .field{
-      width:100%;
-      padding: 14px 14px;
-      border-radius: 14px;
-      border: 1px solid rgba(11,18,32,.14);
-      background: rgba(244,240,230,.84);
-      color: rgba(11,18,32,.92);
-      outline: none;
-      transition: border-color .16s ease, box-shadow .16s ease;
-    }
-    .field:focus{
-      border-color: rgba(45,103,255,.62);
-      box-shadow: 0 0 0 5px rgba(45,103,255,.14);
+      color: rgba(201,209,217,.62);
+      padding-top: 18px;
+      border-top:1px solid rgba(255,255,255,.06);
     }
 
-    /* Bottom bar */
-    #bottombar{
-      position:fixed; bottom:0; left:0; right:0; z-index:70;
-      height:56px;
-      background: rgba(244,240,230,.86);
-      backdrop-filter: blur(12px);
-      border-top: 1px solid rgba(11,18,32,.12);
-      display:flex;
-      font-family: var(--monoFont);
-      font-size: 9px;
-      letter-spacing: .22em;
-      text-transform: uppercase;
+    .reveal{ opacity:0; transform: translateY(10px); transition: opacity .55s ease, transform .55s ease; }
+    .reveal.on{ opacity:1; transform: translateY(0); }
+
+    @media (prefers-reduced-motion: reduce){
+      html{scroll-behavior:auto;}
+      .reveal{ opacity:1; transform:none; transition:none; }
+      .menuBtn, .btn, .drawerLinks a{ transition:none; }
     }
-    #bottombar a{
-      flex:1; display:flex; align-items:center; justify-content:center;
-      border-right: 1px solid rgba(11,18,32,.10);
-      transition: background .16s ease, color .16s ease;
-      color: rgba(11,18,32,.62);
-      user-select:none;
-    }
-    #bottombar a:last-child{ border-right:none; }
-    #bottombar a:hover{ background: rgba(11,18,32,.05); color: rgba(11,18,32,.88); }
-    #bottombar a.active{ color: rgba(11,18,32,.92); box-shadow: inset 0 2px 0 rgba(45,103,255,.95); }
   </style>
 </head>
 
 <body>
-  <div id="stage" aria-hidden="true"></div>
-  <div id="rules" aria-hidden="true"></div>
-  <div id="grain" aria-hidden="true"></div>
-  <div id="cursor" aria-hidden="true"></div>
+  <div class="bg" aria-hidden="true"></div>
 
-  <nav id="topnav" aria-label="Primary">
-    <div class="flex items-baseline gap-4">
-      <a href="index.html" class="font-[var(--brandFont)] font-black text-2xl italic text-[rgba(11,18,32,.92)]">CEYO</a>
-      <span class="font-mono text-[9px] tracking-[0.30em] opacity-60 uppercase text-[rgba(11,18,32,.72)]">Contact</span>
+  <header class="site">
+    <div class="wrap nav">
+      <a class="logo" href="index.html" aria-label="CEYO Home">
+        <span class="mark"><span class="dot" aria-hidden="true"></span><span>CEYO</span></span>
+      </a>
+
+      <div class="actions" aria-label="Menu">
+        <button class="menuBtn" id="openMenu" type="button" aria-label="Open menu">
+          <span class="lab">Menu</span>
+          <span class="icon" aria-hidden="true">☰</span>
+        </button>
+      </div>
     </div>
+  </header>
 
-    <div class="hidden md:flex routeMenu">
-      <a href="index.html" class="nav-exit">Index</a>
-      <a href="platform.html" class="nav-exit">Platform</a>
-      <a href="trust.html" class="nav-exit">Trust</a>
-      <a href="governance.html" class="nav-exit">Governance</a>
-      <a href="contact.html" class="active">Contact</a>
+  <div class="drawer" id="drawer" aria-hidden="true">
+    <div class="drawerCard" role="dialog" aria-modal="true" aria-label="Menu">
+      <div class="drawerHead">
+        <div class="t">Menu</div>
+        <button class="close" id="closeMenu" type="button">Close</button>
+      </div>
+      <div class="drawerLinks">
+        <a href="index.html">Overview</a>
+        <a href="how.html">How It Works</a>
+        <a href="platform.html">Platform</a>
+        <a href="trust.html">Trust</a>
+        <a href="compliance.html">Compliance</a>
+        <a href="integrations.html">Integrations</a>
+        <a href="resources.html">Resources</a>
+        <a href="security.html">Security</a>
+        <a href="use-cases.html">Use Cases</a>
+        <a href="company.html">Company</a>
+        <a class="active" href="contact.html">Contact</a>
+      </div>
     </div>
-  </nav>
+  </div>
 
-  <main class="section">
-    <div class="shell">
-      <div class="grid lg:grid-cols-2 gap-14 items-start">
-        <div>
-          <div class="kicker mb-6">REQUEST CONTROLLED REVIEW · INSTITUTIONAL EVALUATION</div>
-          <h1 class="h1 mb-8">Engage Under<br/>Controlled Conditions</h1>
+  <main class="wrap">
+    <section style="padding-top: var(--s6);">
+      <div class="read reveal">
+        <div class="eyebrow">Contact · Controlled review · Walkthrough</div>
+        <h1>Request a verification walkthrough.</h1>
+        <p class="muted">
+          Use this form to request a controlled review, verification walkthrough, or evaluation materials.
+          Do not submit sensitive production data or secrets.
+        </p>
+      </div>
 
-          <p class="text-[18px] leading-[1.9] text-[var(--muted)] max-w-xl">
-            Public pages are descriptive. Technical specifics, schemas, and verification materials are shared under controlled review.
-            Use this channel to request an institutional evaluation, verification discussion, or deployment posture review.
-          </p>
+      <div class="grid">
+        <!-- FORM -->
+        <div class="panel reveal" aria-label="Contact form">
+          <h3>Contact</h3>
+          <p class="muted">We respond with next steps and a scoped request for any controlled materials.</p>
 
-          <div class="mt-10 panel pad">
-            <div class="fine mb-4">Primary Contact</div>
-            <div class="text-[18px] font-semibold text-[rgba(11,18,32,.92)]">nacenatur@gmail.com</div>
-            <div class="mt-4 rule"></div>
-            <div class="mt-6 text-[14px] leading-[1.9] text-[var(--muted)]">
-              Include: organization, role, intended deployment context, and the level of disclosure requested (Public / Redacted / Controlled Review).
+          <!-- Replace action with your endpoint (Formspree, Netlify Forms, backend, etc.) -->
+          <form action="#" method="post">
+            <div class="row2">
+              <div class="field">
+                <label for="name">Name</label>
+                <input id="name" name="name" type="text" autocomplete="name" required />
+              </div>
+              <div class="field">
+                <label for="email">Email</label>
+                <input id="email" name="email" type="email" autocomplete="email" required />
+              </div>
             </div>
-          </div>
 
-          <div class="mt-10 flex gap-4 flex-wrap">
-            <a class="btn ghost nav-exit" href="trust.html">Trust Center</a>
-            <a class="btn ghost nav-exit" href="platform.html">Platform</a>
-            <a class="btn primary nav-exit" href="governance.html">Governance</a>
+            <div class="row2">
+              <div class="field">
+                <label for="org">Organization</label>
+                <input id="org" name="org" type="text" autocomplete="organization" />
+              </div>
+              <div class="field">
+                <label for="role">Role</label>
+                <select id="role" name="role">
+                  <option value="">Select</option>
+                  <option>Compliance / Audit</option>
+                  <option>Security</option>
+                  <option>AI / Platform Engineering</option>
+                  <option>Legal / Policy</option>
+                  <option>Institutional Reviewer</option>
+                  <option>Other</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="topic">Request type</label>
+              <select id="topic" name="topic" required>
+                <option value="">Select</option>
+                <option>Verification walkthrough</option>
+                <option>Controlled review documentation</option>
+                <option>Integration discussion</option>
+                <option>Security / key custody model</option>
+                <option>Other</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label for="msg">Message</label>
+              <textarea id="msg" name="msg" placeholder="Brief context: what you are evaluating and what you need." required></textarea>
+              <div class="note">
+                <b>Do not include</b> secrets, private keys, production customer data, or classified information.
+              </div>
+            </div>
+
+            <div class="submitRow">
+              <button class="btn primary" type="submit">Submit request<span class="arr">→</span></button>
+              <a class="btn" href="resources.html">View resources<span class="arr">→</span></a>
+            </div>
+          </form>
+
+          <div class="trustBox">
+            <div class="k">Security note</div>
+            <ul>
+              <li>CEYO is designed as <b style="color:rgba(245,242,234,.92)">non-custodial</b> for private signing keys.</li>
+              <li>Controlled materials are shared under appropriate terms and authorization.</li>
+              <li>Verification confirms integrity and provenance under policy scope — not correctness of model output.</li>
+            </ul>
           </div>
         </div>
 
-        <div class="panel pad">
-          <div class="fine mb-5">Request Form (Optional)</div>
-          <form onsubmit="return false;">
-            <div class="grid gap-4">
-              <div>
-                <div class="fine mb-2">Name</div>
-                <input class="field" type="text" placeholder="Full name"/>
-              </div>
-              <div>
-                <div class="fine mb-2">Organization</div>
-                <input class="field" type="text" placeholder="Institution / Company"/>
-              </div>
-              <div>
-                <div class="fine mb-2">Role</div>
-                <input class="field" type="text" placeholder="Security / Compliance / Engineering / Legal"/>
-              </div>
-              <div>
-                <div class="fine mb-2">Disclosure Tier Requested</div>
-                <select class="field">
-                  <option>Public</option>
-                  <option>Redacted</option>
-                  <option>Controlled Review</option>
-                </select>
-              </div>
-              <div>
-                <div class="fine mb-2">Message</div>
-                <textarea class="field" rows="6" placeholder="Context, intended deployment, review goals..."></textarea>
-              </div>
-            </div>
+        <!-- WHAT HAPPENS NEXT -->
+        <div class="panel reveal" aria-label="What happens next">
+          <h3>What happens next</h3>
+          <p class="muted">A simple process designed for institutional review.</p>
 
-            <div class="mt-6 flex gap-4 flex-wrap">
-              <button class="btn primary" type="button" onclick="showNote()">Prepare Email</button>
-              <a class="btn ghost" href="mailto:nacenatur@gmail.com?subject=CEYO%20Controlled%20Review%20Request&body=Name%3A%0AOrganization%3A%0ARole%3A%0ADisclosure%20Tier%3A%0AContext%3A%0A%0A">
-                Open Mail Client
-              </a>
+          <div class="steps" aria-label="Process steps">
+            <div class="step">
+              <div class="k">Step 1</div>
+              <div style="font-weight:600; color:rgba(245,242,234,.92); margin-bottom:6px;">Response + scope</div>
+              <div class="muted">We confirm your request and identify which materials are appropriate for your evaluation context.</div>
             </div>
-
-            <div id="note" class="mt-6 text-[14px] leading-[1.9] text-[var(--muted)] hidden">
-              Copy your details into an email to <strong>nacenatur@gmail.com</strong>. Public pages are descriptive; controlled review shares specifics under authorization.
+            <div class="step">
+              <div class="k">Step 2</div>
+              <div style="font-weight:600; color:rgba(245,242,234,.92); margin-bottom:6px;">Walkthrough</div>
+              <div class="muted">We walk through verification steps, disclosure tiers, and key custody posture with your team.</div>
             </div>
-
-            <div class="mt-10 panel pad" style="background: rgba(45,103,255,.06); border-color: rgba(45,103,255,.24);">
-              <div class="fine mb-3">Boundary</div>
-              <div class="text-[10px] font-mono leading-relaxed uppercase text-[rgba(11,18,32,.72)]">
-                CEYO produces records. It does not validate correctness, fairness, legality, or compliance outcomes.
-                Verification confirms integrity and provenance under policy scope — not correctness of model output.
-              </div>
+            <div class="step">
+              <div class="k">Step 3</div>
+              <div style="font-weight:600; color:rgba(245,242,234,.92); margin-bottom:6px;">Controlled materials</div>
+              <div class="muted">If needed, we provide controlled documentation and sample artifacts under appropriate terms.</div>
             </div>
+          </div>
 
-            <div class="mt-10 fine">© <span id="year">2026</span> CEYO · Contact · V2026.02.19</div>
-          </form>
+          <div class="trustBox" style="margin-top:16px;">
+            <div class="k">Preferred inputs</div>
+            <ul>
+              <li>Target deployment pattern: sidecar / gateway / wrapper</li>
+              <li>Review context: audit, incident reconstruction, regulator inquiry, internal governance</li>
+              <li>Disclosure tier needed: public/redacted vs controlled review</li>
+            </ul>
+          </div>
+
+          <div style="margin-top:16px; display:flex; gap:10px; flex-wrap:wrap;">
+            <a class="btn primary" href="trust.html#verification-spec">Verification steps<span class="arr">→</span></a>
+            <a class="btn" href="platform.html#components">Platform components<span class="arr">→</span></a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer id="footer">
+      <div class="footGrid reveal">
+        <div class="footCol">
+          <div class="t">Product</div>
+          <a href="index.html">Overview</a>
+          <a href="how.html">How It Works</a>
+          <a href="platform.html">Platform</a>
+          <a href="integrations.html">Integrations</a>
+        </div>
+        <div class="footCol">
+          <div class="t">Trust</div>
+          <a href="trust.html">Trust Model</a>
+          <a href="security.html">Security</a>
+          <a href="trust.html#verification-spec">Verification Spec</a>
+          <a href="resources.html#library">Resources</a>
+        </div>
+        <div class="footCol">
+          <div class="t">Resources</div>
+          <a href="resources.html">Library</a>
+          <a href="resources.html#sample-artifact">Sample Artifacts</a>
+          <a href="resources.html#glossary">Glossary</a>
+          <a href="resources.html#faq">FAQs</a>
+        </div>
+        <div class="footCol">
+          <div class="t">Legal</div>
+          <a href="privacy.html">Privacy</a>
+          <a href="terms.html">Terms</a>
+          <a href="vdp.html">Security Disclosure</a>
+          <a href="ethical.html">Responsible Use</a>
         </div>
       </div>
 
-      <div style="height:72px"></div>
-    </div>
+      <div class="footBottom reveal">
+        <div>© <span id="year"></span> CEYO. All rights reserved.</div>
+        <div><a href="vdp.html">Vulnerability Disclosure</a></div>
+      </div>
+    </footer>
   </main>
 
-  <nav id="bottombar" aria-label="Site index">
-    <a href="index.html" class="nav-exit">INDEX</a>
-    <a href="platform.html" class="nav-exit">ARCH</a>
-    <a href="trust.html" class="nav-exit">TRUST</a>
-    <a href="governance.html" class="nav-exit">GOV</a>
-    <a href="contact.html" class="active">CONTACT</a>
-  </nav>
-
   <script>
-    /* Cursor */
-    const cursor = document.getElementById('cursor');
-    if (window.matchMedia("(pointer: fine)").matches){
-      document.addEventListener('mousemove', (e) => {
-        cursor.style.left = e.clientX + "px";
-        cursor.style.top = e.clientY + "px";
-      }, {passive:true});
-      document.querySelectorAll('a, button, input, textarea, select, .panel').forEach(el => {
-        el.addEventListener('mouseenter', () => cursor.classList.add('big'), {passive:true});
-        el.addEventListener('mouseleave', () => cursor.classList.remove('big'), {passive:true});
-      });
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Menu drawer
+    const drawer = document.getElementById('drawer');
+    const openMenu = document.getElementById('openMenu');
+    const closeMenu = document.getElementById('closeMenu');
+    function openDrawer(){ drawer.classList.add('open'); drawer.setAttribute('aria-hidden','false'); document.body.style.overflow='hidden'; }
+    function closeDrawer(){ drawer.classList.remove('open'); drawer.setAttribute('aria-hidden','true'); document.body.style.overflow=''; }
+    openMenu.addEventListener('click', openDrawer);
+    closeMenu.addEventListener('click', closeDrawer);
+    drawer.addEventListener('click', (e)=>{ if(e.target===drawer) closeDrawer(); });
+    window.addEventListener('keydown', (e)=>{ if(e.key==='Escape' && drawer.classList.contains('open')) closeDrawer(); });
+
+    // Reveal
+    const prefersReduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const revealEls = Array.from(document.querySelectorAll('.reveal'));
+    if(!prefersReduce){
+      const io = new IntersectionObserver((entries)=>{
+        entries.forEach(en=>{ if(en.isIntersecting) en.target.classList.add('on'); });
+      }, {threshold: 0.12});
+      revealEls.forEach(el=>io.observe(el));
+    } else {
+      revealEls.forEach(el=>el.classList.add('on'));
     }
-
-    /* Topnav scroll */
-    const topnav = document.getElementById('topnav');
-    window.addEventListener('scroll', () => {
-      topnav.classList.toggle('scrolled', window.scrollY > 14);
-    }, {passive:true});
-
-    /* Year */
-    document.getElementById("year").textContent = new Date().getFullYear();
-
-    function showNote(){
-      document.getElementById('note').classList.remove('hidden');
-    }
-
-    /* Page transition */
-    function navWithFade(url){
-      document.body.animate([{opacity:1},{opacity:0.0}], {duration:200, fill:"forwards"});
-      setTimeout(() => { window.location.href = url; }, 210);
-    }
-    document.querySelectorAll('a.nav-exit').forEach(a => {
-      a.addEventListener('click', (e) => {
-        const href = a.getAttribute('href');
-        if (!href || href.startsWith('#')) return;
-        e.preventDefault();
-        navWithFade(href);
-      });
-    });
   </script>
 </body>
 </html>
