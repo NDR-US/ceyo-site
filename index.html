@@ -50,10 +50,8 @@
     a{color:inherit;text-decoration:none}
     button{font:inherit}
 
-    /* Anchor offset for sticky header */
     [id]{ scroll-margin-top: calc(var(--navH) + 24px); }
 
-    /* Background */
     .bg{
       position:fixed; inset:0; pointer-events:none; z-index:0;
       background:
@@ -72,7 +70,7 @@
     .wrap{ position:relative; z-index:1; max-width:var(--maxW); margin:0 auto; padding:0 var(--s4); }
     @media (max-width: 640px){ .wrap{ padding:0 18px; } }
 
-    /* Header: SAME BEHAVIOR EVERY PAGE (Logo + CTAs + Menu only) */
+    /* Header */
     header.site{
       position:sticky; top:0; z-index:50;
       backdrop-filter: blur(10px);
@@ -82,15 +80,19 @@
     .nav{
       height: calc(var(--navH) + env(safe-area-inset-top));
       padding-top: env(safe-area-inset-top);
-      display:flex; align-items:center; justify-content:space-between; gap:var(--s3);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: var(--s3);
       min-width:0;
+      flex-wrap:nowrap;
     }
 
     .logo{
       display:flex; align-items:center; gap:10px;
       font-weight:600; letter-spacing:-.01em;
-      min-width: 160px;
       flex:0 0 auto;
+      min-width: 140px;
     }
     .logo .mark{
       display:inline-flex; align-items:center; gap:10px;
@@ -98,11 +100,13 @@
       border-radius:999px;
       border:1px solid rgba(255,255,255,.08);
       background: rgba(255,255,255,.02);
+      white-space:nowrap;
     }
     .logo .dot{
       width:8px; height:8px; border-radius:50%;
       background: var(--accent2);
       box-shadow: 0 0 0 4px rgba(201,164,74,.12);
+      flex:0 0 auto;
     }
 
     .actions{
@@ -110,6 +114,7 @@
       justify-content:flex-end;
       flex:1 1 auto;
       min-width:0;
+      flex-wrap:nowrap;
     }
     .btn{
       height:48px; padding:0 18px; border-radius:999px;
@@ -149,12 +154,21 @@
     }
     .menuBtn:hover{ transform: translateY(-1px); border-color: rgba(201,164,74,.35); background: rgba(255,255,255,.04); }
 
-    /* On small screens hide secondary CTA first */
-    @media (max-width: 980px){
+    /* Mobile header: prevent crowding */
+    @media (max-width: 520px){
+      .logo{ min-width: 0; }
+      .logo .mark{ padding:8px 10px; gap:8px; }
       .btn.secondary{ display:none; }
+      .btn.primary{ padding:0 14px; }
+      .menuBtn{ width:82px; }
+      .actions{ gap:8px; }
+    }
+    @media (max-width: 400px){
+      .btn.primary{ display:none; } /* keep header clean: logo + menu */
+      .menuBtn{ width:92px; }
     }
 
-    /* Drawer (menu) */
+    /* Drawer */
     .drawer{
       position:fixed; inset:0; z-index:80;
       display:none;
@@ -251,16 +265,6 @@
       color: rgba(201,164,74,.88);
     }
 
-    /* In brief strip (renamed from “Plain-language summary”) */
-    .strip{
-      border:1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.02);
-      border-radius: var(--r-lg);
-      padding: 20px 22px;
-    }
-    .strip ul{ margin: 12px 0 0 0; padding: 0 0 0 18px; }
-    .strip li{ margin: 8px 0; line-height:1.5; color: rgba(201,209,217,.86); }
-
     /* 3 pillars */
     .grid3{
       display:grid;
@@ -290,34 +294,15 @@
     }
     .card p{ color: rgba(201,209,217,.84); }
 
-    /* Who it’s for (renamed + tightened language) */
-    .grid4{
-      display:grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 14px;
-      margin-top: 18px;
-    }
-    @media (max-width: 980px){ .grid4{ grid-template-columns: 1fr 1fr; } }
-    @media (max-width: 640px){ .grid4{ grid-template-columns: 1fr; } }
-    .role{
+    /* Purpose strip (replaces In brief) */
+    .strip{
       border:1px solid rgba(255,255,255,.10);
       background: rgba(255,255,255,.02);
       border-radius: var(--r-lg);
-      padding: 18px 18px;
-    }
-    .role .icon{
-      width: 34px; height: 34px;
-      border-radius: 12px;
-      border:1px solid rgba(201,164,74,.35);
-      background: rgba(201,164,74,.08);
-      display:flex; align-items:center; justify-content:center;
-      margin-bottom: 12px;
-      font-family: var(--mono);
-      font-size: 12px;
-      color: rgba(245,242,234,.92);
+      padding: 20px 22px;
     }
 
-    /* Evidence flow diagram */
+    /* Evidence flow */
     .diagramWrap{
       margin-top: 18px;
       border:1px solid rgba(255,255,255,.10);
@@ -340,7 +325,7 @@
     .draw .line{ animation: drawLine 1.0s ease-out forwards; }
     @keyframes drawLine{ to{ stroke-dashoffset: 0; } }
 
-    /* Five steps module (overview version) */
+    /* Five steps */
     .stepStrip{
       margin-top: 18px;
       border:1px solid rgba(255,255,255,.10);
@@ -372,7 +357,6 @@
     }
     .stepTitle{ font-weight:600; margin-bottom:6px; }
     .stepShort{ margin:0; color: rgba(201,209,217,.78); font-size: 14px; line-height: 1.55; }
-
     .miniSample{
       margin-top: 12px;
       border:1px solid rgba(201,164,74,.22);
@@ -387,7 +371,7 @@
     }
     .miniSample .k{ color: rgba(201,164,74,.92); text-transform: uppercase; letter-spacing:.12em; font-size: 11px; }
 
-    /* Verify module */
+    /* Verify */
     .verify{
       border:1px solid rgba(201,164,74,.28);
       background: rgba(201,164,74,.06);
@@ -537,7 +521,6 @@
       border-top:1px solid rgba(255,255,255,.06);
     }
 
-    /* Motion */
     .reveal{ opacity:0; transform: translateY(10px); transition: opacity .55s ease, transform .55s ease; }
     .reveal.on{ opacity:1; transform: translateY(0); }
 
@@ -568,7 +551,6 @@
     </div>
   </header>
 
-  <!-- Drawer menu (single source of navigation) -->
   <div class="drawer" id="drawer" aria-hidden="true">
     <div class="drawerCard" role="dialog" aria-modal="true" aria-label="Menu">
       <div class="drawerHead">
@@ -590,7 +572,6 @@
   </div>
 
   <main class="wrap">
-    <!-- HERO -->
     <section style="padding-top: var(--s6);">
       <div class="read reveal">
         <div class="eyebrow">Neutral audit layer · Evidentiary records · Independent verification</div>
@@ -606,28 +587,14 @@
         </div>
 
         <div style="margin-top:18px; display:flex; gap:10px; flex-wrap:wrap;">
-          <a class="btn primary" href="#five">Five steps<span class="arr">→</span></a>
+          <a class="btn primary" href="#pillars">Record · Seal · Verify<span class="arr">→</span></a>
+          <a class="btn" href="#five">Five steps<span class="arr">→</span></a>
           <a class="btn" href="#verify60">Verify in 60 seconds<span class="arr">→</span></a>
         </div>
       </div>
     </section>
 
-    <!-- IN BRIEF -->
-    <section id="brief">
-      <div class="read reveal">
-        <h2>In brief</h2>
-        <div class="strip">
-          <p><b>CEYO creates audit-ready evidence at the moment an AI system produces an output.</b></p>
-          <ul>
-            <li>Operators define exactly what is recorded (policy-scoped capture).</li>
-            <li>Artifacts are canonicalized and sealed so tampering is detectable.</li>
-            <li>Independent reviewers verify integrity under constrained disclosure.</li>
-          </ul>
-        </div>
-      </div>
-    </section>
-
-    <!-- RECORD / SEAL / VERIFY -->
+    <!-- 3 pillars FIRST -->
     <section id="pillars">
       <div class="read reveal">
         <h2>Record · Seal · Verify</h2>
@@ -648,70 +615,19 @@
       </div>
     </section>
 
-    <!-- WHO IT SERVES (renamed) -->
-    <section id="serves">
+    <!-- Purpose (your wording) -->
+    <section id="purpose">
       <div class="read reveal">
-        <h2>Who it serves</h2>
-        <p class="muted">Designed for fast executive clarity while remaining credible to technical and security reviewers.</p>
-
-        <div class="grid4" aria-label="Stakeholders">
-          <div class="role">
-            <div class="icon">C</div>
-            <h3>Compliance & audit</h3>
-            <p class="muted">Audit-ready artifacts with explicit scope, identifiers, and versioning discipline.</p>
-          </div>
-          <div class="role">
-            <div class="icon">S</div>
-            <h3>Security</h3>
-            <p class="muted">Non-custodial key posture and deterministic tamper evidence.</p>
-          </div>
-          <div class="role">
-            <div class="icon">AI</div>
-            <h3>AI & platform</h3>
-            <p class="muted">Integrate as a layer — no rewrite of model weights or core pipelines.</p>
-          </div>
-          <div class="role">
-            <div class="icon">R</div>
-            <h3>Review boards</h3>
-            <p class="muted">Independent verification without default exposure of proprietary internals.</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- EVIDENCE FLOW -->
-    <section id="flow">
-      <div class="read reveal">
-        <h2>Evidence flow</h2>
-        <div class="diagramWrap reveal" id="diagramBox">
-          <svg class="diagram" viewBox="0 0 980 210" role="img" aria-label="Input to verification flow">
-            <path class="line" d="M80 86 C190 86, 190 86, 300 86 S 410 86, 520 86 S 630 86, 740 86 S 850 86, 920 86"/>
-            <circle class="node" cx="80"  cy="86" r="18"></circle>
-            <circle class="node" cx="300" cy="86" r="18"></circle>
-            <circle class="node" cx="520" cy="86" r="18"></circle>
-            <circle class="node" cx="740" cy="86" r="18"></circle>
-            <circle class="node" cx="920" cy="86" r="18"></circle>
-
-            <text class="lbl" x="80"  y="36" text-anchor="middle">INPUT</text>
-            <text class="lbl" x="300" y="36" text-anchor="middle">POLICY</text>
-            <text class="lbl" x="520" y="36" text-anchor="middle">CANONICALIZE</text>
-            <text class="lbl" x="740" y="36" text-anchor="middle">SEAL</text>
-            <text class="lbl" x="920" y="36" text-anchor="middle">ARTIFACT</text>
-
-            <text class="lbl" x="490" y="176" text-anchor="middle" style="fill: rgba(201,164,74,.88);">VERIFY</text>
-            <text class="lbl" x="490" y="196" text-anchor="middle" style="fill: rgba(201,209,217,.66); letter-spacing:.06em; text-transform:none; font-size: 12px;">
-              Recompute canonicalization · Recompute hash · Validate signature · Confirm policy alignment
-            </text>
-          </svg>
-
-          <p class="muted" style="margin-top:12px">
-            Verification confirms integrity and provenance under declared policy scope — not correctness of model output.
+        <h2>Purpose</h2>
+        <div class="strip">
+          <p class="muted" style="margin:0;">
+            Designed for fast executive clarity while remaining credible for technical and security reviewers.
           </p>
         </div>
       </div>
     </section>
 
-    <!-- FIVE STEPS (overview version) -->
+    <!-- Five steps -->
     <section id="five">
       <div class="read reveal">
         <h2>Five steps</h2>
@@ -765,7 +681,7 @@ signature_algorithm: "ECDSA-P256"
       </div>
     </section>
 
-    <!-- VERIFY IN 60 SECONDS (on overview, as requested) -->
+    <!-- Verify in 60 seconds -->
     <section id="verify60">
       <div class="read reveal">
         <h2>Verify in 60 seconds</h2>
@@ -824,15 +740,41 @@ signature_algorithm: "ECDSA-P256"
             It does not confirm output correctness, legality, or compliance conclusions.
           </p>
         </div>
+      </div>
+    </section>
 
-        <div style="margin-top:18px; display:flex; gap:10px; flex-wrap:wrap;">
-          <a class="btn primary" href="contact.html">Request a walkthrough<span class="arr">→</span></a>
-          <a class="btn" href="resources.html#sample-artifact">Sample artifacts<span class="arr">→</span></a>
+    <!-- Evidence flow LAST -->
+    <section id="flow">
+      <div class="read reveal">
+        <h2>Evidence flow</h2>
+        <div class="diagramWrap reveal" id="diagramBox">
+          <svg class="diagram" viewBox="0 0 980 210" role="img" aria-label="Input to verification flow">
+            <path class="line" d="M80 86 C190 86, 190 86, 300 86 S 410 86, 520 86 S 630 86, 740 86 S 850 86, 920 86"/>
+            <circle class="node" cx="80"  cy="86" r="18"></circle>
+            <circle class="node" cx="300" cy="86" r="18"></circle>
+            <circle class="node" cx="520" cy="86" r="18"></circle>
+            <circle class="node" cx="740" cy="86" r="18"></circle>
+            <circle class="node" cx="920" cy="86" r="18"></circle>
+
+            <text class="lbl" x="80"  y="36" text-anchor="middle">INPUT</text>
+            <text class="lbl" x="300" y="36" text-anchor="middle">POLICY</text>
+            <text class="lbl" x="520" y="36" text-anchor="middle">CANONICALIZE</text>
+            <text class="lbl" x="740" y="36" text-anchor="middle">SEAL</text>
+            <text class="lbl" x="920" y="36" text-anchor="middle">ARTIFACT</text>
+
+            <text class="lbl" x="490" y="176" text-anchor="middle" style="fill: rgba(201,164,74,.88);">VERIFY</text>
+            <text class="lbl" x="490" y="196" text-anchor="middle" style="fill: rgba(201,209,217,.66); letter-spacing:.06em; text-transform:none; font-size: 12px;">
+              Recompute canonicalization · Recompute hash · Validate signature · Confirm policy alignment
+            </text>
+          </svg>
+
+          <p class="muted" style="margin-top:12px">
+            Verification confirms integrity and provenance under declared policy scope — not correctness of model output.
+          </p>
         </div>
       </div>
     </section>
 
-    <!-- FOOTER -->
     <footer id="footer">
       <div class="footGrid reveal">
         <div class="footCol">
@@ -873,7 +815,6 @@ signature_algorithm: "ECDSA-P256"
   </main>
 
   <script>
-    // Year
     document.getElementById('year').textContent = new Date().getFullYear();
 
     // Drawer menu
@@ -887,7 +828,7 @@ signature_algorithm: "ECDSA-P256"
     drawer.addEventListener('click', (e)=>{ if(e.target===drawer) closeDrawer(); });
     window.addEventListener('keydown', (e)=>{ if(e.key==='Escape' && drawer.classList.contains('open')) closeDrawer(); });
 
-    // Motion rules: reveal + diagram draw
+    // Reveal + diagram draw
     const prefersReduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const revealEls = Array.from(document.querySelectorAll('.reveal'));
 
@@ -907,64 +848,61 @@ signature_algorithm: "ECDSA-P256"
       document.getElementById('diagramBox').classList.add('draw');
     }
 
-    // Verify demo logic (format + required fields)
+    // Verify demo logic
     const statusPill = document.getElementById('statusPill');
     const artifactInput = document.getElementById('artifactInput');
     const runVerify = document.getElementById('runVerify');
     const loadExample = document.getElementById('loadExample');
     const clearBox = document.getElementById('clearBox');
 
-    if(statusPill && artifactInput && runVerify && loadExample && clearBox){
-      const required = [
-        "artifact_id","policy_id","policy_version","canonicalization",
-        "hash_algorithm","signature_algorithm","digest","signature","public_key_reference"
-      ];
-      function setStatus(kind, text){
-        statusPill.classList.remove('pass','fail');
-        if(kind) statusPill.classList.add(kind);
-        statusPill.textContent = text;
-      }
-      runVerify.addEventListener('click', ()=>{
-        try{
-          const obj = JSON.parse(artifactInput.value);
-          const missing = required.filter(k => !(k in obj));
-          if(missing.length){ setStatus('fail', 'Status · missing fields'); return; }
-          if(String(obj.canonicalization || '').toUpperCase().indexOf('RFC') === -1){
-            setStatus('fail', 'Status · canonicalization mismatch'); return;
-          }
-          setStatus('pass', 'Status · format OK');
-        } catch(e){
-          setStatus('fail', 'Status · invalid JSON');
-        }
-      });
-      loadExample.addEventListener('click', ()=>{
-        artifactInput.value = JSON.stringify({
-          artifact_id: "ART-EXAMPLE-001",
-          policy_id: "POL-001",
-          policy_version: "V1",
-          policy_hash: "…",
-          canonicalization: "RFC8785",
-          hash_algorithm: "SHA-256",
-          signature_algorithm: "ECDSA-P256",
-          digest: "…",
-          signature: "…",
-          public_key_reference: "KMS:key/…",
-          timestamp_utc: "2026-02-19T00:00:00Z"
-        }, null, 2);
-        setStatus('', 'Status · waiting');
-      });
-      clearBox.addEventListener('click', ()=>{
-        artifactInput.value = "";
-        setStatus('', 'Status · waiting');
-      });
+    const required = [
+      "artifact_id","policy_id","policy_version","canonicalization",
+      "hash_algorithm","signature_algorithm","digest","signature","public_key_reference"
+    ];
+
+    function setStatus(kind, text){
+      statusPill.classList.remove('pass','fail');
+      if(kind) statusPill.classList.add(kind);
+      statusPill.textContent = text;
     }
 
-    /* Neuron field + atom ring behavior:
-       - Ambient neurons
-       - Converge into ring through content
-       - Burst near flow section
-       - Re-converge by footer
-    */
+    runVerify.addEventListener('click', ()=>{
+      try{
+        const obj = JSON.parse(artifactInput.value);
+        const missing = required.filter(k => !(k in obj));
+        if(missing.length){ setStatus('fail', 'Status · missing fields'); return; }
+        if(String(obj.canonicalization || '').toUpperCase().indexOf('RFC') === -1){
+          setStatus('fail', 'Status · canonicalization mismatch'); return;
+        }
+        setStatus('pass', 'Status · format OK');
+      } catch(e){
+        setStatus('fail', 'Status · invalid JSON');
+      }
+    });
+
+    loadExample.addEventListener('click', ()=>{
+      artifactInput.value = JSON.stringify({
+        artifact_id: "ART-EXAMPLE-001",
+        policy_id: "POL-001",
+        policy_version: "V1",
+        policy_hash: "…",
+        canonicalization: "RFC8785",
+        hash_algorithm: "SHA-256",
+        signature_algorithm: "ECDSA-P256",
+        digest: "…",
+        signature: "…",
+        public_key_reference: "KMS:key/…",
+        timestamp_utc: "2026-02-19T00:00:00Z"
+      }, null, 2);
+      setStatus('', 'Status · waiting');
+    });
+
+    clearBox.addEventListener('click', ()=>{
+      artifactInput.value = "";
+      setStatus('', 'Status · waiting');
+    });
+
+    /* Neuron field + atom ring + burst */
     (function(){
       const c = document.getElementById('neurons');
       const ctx = c.getContext('2d', {alpha:true});
@@ -1004,7 +942,6 @@ signature_algorithm: "ECDSA-P256"
       }
 
       const anchors = {
-        brief: document.getElementById('brief'),
         pillars: document.getElementById('pillars'),
         flow: document.getElementById('flow'),
         footer: document.getElementById('footer')
@@ -1023,9 +960,8 @@ signature_algorithm: "ECDSA-P256"
       const state = { converge:0, burst:0, focus:0, coreAlpha:0 };
 
       function tickState(){
-        const p1 = inRangeProgress(anchors.brief, 0.80, 1.10);
         const p2 = inRangeProgress(anchors.pillars, 0.70, 1.05);
-        const baseConverge = Math.max(p1*0.65, p2);
+        const baseConverge = p2;
 
         const burstP = inRangeProgress(anchors.flow, 0.58, 0.95);
         const burstOut = Math.sin(burstP * Math.PI);
