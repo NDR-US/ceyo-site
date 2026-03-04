@@ -1,0 +1,754 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+  <title>CEYO — Use Cases</title>
+  <meta name="description" content="Where verification matters: regulated decisions, safety-critical autonomy, high-stakes recommendations, and public sector oversight. CEYO produces deterministic, integrity-sealed artifacts for independent verification under policy scope."/>
+  <meta name="theme-color" content="#0B0F14"/>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --ink:#0B0F14;
+      --textOnInk:#C9D1D9;
+
+      --accent:#3A320C;
+      --accent2:#C9A44A;
+
+      --maxW:1160px;
+      --readW:740px;
+
+      --r-lg:18px;
+
+      --s1:8px;  --s2:16px; --s3:24px; --s4:32px; --s5:48px; --s6:64px; --s7:96px;
+
+      --lh:1.65;
+      --shadow:0 10px 30px rgba(0,0,0,.25);
+      --shadow2:0 18px 60px rgba(0,0,0,.35);
+
+      --mono:'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --ui:'Inter', system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+
+      --navH:72px;
+    }
+
+    *{box-sizing:border-box}
+    html{background:var(--ink);scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family:var(--ui);
+      color:var(--textOnInk);
+      background:var(--ink);
+      -webkit-text-size-adjust:100%;
+      overflow-x:hidden;
+    }
+    a{color:inherit;text-decoration:none}
+    button{font:inherit}
+
+    /* Anchor offset for sticky header */
+    [id]{ scroll-margin-top: calc(var(--navH) + 24px); }
+
+    /* Background (cohesive, distinct: subtle “map” bands + warm focus) */
+    .bg{
+      position:fixed; inset:0; pointer-events:none; z-index:0;
+      background:
+        radial-gradient(900px 520px at 42% 8%, rgba(58,50,12,.20), transparent 62%),
+        radial-gradient(820px 520px at 86% 26%, rgba(201,164,74,.08), transparent 64%),
+        linear-gradient(180deg, #0B0F14 0%, #0A0D12 42%, #0B0F14 100%);
+    }
+    .band{
+      position:fixed; inset:-20% -20%; z-index:0; pointer-events:none;
+      opacity:.22;
+      background:
+        repeating-linear-gradient(
+          135deg,
+          rgba(255,255,255,.06) 0px,
+          rgba(255,255,255,.06) 1px,
+          transparent 1px,
+          transparent 54px
+        );
+      mask-image: radial-gradient(720px 520px at 50% 18%, black 55%, transparent 100%);
+    }
+
+    .wrap{ position:relative; z-index:1; max-width:var(--maxW); margin:0 auto; padding:0 var(--s4); }
+    @media (max-width: 640px){ .wrap{ padding:0 18px; } }
+
+    /* Header (MENU-ONLY pattern — consistent across pages) */
+    header.site{
+      position:sticky; top:0; z-index:50;
+      backdrop-filter: blur(10px);
+      background: rgba(11,15,20,.72);
+      border-bottom:1px solid rgba(255,255,255,.06);
+    }
+    .nav{
+      height: calc(var(--navH) + env(safe-area-inset-top));
+      padding-top: env(safe-area-inset-top);
+      display:flex; align-items:center; justify-content:space-between; gap:var(--s3);
+    }
+    .logo{ display:flex; align-items:center; gap:10px; min-width: 180px; font-weight:600; letter-spacing:-.01em; }
+    .logo .mark{
+      display:inline-flex; align-items:center; gap:10px;
+      padding:10px 12px; border-radius:999px;
+      border:1px solid rgba(255,255,255,.08);
+      background: rgba(255,255,255,.02);
+    }
+    .logo .dot{
+      width:8px; height:8px; border-radius:50%;
+      background: var(--accent2);
+      box-shadow: 0 0 0 4px rgba(201,164,74,.12);
+    }
+
+    .actions{
+      display:flex; align-items:center; gap:10px;
+      justify-content:flex-end;
+      min-width: 240px;
+    }
+    .btn{
+      height:48px; padding:0 18px; border-radius:999px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.02);
+      color: rgba(201,209,217,.98);
+      display:inline-flex; align-items:center; justify-content:center;
+      font-size:14px;
+      transition: transform .18s ease, border-color .18s ease, background .18s ease;
+      white-space:nowrap;
+    }
+    .btn:hover{ transform: translateY(-1px); border-color: rgba(201,164,74,.35); background: rgba(255,255,255,.04); }
+    .btn.primary{
+      border-color: rgba(201,164,74,.50);
+      background: rgba(201,164,74,.10);
+      color: rgba(245,242,234,.96);
+    }
+    .btn.primary:hover{ background: rgba(201,164,74,.16); }
+    .btn .arr{ display:inline-block; margin-left:10px; transition: transform .16s ease; }
+    .btn:hover .arr{ transform: translateX(3px); }
+
+    .menuBtn{
+      height:48px; width:48px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.02);
+      color: rgba(201,209,217,.95);
+      display:inline-flex; align-items:center; justify-content:center;
+      cursor:pointer;
+      transition: transform .16s ease, border-color .16s ease, background .16s ease;
+    }
+    .menuBtn:hover{ transform: translateY(-1px); border-color: rgba(201,164,74,.35); background: rgba(255,255,255,.04); }
+
+    /* Keep header clean on small screens */
+    @media (max-width: 860px){
+      .actions .btn.secondary{ display:none; }
+      .logo{ min-width: 150px; }
+    }
+    @media (max-width: 520px){
+      .actions .btn{ padding:0 14px; height:46px; }
+      .menuBtn{ height:46px; width:46px; }
+      .logo .mark{ padding:9px 10px; }
+    }
+
+    /* Drawer menu */
+    .drawer{
+      position:fixed; inset:0; z-index:80;
+      display:none;
+      background: rgba(11,15,20,.72);
+      backdrop-filter: blur(10px);
+      padding: calc(env(safe-area-inset-top) + 12px) 18px 18px;
+    }
+    .drawer.open{ display:block; }
+    .drawerCard{
+      max-width: 720px; margin: 0 auto;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.03);
+      border-radius: var(--r-lg);
+      box-shadow: var(--shadow2);
+      overflow:hidden;
+    }
+    .drawerHead{
+      display:flex; align-items:center; justify-content:space-between;
+      padding: 14px 14px;
+      border-bottom:1px solid rgba(255,255,255,.08);
+    }
+    .drawerHead .t{
+      font-family: var(--mono);
+      font-size:12px; letter-spacing:.18em;
+      text-transform:uppercase; color: rgba(201,209,217,.82);
+    }
+    .close{
+      height:44px; padding:0 14px; border-radius:999px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.02);
+      color: rgba(201,209,217,.92);
+      cursor:pointer;
+    }
+    .drawerGrid{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      padding: 10px;
+    }
+    @media (max-width: 720px){ .drawerGrid{ grid-template-columns: 1fr; } }
+    .drawerGrid a{
+      padding: 14px 14px; border-radius: 14px;
+      border:1px solid rgba(255,255,255,.06);
+      background: rgba(255,255,255,.02);
+      font-size: 15px;
+      transition: transform .18s ease, border-color .18s ease;
+    }
+    .drawerGrid a:hover{ transform: translateY(-1px); border-color: rgba(201,164,74,.28); }
+
+    /* Typography */
+    .read{ max-width: var(--readW); }
+    p{ margin: 0 0 14px 0; line-height: var(--lh); }
+    .muted{ color: rgba(201,209,217,.78); }
+
+    main{ padding: var(--s6) 0 var(--s7); }
+    section{ padding: var(--s7) 0; border-top:1px solid rgba(255,255,255,.06); }
+    section:first-of-type{ border-top:none; padding-top: var(--s6); }
+
+    .eyebrow{
+      font-family: var(--mono);
+      font-size: 12px; letter-spacing: .18em;
+      text-transform: uppercase;
+      color: rgba(201,164,74,.92);
+      margin-bottom: 12px;
+    }
+    h1{ font-size: 46px; line-height: 1.15; letter-spacing: -0.02em; margin: 0 0 14px 0; font-weight: 600; }
+    h2{ font-size: 30px; line-height: 1.20; letter-spacing: -0.01em; margin: 0 0 12px 0; font-weight: 600; }
+    h3{ font-size: 20px; line-height: 1.25; margin: 0 0 10px 0; font-weight: 600; }
+    @media (max-width: 640px){
+      body{ font-size: 16.5px; }
+      h1{ font-size: 32px; }
+      h2{ font-size: 24px; }
+      h3{ font-size: 19px; }
+    }
+
+    /* Scenario-led layout (distinct) */
+    .scenarioStack{ margin-top: 18px; display:flex; flex-direction:column; gap: 14px; }
+
+    .scenario{
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.02);
+      border-radius: var(--r-lg);
+      overflow:hidden;
+    }
+    .scenarioHead{
+      padding: 18px 18px;
+      border-bottom:1px solid rgba(255,255,255,.06);
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      gap: 14px;
+      flex-wrap:wrap;
+    }
+    .tagRow{
+      display:flex; gap:10px; flex-wrap:wrap; align-items:center;
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing:.12em;
+      text-transform: uppercase;
+      color: rgba(201,209,217,.70);
+    }
+    .pill{
+      display:inline-flex; align-items:center; gap:8px;
+      padding: 8px 10px;
+      border-radius: 999px;
+      border:1px solid rgba(201,164,74,.26);
+      background: rgba(201,164,74,.08);
+      color: rgba(245,242,234,.92);
+      white-space:nowrap;
+    }
+    .scenarioBody{
+      padding: 18px 18px;
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      align-items:start;
+    }
+    @media (max-width: 980px){ .scenarioBody{ grid-template-columns: 1fr; } }
+
+    .panel{
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(11,15,20,.55);
+      border-radius: var(--r-lg);
+      padding: 16px 16px;
+    }
+    .panel .k{
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing:.14em;
+      text-transform: uppercase;
+      color: rgba(201,164,74,.86);
+      margin-bottom: 10px;
+    }
+    .panel ul{ margin: 0; padding: 0 0 0 18px; }
+    .panel li{ margin: 8px 0; color: rgba(201,209,217,.84); line-height: 1.55; }
+
+    /* “Who verifies” strip (scenario signature) */
+    .verifies{
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top:1px solid rgba(255,255,255,.08);
+      display:flex;
+      gap: 10px;
+      flex-wrap:wrap;
+      align-items:center;
+      color: rgba(201,209,217,.80);
+      font-size: 14px;
+    }
+    .verifies b{ color: rgba(245,242,234,.92); font-weight:600; }
+
+    /* Small “flow” line inside each scenario */
+    .miniFlow{
+      margin-top: 12px;
+      border:1px solid rgba(201,164,74,.20);
+      background: rgba(11,15,20,.55);
+      border-radius: var(--r-lg);
+      padding: 12px 12px;
+      overflow:hidden;
+    }
+    .miniFlow svg{ width:100%; height:auto; display:block; }
+    .mnode{ fill: rgba(11,15,20,.82); stroke: rgba(255,255,255,.14); stroke-width:1.2; }
+    .mlbl{ fill: rgba(201,209,217,.88); font-family: var(--mono); font-size: 11px; letter-spacing:.10em; text-transform: uppercase; }
+    .mline{ fill:none; stroke: rgba(201,164,74,.55); stroke-width: 2; stroke-linecap: round; }
+
+    /* Footer */
+    footer{ border-top:1px solid rgba(255,255,255,.06); padding: var(--s7) 0 var(--s6); }
+    .footGrid{
+      display:grid;
+      grid-template-columns: 1.2fr 1fr 1fr 1fr;
+      gap: 14px;
+      margin-bottom: 22px;
+    }
+    @media (max-width: 980px){ .footGrid{ grid-template-columns: 1fr 1fr; } }
+    @media (max-width: 640px){ .footGrid{ grid-template-columns: 1fr; } }
+    .footCol{
+      border:1px solid rgba(255,255,255,.08);
+      background: rgba(255,255,255,.02);
+      border-radius: var(--r-lg);
+      padding: 18px 18px;
+    }
+    .footCol .t{
+      font-family: var(--mono);
+      font-size: 12px;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: rgba(201,164,74,.86);
+      margin-bottom: 10px;
+    }
+    .footCol a{
+      display:block;
+      padding: 10px 10px;
+      border-radius: 12px;
+      border:1px solid transparent;
+      color: rgba(201,209,217,.84);
+      transition: background .18s ease, border-color .18s ease;
+    }
+    .footCol a:hover{ background: rgba(255,255,255,.03); border-color: rgba(255,255,255,.06); }
+    .footBottom{
+      display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap;
+      font-family: var(--mono);
+      font-size: 12px;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: rgba(201,209,217,.62);
+      padding-top: 18px;
+      border-top:1px solid rgba(255,255,255,.06);
+    }
+
+    /* Motion: fade-up reveal only */
+    .reveal{ opacity:0; transform: translateY(10px); transition: opacity .55s ease, transform .55s ease; }
+    .reveal.on{ opacity:1; transform: translateY(0); }
+
+    @media (prefers-reduced-motion: reduce){
+      html{scroll-behavior:auto;}
+      .reveal{ opacity:1; transform:none; transition:none; }
+      .btn, .menuBtn, .drawerGrid a, .footCol a{ transition:none; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="bg" aria-hidden="true"></div>
+  <div class="band" aria-hidden="true"></div>
+
+  <header class="site">
+    <div class="wrap nav">
+      <a class="logo" href="index.html" aria-label="CEYO Home">
+        <span class="mark"><span class="dot" aria-hidden="true"></span><span>CEYO</span></span>
+      </a>
+
+      <div class="actions" aria-label="Actions">
+        <a class="btn secondary" href="resources.html#sample-artifact">View sample artifact<span class="arr">→</span></a>
+        <a class="btn primary" href="contact.html">Request walkthrough<span class="arr">→</span></a>
+        <button class="menuBtn" id="openMenu" aria-label="Open menu" type="button">☰</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- MENU DRAWER (same list across the site) -->
+  <div class="drawer" id="drawer" aria-hidden="true">
+    <div class="drawerCard" role="dialog" aria-modal="true" aria-label="Menu">
+      <div class="drawerHead">
+        <div class="t">Menu</div>
+        <button class="close" id="closeMenu" type="button">Close</button>
+      </div>
+      <div class="drawerGrid">
+        <a href="index.html">Overview</a>
+        <a href="how.html">How It Works</a>
+        <a href="platform.html">Platform</a>
+        <a href="trust.html">Trust & Verification</a>
+        <a href="compliance.html">Compliance</a>
+        <a href="integrations.html">Integrations</a>
+        <a href="use-cases.html">Use Cases</a>
+        <a href="security.html">Security</a>
+        <a href="resources.html">Resources</a>
+        <a href="company.html">Company</a>
+        <a href="contact.html">Contact</a>
+      </div>
+    </div>
+  </div>
+
+  <main class="wrap">
+    <!-- HERO -->
+    <section style="padding-top: var(--s6);">
+      <div class="read reveal">
+        <div class="eyebrow">Use cases · Oversight workflows · Where verification matters</div>
+        <h1>When outcomes are disputed, institutions need records.</h1>
+        <p class="muted">
+          CEYO is built for environments where post-hoc reconstruction from logs is not enough.
+          These scenarios show how <b style="color:rgba(245,242,234,.92)">record → seal → verify</b> supports oversight without default exposure of proprietary internals.
+        </p>
+
+        <div style="margin-top:18px; display:flex; gap:10px; flex-wrap:wrap;">
+          <a class="btn primary" href="#scenarios">View scenarios<span class="arr">→</span></a>
+          <a class="btn" href="trust.html#verification-spec">Verification steps<span class="arr">→</span></a>
+        </div>
+      </div>
+    </section>
+
+    <!-- SCENARIOS (dominant module) -->
+    <section id="scenarios">
+      <div class="read reveal">
+        <h2>Scenarios</h2>
+        <p class="muted">Each scenario is described in operational terms first, then mapped to what CEYO records and what reviewers can verify.</p>
+
+        <div class="scenarioStack">
+
+          <!-- 01 -->
+          <article class="scenario reveal" aria-label="Regulated decisions">
+            <div class="scenarioHead">
+              <div>
+                <h3 style="margin:0 0 6px 0;">Regulated decisions</h3>
+                <div class="tagRow">
+                  <span class="pill">Audit review</span>
+                  <span>disputes · compliance inquiry · post-hoc verification</span>
+                </div>
+              </div>
+              <div class="tagRow" aria-label="Outcome posture">
+                <span class="pill">Outcome</span>
+                <span>Integrity + provenance</span>
+              </div>
+            </div>
+
+            <div class="scenarioBody">
+              <div class="panel">
+                <div class="k">Situation</div>
+                <p class="muted">A decision is later questioned (policy complaint, regulatory inquiry, internal audit). Logs exist, but verification requires a stable record with explicit scope.</p>
+
+                <div class="verifies">
+                  <span><b>Who verifies:</b> compliance teams, internal audit, external reviewers</span>
+                </div>
+
+                <div class="miniFlow" aria-label="Mini flow">
+                  <svg viewBox="0 0 860 110" role="img" aria-label="Record to verification mini flow">
+                    <path class="mline" d="M70 56 C170 56, 170 56, 270 56 S 370 56, 470 56 S 570 56, 670 56 S 770 56, 820 56"/>
+                    <circle class="mnode" cx="70" cy="56" r="14"></circle>
+                    <circle class="mnode" cx="270" cy="56" r="14"></circle>
+                    <circle class="mnode" cx="470" cy="56" r="14"></circle>
+                    <circle class="mnode" cx="670" cy="56" r="14"></circle>
+                    <circle class="mnode" cx="820" cy="56" r="14"></circle>
+                    <text class="mlbl" x="70" y="26" text-anchor="middle">INPUT</text>
+                    <text class="mlbl" x="270" y="26" text-anchor="middle">POLICY</text>
+                    <text class="mlbl" x="470" y="26" text-anchor="middle">CANON</text>
+                    <text class="mlbl" x="670" y="26" text-anchor="middle">SEAL</text>
+                    <text class="mlbl" x="820" y="26" text-anchor="middle">VERIFY</text>
+                  </svg>
+                </div>
+              </div>
+
+              <div class="panel">
+                <div class="k">What CEYO records</div>
+                <ul>
+                  <li>Policy-scoped inputs and context required for review (no implicit expansion).</li>
+                  <li>Policy identifier + version (and policy hash where used) to bind scope.</li>
+                  <li>Canonical payload + digest + signature for tamper-evidence.</li>
+                </ul>
+                <div class="k" style="margin-top:14px;">What verification confirms</div>
+                <ul>
+                  <li>Artifact integrity (not modified since sealing).</li>
+                  <li>Provenance (signature valid under declared key reference).</li>
+                  <li>Scope boundary (policy alignment is checkable).</li>
+                </ul>
+              </div>
+            </div>
+          </article>
+
+          <!-- 02 -->
+          <article class="scenario reveal" aria-label="Safety-critical autonomy">
+            <div class="scenarioHead">
+              <div>
+                <h3 style="margin:0 0 6px 0;">Safety-critical autonomy</h3>
+                <div class="tagRow">
+                  <span class="pill">After-action review</span>
+                  <span>incident reconstruction · safety boards · liability</span>
+                </div>
+              </div>
+              <div class="tagRow">
+                <span class="pill">Posture</span>
+                <span>Fail-open continuity</span>
+              </div>
+            </div>
+
+            <div class="scenarioBody">
+              <div class="panel">
+                <div class="k">Situation</div>
+                <p class="muted">A safety incident requires board review. The question is not “what logs say,” but what can be independently validated about the recorded context.</p>
+
+                <div class="verifies">
+                  <span><b>Who verifies:</b> safety boards, incident response, independent investigators</span>
+                </div>
+
+                <div class="miniFlow">
+                  <svg viewBox="0 0 860 110" role="img" aria-label="Mini flow with fail-open">
+                    <path class="mline" d="M70 56 C170 56, 170 56, 270 56 S 370 56, 470 56 S 570 56, 670 56 S 770 56, 820 56"/>
+                    <circle class="mnode" cx="70" cy="56" r="14"></circle>
+                    <circle class="mnode" cx="270" cy="56" r="14"></circle>
+                    <circle class="mnode" cx="470" cy="56" r="14"></circle>
+                    <circle class="mnode" cx="670" cy="56" r="14"></circle>
+                    <circle class="mnode" cx="820" cy="56" r="14"></circle>
+                    <text class="mlbl" x="70" y="26" text-anchor="middle">EVENT</text>
+                    <text class="mlbl" x="270" y="26" text-anchor="middle">CAPTURE</text>
+                    <text class="mlbl" x="470" y="26" text-anchor="middle">CANON</text>
+                    <text class="mlbl" x="670" y="26" text-anchor="middle">SEAL</text>
+                    <text class="mlbl" x="820" y="26" text-anchor="middle">REVIEW</text>
+                  </svg>
+                </div>
+              </div>
+
+              <div class="panel">
+                <div class="k">What CEYO records</div>
+                <ul>
+                  <li>Policy-scoped event inputs and bounded runtime context.</li>
+                  <li>Time anchoring (timestamp) within the artifact wrapper.</li>
+                  <li>Sealing status (sealed/unsealed) without blocking inference by default.</li>
+                </ul>
+                <div class="k" style="margin-top:14px;">What verification confirms</div>
+                <ul>
+                  <li>Integrity and provenance where sealing succeeded.</li>
+                  <li>Clear, reportable exceptions where sealing did not succeed.</li>
+                  <li>Scope boundaries enforced by policy version references.</li>
+                </ul>
+              </div>
+            </div>
+          </article>
+
+          <!-- 03 -->
+          <article class="scenario reveal" aria-label="High-stakes recommendations">
+            <div class="scenarioHead">
+              <div>
+                <h3 style="margin:0 0 6px 0;">High-stakes recommendations</h3>
+                <div class="tagRow">
+                  <span class="pill">Accountability</span>
+                  <span>appeals · oversight · contested outcomes</span>
+                </div>
+              </div>
+              <div class="tagRow">
+                <span class="pill">Disclosure</span>
+                <span>tiered review</span>
+              </div>
+            </div>
+
+            <div class="scenarioBody">
+              <div class="panel">
+                <div class="k">Situation</div>
+                <p class="muted">A recommendation influences a consequential decision. Later, an appeal or review challenges what factors were in scope at the time of inference.</p>
+
+                <div class="verifies">
+                  <span><b>Who verifies:</b> internal review boards, compliance, authorized third parties</span>
+                </div>
+
+                <div class="miniFlow">
+                  <svg viewBox="0 0 860 110" role="img" aria-label="Mini flow with tiers">
+                    <path class="mline" d="M70 56 C170 56, 170 56, 270 56 S 370 56, 470 56 S 570 56, 670 56 S 770 56, 820 56"/>
+                    <circle class="mnode" cx="70" cy="56" r="14"></circle>
+                    <circle class="mnode" cx="270" cy="56" r="14"></circle>
+                    <circle class="mnode" cx="470" cy="56" r="14"></circle>
+                    <circle class="mnode" cx="670" cy="56" r="14"></circle>
+                    <circle class="mnode" cx="820" cy="56" r="14"></circle>
+                    <text class="mlbl" x="70" y="26" text-anchor="middle">INPUT</text>
+                    <text class="mlbl" x="270" y="26" text-anchor="middle">TIERS</text>
+                    <text class="mlbl" x="470" y="26" text-anchor="middle">SEAL</text>
+                    <text class="mlbl" x="670" y="26" text-anchor="middle">DISCLOSE</text>
+                    <text class="mlbl" x="820" y="26" text-anchor="middle">VERIFY</text>
+                  </svg>
+                </div>
+              </div>
+
+              <div class="panel">
+                <div class="k">What CEYO records</div>
+                <ul>
+                  <li>Policy-defined factors (captured, excluded, or masked) with tier designation.</li>
+                  <li>Canonical structure to support recomputation without interpretive variance.</li>
+                  <li>Integrity fields for tamper evidence and provenance checks.</li>
+                </ul>
+                <div class="k" style="margin-top:14px;">What verification confirms</div>
+                <ul>
+                  <li>Artifact has not been modified since sealing.</li>
+                  <li>Artifact originated from the declared source under the declared key reference.</li>
+                  <li>Capture scope is bounded by recorded policy identifiers.</li>
+                </ul>
+              </div>
+            </div>
+          </article>
+
+          <!-- 04 -->
+          <article class="scenario reveal" aria-label="Public sector oversight">
+            <div class="scenarioHead">
+              <div>
+                <h3 style="margin:0 0 6px 0;">Public sector oversight</h3>
+                <div class="tagRow">
+                  <span class="pill">Institutional review</span>
+                  <span>governance boards · inspectors · formal proceedings</span>
+                </div>
+              </div>
+              <div class="tagRow">
+                <span class="pill">Boundary</span>
+                <span>records, not judgments</span>
+              </div>
+            </div>
+
+            <div class="scenarioBody">
+              <div class="panel">
+                <div class="k">Situation</div>
+                <p class="muted">A reviewer needs a defensible record without forcing disclosure of proprietary system internals. Oversight requires verifiability under constrained disclosure.</p>
+
+                <div class="verifies">
+                  <span><b>Who verifies:</b> authorized institutions, inspectors, independent reviewers</span>
+                </div>
+
+                <div class="miniFlow">
+                  <svg viewBox="0 0 860 110" role="img" aria-label="Mini flow for oversight">
+                    <path class="mline" d="M70 56 C170 56, 170 56, 270 56 S 370 56, 470 56 S 570 56, 670 56 S 770 56, 820 56"/>
+                    <circle class="mnode" cx="70" cy="56" r="14"></circle>
+                    <circle class="mnode" cx="270" cy="56" r="14"></circle>
+                    <circle class="mnode" cx="470" cy="56" r="14"></circle>
+                    <circle class="mnode" cx="670" cy="56" r="14"></circle>
+                    <circle class="mnode" cx="820" cy="56" r="14"></circle>
+                    <text class="mlbl" x="70" y="26" text-anchor="middle">CAPTURE</text>
+                    <text class="mlbl" x="270" y="26" text-anchor="middle">POLICY</text>
+                    <text class="mlbl" x="470" y="26" text-anchor="middle">SEAL</text>
+                    <text class="mlbl" x="670" y="26" text-anchor="middle">TIER</text>
+                    <text class="mlbl" x="820" y="26" text-anchor="middle">REVIEW</text>
+                  </svg>
+                </div>
+              </div>
+
+              <div class="panel">
+                <div class="k">What CEYO records</div>
+                <ul>
+                  <li>Policy-scoped artifacts that can be disclosed under tiered access.</li>
+                  <li>Stable schema + canonicalization version for future verification.</li>
+                  <li>Integrity sealing to support formal review workflows.</li>
+                </ul>
+                <div class="k" style="margin-top:14px;">What verification confirms</div>
+                <ul>
+                  <li>Integrity and provenance under the declared key custody framework.</li>
+                  <li>Policy alignment (scope boundary) as recorded at capture time.</li>
+                  <li>Reportable integrity exceptions on verification failure.</li>
+                </ul>
+              </div>
+            </div>
+          </article>
+
+        </div>
+
+        <div style="margin-top:18px; display:flex; gap:10px; flex-wrap:wrap;">
+          <a class="btn primary" href="contact.html">Request a walkthrough<span class="arr">→</span></a>
+          <a class="btn" href="resources.html#sample-artifact">View public samples<span class="arr">→</span></a>
+        </div>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer id="footer">
+      <div class="footGrid reveal">
+        <div class="footCol">
+          <div class="t">Product</div>
+          <a href="index.html">Overview</a>
+          <a href="how.html">How It Works</a>
+          <a href="platform.html">Platform</a>
+          <a href="integrations.html">Integrations</a>
+        </div>
+        <div class="footCol">
+          <div class="t">Trust</div>
+          <a href="trust.html">Trust Model</a>
+          <a href="security.html">Security</a>
+          <a href="trust.html#verification-spec">Verification Spec</a>
+          <a href="resources.html#library">Resources</a>
+        </div>
+        <div class="footCol">
+          <div class="t">Resources</div>
+          <a href="resources.html">Library</a>
+          <a href="resources.html#sample-artifact">Sample Artifacts</a>
+          <a href="resources.html#glossary">Glossary</a>
+          <a href="resources.html#faq">FAQs</a>
+        </div>
+        <div class="footCol">
+          <div class="t">Legal</div>
+          <a href="privacy.html">Privacy</a>
+          <a href="terms.html">Terms</a>
+          <a href="vdp.html">Security Disclosure</a>
+          <a href="ethical.html">Responsible Use</a>
+        </div>
+      </div>
+
+      <div class="footBottom reveal">
+        <div>© <span id="year"></span> CEYO. All rights reserved.</div>
+        <div><a href="vdp.html">Vulnerability Disclosure</a></div>
+      </div>
+    </footer>
+  </main>
+
+  <script>
+    // Year
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Menu drawer (consistent)
+    const drawer = document.getElementById('drawer');
+    const openMenu = document.getElementById('openMenu');
+    const closeMenu = document.getElementById('closeMenu');
+    function openDrawer(){ drawer.classList.add('open'); drawer.setAttribute('aria-hidden','false'); document.body.style.overflow='hidden'; }
+    function closeDrawer(){ drawer.classList.remove('open'); drawer.setAttribute('aria-hidden','true'); document.body.style.overflow=''; }
+    if(openMenu) openMenu.addEventListener('click', openDrawer);
+    if(closeMenu) closeMenu.addEventListener('click', closeDrawer);
+    drawer.addEventListener('click', (e)=>{ if(e.target===drawer) closeDrawer(); });
+    window.addEventListener('keydown', (e)=>{ if(e.key==='Escape' && drawer.classList.contains('open')) closeDrawer(); });
+
+    // Reveal
+    const prefersReduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const revealEls = Array.from(document.querySelectorAll('.reveal'));
+    if(!prefersReduce){
+      const io = new IntersectionObserver((entries)=>{
+        entries.forEach(en=>{ if(en.isIntersecting) en.target.classList.add('on'); });
+      }, {threshold: 0.12});
+      revealEls.forEach(el=>io.observe(el));
+    } else {
+      revealEls.forEach(el=>el.classList.add('on'));
+    }
+  </script>
+</body>
+</html>
