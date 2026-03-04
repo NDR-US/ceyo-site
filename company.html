@@ -4,7 +4,7 @@
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
   <title>CEYO — Company</title>
-  <meta name="description" content="CEYO is evidentiary infrastructure: deterministic, integrity-sealed artifacts for independent verification under explicit policy scope and constrained disclosure."/>
+  <meta name="description" content="CEYO builds evidentiary infrastructure for AI inference: deterministic, integrity-sealed artifacts for independent verification under constrained disclosure."/>
   <meta name="theme-color" content="#0B0F14"/>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -15,21 +15,19 @@
     :root{
       --ink:#0B0F14;
       --textOnInk:#C9D1D9;
-      --muted:rgba(201,209,217,.78);
-      --muted2:rgba(201,209,217,.62);
-      --line:rgba(255,255,255,.10);
+      --lineOnInk:rgba(255,255,255,.10);
 
-      --accent:#3A320C;   /* olive (minimal use) */
-      --accent2:#C9A44A;  /* amber highlight */
+      --accent:#3A320C;
+      --accent2:#C9A44A;
 
       --maxW:1160px;
-      --readW:760px;
+      --readW:740px;
 
       --r-lg:18px;
 
       --s1:8px;  --s2:16px; --s3:24px; --s4:32px; --s5:48px; --s6:64px; --s7:96px;
-      --lh:1.65;
 
+      --lh:1.65;
       --shadow:0 10px 30px rgba(0,0,0,.25);
       --shadow2:0 18px 60px rgba(0,0,0,.35);
 
@@ -51,9 +49,8 @@
     }
     a{color:inherit;text-decoration:none}
     button{font:inherit}
-    [id]{ scroll-margin-top: calc(var(--navH) + 24px); }
 
-    /* Index-style atmosphere */
+    /* Background (same family as index) */
     .bg{
       position:fixed; inset:0; pointer-events:none; z-index:0;
       background:
@@ -61,18 +58,21 @@
         radial-gradient(820px 520px at 82% 34%, rgba(201,164,74,.10), transparent 64%),
         linear-gradient(180deg, #0B0F14 0%, #0A0D12 40%, #0B0F14 100%);
     }
+
+    /* Neurons only for hero; we fade via JS */
     canvas#neurons{
       position:fixed; inset:0;
       width:100%; height:100%;
       z-index:0;
       pointer-events:none;
-      opacity:.95;
+      opacity:0.92;
+      transition: opacity .25s ease;
     }
 
     .wrap{ position:relative; z-index:1; max-width:var(--maxW); margin:0 auto; padding:0 var(--s4); }
     @media (max-width: 640px){ .wrap{ padding:0 18px; } }
 
-    /* Sticky header — brand + MENU only */
+    /* Sticky header: MENU-ONLY (no visible desktop nav) */
     header.site{
       position:sticky; top:0; z-index:50;
       backdrop-filter: blur(10px);
@@ -85,13 +85,16 @@
       display:flex; align-items:center; justify-content:space-between; gap:var(--s3);
     }
 
-    .logo{ display:flex; align-items:center; gap:10px; min-width:180px; font-weight:600; letter-spacing:-.01em; }
+    .logo{
+      display:flex; align-items:center; gap:10px;
+      font-weight:600; letter-spacing:-.01em;
+      min-width: 160px;
+    }
     .logo .mark{
       display:inline-flex; align-items:center; gap:10px;
       padding:10px 12px; border-radius:999px;
       border:1px solid rgba(255,255,255,.08);
       background: rgba(255,255,255,.02);
-      color: rgba(245,242,234,.96);
     }
     .logo .dot{
       width:8px; height:8px; border-radius:50%;
@@ -99,29 +102,47 @@
       box-shadow: 0 0 0 4px rgba(201,164,74,.12);
     }
 
-    .menuBtn{
-      height:48px; padding:0 16px; border-radius:999px;
+    .actions{ display:flex; align-items:center; gap:10px; justify-content:flex-end; }
+    .btn{
+      height:48px; padding:0 18px; border-radius:999px;
       border:1px solid rgba(255,255,255,.10);
       background: rgba(255,255,255,.02);
-      color: rgba(201,209,217,.95);
+      color: rgba(201,209,217,.98);
       display:inline-flex; align-items:center; justify-content:center;
-      gap:10px; cursor:pointer;
+      font-size:14px;
       transition: transform .18s ease, border-color .18s ease, background .18s ease;
       white-space:nowrap;
     }
-    .menuBtn:hover{
-      transform: translateY(-1px);
-      border-color: rgba(201,164,74,.35);
-      background: rgba(255,255,255,.04);
+    .btn:hover{ transform: translateY(-1px); border-color: rgba(201,164,74,.35); background: rgba(255,255,255,.04); }
+    .btn.primary{
+      border-color: rgba(201,164,74,.50);
+      background: rgba(201,164,74,.10);
+      color: rgba(245,242,234,.96);
     }
-    .menuBtn .lab{
-      font-family: var(--mono);
-      font-size: 12px;
-      letter-spacing:.18em;
-      text-transform: uppercase;
+    .btn.primary:hover{ background: rgba(201,164,74,.16); }
+    .btn .arr{ display:inline-block; margin-left:10px; transition: transform .16s ease; }
+    .btn:hover .arr{ transform: translateX(3px); }
+
+    .menuBtn{
+      height:48px; width:48px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.02);
+      color: rgba(201,209,217,.95);
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      cursor:pointer;
+    }
+    .menuBtn:active{ transform: translateY(1px); }
+
+    /* Mobile: hide secondary CTA if needed */
+    @media (max-width: 720px){
+      .actions .btn.secondary{ display:none; }
+      .logo{ min-width: 140px; }
     }
 
-    /* Drawer */
+    /* Drawer menu */
     .drawer{
       position:fixed; inset:0; z-index:80;
       display:none;
@@ -164,17 +185,11 @@
       transition: transform .18s ease, border-color .18s ease;
     }
     .drawerLinks a:hover{ transform: translateY(-1px); border-color: rgba(201,164,74,.28); }
-    .drawerLinks a.active{
-      border-color: rgba(201,164,74,.45);
-      background: rgba(201,164,74,.12);
-      color: rgba(245,242,234,.96);
-    }
 
     /* Typography */
     .read{ max-width: var(--readW); }
     p{ margin: 0 0 14px 0; line-height: var(--lh); }
-    .muted{ color: var(--muted); }
-    .muted2{ color: var(--muted2); }
+    .muted{ color: rgba(201,209,217,.78); }
 
     main{ padding: var(--s6) 0 var(--s7); }
     section{ padding: var(--s7) 0; border-top:1px solid rgba(255,255,255,.06); }
@@ -187,7 +202,7 @@
       color: rgba(201,164,74,.92);
       margin-bottom: 12px;
     }
-    h1{ font-size: 46px; line-height: 1.12; letter-spacing: -0.02em; margin: 0 0 14px 0; font-weight: 600; }
+    h1{ font-size: 46px; line-height: 1.15; letter-spacing: -0.02em; margin: 0 0 14px 0; font-weight: 600; }
     h2{ font-size: 30px; line-height: 1.20; letter-spacing: -0.01em; margin: 0 0 12px 0; font-weight: 600; }
     h3{ font-size: 20px; line-height: 1.25; margin: 0 0 10px 0; font-weight: 600; }
     @media (max-width: 640px){
@@ -196,13 +211,13 @@
       h3{ font-size: 19px; }
     }
 
-    /* Premium hero layout */
+    /* Company-specific modules (not “blocks of paragraphs”) */
     .heroGrid{
-      margin-top: 18px;
       display:grid;
-      grid-template-columns: 1.05fr 0.95fr;
+      grid-template-columns: 1.1fr 0.9fr;
       gap: 14px;
       align-items:start;
+      margin-top: 18px;
     }
     @media (max-width: 980px){ .heroGrid{ grid-template-columns: 1fr; } }
 
@@ -212,112 +227,108 @@
       border-radius: var(--r-lg);
       padding: 18px 18px;
     }
-
-    .chips{ display:flex; flex-wrap:wrap; gap:10px; margin-top: 12px; }
-    .chip{
-      height: 40px;
-      padding: 0 14px;
-      border-radius: 999px;
-      border:1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.02);
-      display:inline-flex; align-items:center;
-      font-size: 14px;
-      color: rgba(201,209,217,.92);
-    }
-    .chip .k{
-      font-family:var(--mono);
-      font-size: 11px;
-      letter-spacing:.12em;
-      text-transform:uppercase;
-      margin-right:8px;
-      color: rgba(201,164,74,.88);
-    }
-    .chip b{ font-weight:600; color: rgba(245,242,234,.94); }
-
-    .foundation{
-      margin-top: 14px;
+    .quote{
       border:1px solid rgba(201,164,74,.22);
       background: rgba(11,15,20,.60);
       border-radius: var(--r-lg);
-      padding: 16px 16px;
+      padding: 18px 18px;
     }
-    .foundation .k{
+    .quote b{
+      display:block;
       font-family: var(--mono);
-      font-size: 11px;
-      letter-spacing:.14em;
+      font-size: 12px;
+      letter-spacing:.18em;
       text-transform: uppercase;
-      color: rgba(201,164,74,.86);
+      color: rgba(201,164,74,.90);
       margin-bottom: 10px;
     }
-    .foundation ul{ margin:0; padding:0 0 0 18px; }
-    .foundation li{ margin:8px 0; color: rgba(201,209,217,.84); line-height: 1.55; }
+    .quote .big{
+      margin:0;
+      font-size: 18px;
+      line-height: 1.55;
+      color: rgba(245,242,234,.92);
+      font-weight: 500;
+    }
+    .quote .sub{
+      margin-top:10px;
+      color: rgba(201,209,217,.72);
+      font-size: 14px;
+      line-height: 1.65;
+    }
 
-    .pillars{
-      margin-top: 18px;
+    .principles{
       display:grid;
-      grid-template-columns: repeat(4, 1fr);
+      grid-template-columns: repeat(2, 1fr);
       gap: 14px;
-    }
-    @media (max-width: 980px){ .pillars{ grid-template-columns: 1fr 1fr; } }
-    @media (max-width: 640px){ .pillars{ grid-template-columns: 1fr; } }
-
-    .p{
-      border:1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.02);
-      border-radius: var(--r-lg);
-      padding: 16px 16px;
-      transition: transform .18s ease, border-color .18s ease, background .18s ease;
-    }
-    .p:hover{
-      transform: translateY(-2px);
-      border-color: rgba(201,164,74,.28);
-      background: rgba(255,255,255,.03);
-    }
-    .p .k{
-      font-family: var(--mono);
-      font-size: 11px;
-      letter-spacing:.14em;
-      text-transform: uppercase;
-      color: rgba(201,164,74,.86);
-      margin-bottom: 8px;
-    }
-
-    .quote{
       margin-top: 18px;
+    }
+    @media (max-width: 980px){ .principles{ grid-template-columns: 1fr; } }
+    .pr{
       border:1px solid rgba(255,255,255,.10);
       background: rgba(255,255,255,.02);
       border-radius: var(--r-lg);
       padding: 18px 18px;
     }
-    .quote b{ color: rgba(245,242,234,.92); }
-    .quote .m{
+    .prTop{
+      display:flex; justify-content:space-between; align-items:baseline; gap: 10px;
+      margin-bottom: 8px;
+    }
+    .prTop span{
       font-family: var(--mono);
       font-size: 11px;
-      letter-spacing:.12em;
+      letter-spacing:.14em;
       text-transform: uppercase;
-      color: rgba(201,209,217,.62);
-      margin-top: 10px;
-    }
-
-    .btn{
-      height:48px; padding:0 18px; border-radius:999px;
-      border:1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.02);
-      color: rgba(201,209,217,.98);
-      display:inline-flex; align-items:center; justify-content:center;
-      font-size:14px;
-      transition: transform .18s ease, border-color .18s ease, background .18s ease;
+      color: rgba(201,164,74,.86);
       white-space:nowrap;
     }
-    .btn:hover{ transform: translateY(-1px); border-color: rgba(201,164,74,.35); background: rgba(255,255,255,.04); }
-    .btn.primary{
-      border-color: rgba(201,164,74,.50);
-      background: rgba(201,164,74,.10);
-      color: rgba(245,242,234,.96);
+    .prTop b{ color: rgba(245,242,234,.92); font-weight:600; }
+
+    .engageGrid{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-top: 18px;
+      align-items:start;
     }
-    .btn.primary:hover{ background: rgba(201,164,74,.16); }
-    .btn .arr{ display:inline-block; margin-left:10px; transition: transform .16s ease; }
-    .btn:hover .arr{ transform: translateX(3px); }
+    @media (max-width: 980px){ .engageGrid{ grid-template-columns: 1fr; } }
+    .list{
+      margin: 0;
+      padding: 0 0 0 18px;
+    }
+    .list li{
+      margin: 8px 0;
+      color: rgba(201,209,217,.84);
+      line-height: 1.55;
+    }
+
+    .docs{
+      display:grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+      margin-top: 18px;
+    }
+    @media (max-width: 980px){ .docs{ grid-template-columns: 1fr; } }
+    .doc{
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.02);
+      border-radius: var(--r-lg);
+      padding: 18px 18px;
+      transition: transform .18s ease, border-color .18s ease, background .18s ease;
+    }
+    .doc:hover{
+      transform: translateY(-1px);
+      border-color: rgba(201,164,74,.28);
+      background: rgba(255,255,255,.03);
+    }
+    .doc .tag{
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing:.14em;
+      text-transform: uppercase;
+      color: rgba(201,164,74,.86);
+    }
+    .doc b{ display:block; margin-top:8px; color: rgba(245,242,234,.92); }
+    .doc p{ margin-top:8px; color: rgba(201,209,217,.78); }
 
     /* Footer (same as other dark pages) */
     footer{ border-top:1px solid rgba(255,255,255,.06); padding: var(--s7) 0 var(--s6); }
@@ -369,8 +380,8 @@
     @media (prefers-reduced-motion: reduce){
       html{scroll-behavior:auto;}
       .reveal{ opacity:1; transform:none; transition:none; }
+      .btn, .drawerLinks a, .doc{ transition:none; }
       canvas#neurons{ display:none; }
-      .menuBtn, .btn, .drawerLinks a, .p{ transition:none; }
     }
   </style>
 </head>
@@ -385,13 +396,15 @@
         <span class="mark"><span class="dot" aria-hidden="true"></span><span>CEYO</span></span>
       </a>
 
-      <button class="menuBtn" id="openMenu" type="button" aria-label="Open menu">
-        <span class="lab">Menu</span>
-        <span aria-hidden="true">☰</span>
-      </button>
+      <div class="actions" aria-label="Actions">
+        <a class="btn secondary" href="resources.html#sample-artifact">View sample artifact<span class="arr">→</span></a>
+        <a class="btn primary" href="contact.html">Request walkthrough<span class="arr">→</span></a>
+        <button class="menuBtn" id="openMenu" aria-label="Open menu" type="button">☰</button>
+      </div>
     </div>
   </header>
 
+  <!-- Drawer menu -->
   <div class="drawer" id="drawer" aria-hidden="true">
     <div class="drawerCard" role="dialog" aria-modal="true" aria-label="Menu">
       <div class="drawerHead">
@@ -406,103 +419,147 @@
         <a href="compliance.html">Compliance</a>
         <a href="integrations.html">Integrations</a>
         <a href="resources.html">Resources</a>
-        <a href="security.html">Security</a>
-        <a href="use-cases.html">Use Cases</a>
-        <a class="active" href="company.html">Company</a>
+        <a href="company.html">Company</a>
         <a href="contact.html">Contact</a>
       </div>
     </div>
   </div>
 
   <main class="wrap">
+    <!-- HERO -->
     <section style="padding-top: var(--s6);">
       <div class="read reveal">
-        <div class="eyebrow">Company · Neutrality · Independent verification</div>
-        <h1>Built for formal review.</h1>
+        <div class="eyebrow">Company · Principles · Responsible deployment</div>
+        <h1>Evidence infrastructure for AI systems.</h1>
         <p class="muted">
-          CEYO produces deterministic, integrity-sealed audit artifacts at the inference boundary. Verification is mechanical:
-          canonicalize → hash → signature → policy alignment. CEYO produces records; institutions make determinations.
+          CEYO exists to close a repeatable oversight gap: most inference deployments retain outputs and logs, but lack canonical,
+          integrity-sealed records designed for independent verification under constrained disclosure.
         </p>
       </div>
 
       <div class="heroGrid">
         <div class="panel reveal">
-          <h2 style="margin-top:0">The posture</h2>
+          <h3>What we build</h3>
           <p class="muted">
-            CEYO closes the gap between “telemetry” and “evidence” by generating canonical artifacts that can be verified later
-            without default disclosure of proprietary internals.
+            CEYO is an attachable evidentiary layer at the inference boundary. It produces policy-scoped audit artifacts through a fixed chain:
+            <b style="color:rgba(245,242,234,.92)">capture → canonicalize → seal → disclose → verify</b>.
           </p>
-
-          <div class="chips" aria-label="Proof chips">
-            <div class="chip"><span class="k">Proof</span><b>Deterministic</b></div>
-            <div class="chip"><span class="k">Keys</span><b>Non-custodial</b></div>
-            <div class="chip"><span class="k">Review</span><b>Independently verifiable</b></div>
-          </div>
-
+          <ul class="list">
+            <li>Deterministic canonicalization (RFC 8785) for reproducible hashing</li>
+            <li>Cryptographic sealing for tamper-evidence and provenance checks</li>
+            <li>Non-custodial key posture (operator-controlled keys)</li>
+            <li>Tiered disclosure for review without default IP exposure</li>
+          </ul>
           <div style="margin-top:16px; display:flex; gap:10px; flex-wrap:wrap;">
-            <a class="btn primary" href="contact.html">Request walkthrough<span class="arr">→</span></a>
-            <a class="btn" href="trust.html#verification-spec">Verification steps<span class="arr">→</span></a>
+            <a class="btn primary" href="how.html">How it works<span class="arr">→</span></a>
+            <a class="btn" href="trust.html">Trust model<span class="arr">→</span></a>
           </div>
         </div>
 
-        <div class="panel reveal">
-          <h2 style="margin-top:0">The boundary</h2>
-          <p class="muted">
-            CEYO does not certify compliance, legality, or decision correctness. It does not guarantee inference reproducibility.
-            It provides integrity-sealed records to support oversight processes.
+        <div class="quote reveal" aria-label="Principle statement">
+          <b>Principle</b>
+          <p class="big">Evidence infrastructure must remain separate from decision authority.</p>
+          <p class="sub">
+            CEYO produces records. Institutions and authorized operators make determinations.
+            Verification confirms integrity and provenance under policy scope — not correctness, legality, or compliance conclusions.
           </p>
+        </div>
+      </div>
+    </section>
 
-          <div class="foundation" aria-label="Foundations">
-            <div class="k">Foundations</div>
-            <ul>
-              <li><b style="color:rgba(245,242,234,.92)">Scope first:</b> capture is policy-defined and versioned.</li>
-              <li><b style="color:rgba(245,242,234,.92)">Seal second:</b> canonicalize deterministically before hashing.</li>
-              <li><b style="color:rgba(245,242,234,.92)">Verify last:</b> independent recomputation yields PASS/FAIL outcomes.</li>
+    <!-- PRINCIPLES -->
+    <section id="principles">
+      <div class="read reveal">
+        <h2>Operating principles</h2>
+        <p class="muted">A posture designed for institutional review and constrained disclosure.</p>
+
+        <div class="principles" aria-label="Principles grid">
+          <div class="pr reveal">
+            <div class="prTop"><b>Neutrality</b><span>Non-adjudication</span></div>
+            <p class="muted">We do not certify compliance or decision correctness. We structure records so institutions can review.</p>
+          </div>
+          <div class="pr reveal">
+            <div class="prTop"><b>Verifiability</b><span>Determinism</span></div>
+            <p class="muted">Canonicalization and sealing enable repeatable, mechanical verification outcomes (PASS/FAIL/POLICY_MISMATCH).</p>
+          </div>
+          <div class="pr reveal">
+            <div class="prTop"><b>Minimal disclosure</b><span>Tiered access</span></div>
+            <p class="muted">Policy scope and disclosure tiers define what is visible before generation. No implicit expansion after the fact.</p>
+          </div>
+          <div class="pr reveal">
+            <div class="prTop"><b>Operator control</b><span>Non-custodial keys</span></div>
+            <p class="muted">Signing keys remain in operator HSM/KMS/TEE. CEYO is designed not to possess private keys.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ENGAGEMENT -->
+    <section id="engagement">
+      <div class="read reveal">
+        <h2>How we engage</h2>
+        <p class="muted">A review-first workflow, aligned to oversight needs.</p>
+
+        <div class="engageGrid">
+          <div class="panel reveal">
+            <h3>Evaluation pathway</h3>
+            <ul class="list">
+              <li><b style="color:rgba(245,242,234,.92)">Public layer:</b> high-level posture, samples, and boundaries.</li>
+              <li><b style="color:rgba(245,242,234,.92)">Controlled review:</b> specs, capture policy schema, verification harness details (under NDA/terms).</li>
+              <li><b style="color:rgba(245,242,234,.92)">Deployment:</b> operator-defined policy scope, key custody framework, retention posture.</li>
+            </ul>
+          </div>
+
+          <div class="panel reveal">
+            <h3>What CEYO is not</h3>
+            <ul class="list">
+              <li>Not a model evaluation or safety certification body</li>
+              <li>Not a compliance determination engine</li>
+              <li>Not an operational command or monitoring system</li>
+              <li>Not a guarantee of legal admissibility or regulatory sufficiency</li>
             </ul>
           </div>
         </div>
-      </div>
-    </section>
-
-    <section id="principles">
-      <div class="read reveal">
-        <h2>Principles</h2>
-        <p class="muted">Constraints that keep the system credible under scrutiny.</p>
-
-        <div class="pillars" aria-label="Principles">
-          <div class="p reveal">
-            <div class="k">Neutrality</div>
-            <p class="muted" style="margin:0">Evidence infrastructure stays separate from decision authority.</p>
-          </div>
-          <div class="p reveal">
-            <div class="k">Verifiability</div>
-            <p class="muted" style="margin:0">Determinism + sealing enable independent recomputation and verification.</p>
-          </div>
-          <div class="p reveal">
-            <div class="k">Minimal disclosure</div>
-            <p class="muted" style="margin:0">Tiered disclosure supports review without default exposure of internals.</p>
-          </div>
-          <div class="p reveal">
-            <div class="k">Operator control</div>
-            <p class="muted" style="margin:0">Non-custodial keys: signing authority remains with operators (HSM/KMS/TEE).</p>
-          </div>
-        </div>
-
-        <div class="quote reveal" aria-label="Core statement">
-          <p style="margin:0">
-            <b>Evidence infrastructure must remain separate from decision authority.</b>
-            That separation preserves neutrality and avoids structural conflicts between record generation and policy enforcement.
-          </p>
-          <div class="m">CEYO provides the artifact · Institutions provide the oversight</div>
-        </div>
 
         <div style="margin-top:18px; display:flex; gap:10px; flex-wrap:wrap;">
-          <a class="btn primary" href="resources.html">View resources<span class="arr">→</span></a>
-          <a class="btn" href="ethical.html">Responsible use<span class="arr">→</span></a>
+          <a class="btn primary" href="contact.html">Request a walkthrough<span class="arr">→</span></a>
+          <a class="btn" href="resources.html">View resources<span class="arr">→</span></a>
         </div>
       </div>
     </section>
 
+    <!-- DOCUMENT SUITE -->
+    <section id="docs">
+      <div class="read reveal">
+        <h2>Document suite</h2>
+        <p class="muted">Public references plus controlled documents available for qualified review.</p>
+
+        <div class="docs" aria-label="Document cards">
+          <a class="doc reveal" href="resources.html#sample-artifact">
+            <span class="tag">Public</span>
+            <b>Sample artifacts & verification reports</b>
+            <p>Structure examples (redacted) showing PASS/FAIL outcomes.</p>
+          </a>
+          <a class="doc reveal" href="trust.html#verification-spec">
+            <span class="tag">Public preview</span>
+            <b>Verification steps</b>
+            <p>Canonicalize → hash → signature → policy alignment.</p>
+          </a>
+          <a class="doc reveal" href="ethical.html">
+            <span class="tag">Public</span>
+            <b>Responsible use policy</b>
+            <p>Deployment boundaries, operator obligations, prohibited use, escalation pathway.</p>
+          </a>
+          <a class="doc reveal" href="contact.html">
+            <span class="tag">Controlled</span>
+            <b>Specs (under review terms)</b>
+            <p>Capture policy schema, verification spec, benchmark methodology.</p>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
     <footer id="footer">
       <div class="footGrid reveal">
         <div class="footCol">
@@ -517,7 +574,7 @@
           <a href="trust.html">Trust Model</a>
           <a href="security.html">Security</a>
           <a href="trust.html#verification-spec">Verification Spec</a>
-          <a href="resources.html#library">Resources</a>
+          <a href="resources.html#trust-center">Trust Center</a>
         </div>
         <div class="footCol">
           <div class="t">Resources</div>
@@ -545,7 +602,7 @@
   <script>
     document.getElementById('year').textContent = new Date().getFullYear();
 
-    // Menu drawer
+    // Drawer menu
     const drawer = document.getElementById('drawer');
     const openMenu = document.getElementById('openMenu');
     const closeMenu = document.getElementById('closeMenu');
@@ -568,11 +625,25 @@
       revealEls.forEach(el=>el.classList.add('on'));
     }
 
-    /* Neuron field + atom core behavior (same as index; dark theme) */
+    // Fade neurons after hero so Company feels distinct (not repetitive site-wide)
     (function(){
+      const canvas = document.getElementById('neurons');
+      if(!canvas) return;
+      const fadeAt = Math.max(420, window.innerHeight * 0.65);
+      function onScroll(){
+        const y = window.scrollY || 0;
+        const t = Math.max(0, Math.min(1, (y - 60) / fadeAt));
+        canvas.style.opacity = String(0.92 * (1 - t));
+      }
+      window.addEventListener('scroll', onScroll, {passive:true});
+      onScroll();
+    })();
+
+    /* Neuron field + atom core (same behavior as index hero, runs while visible) */
+    (function(){
+      const prefersReduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       const c = document.getElementById('neurons');
-      if(!c) return;
-      if(prefersReduce) return;
+      if(!c || prefersReduce) return;
 
       const ctx = c.getContext('2d', {alpha:true});
       let w=0,h=0,dpr=1;
@@ -589,159 +660,107 @@
       resize();
       window.addEventListener('resize', resize, {passive:true});
 
-      const N = 240;
-      const boundsPad = 40;
+      const N = 220;
+      const pad = 40;
       const nodes = [];
       const dirs = [];
       const rnd = (a,b)=> a + Math.random()*(b-a);
 
       for(let i=0;i<N;i++){
-        nodes.push({
-          x:rnd(-boundsPad, w+boundsPad),
-          y:rnd(-boundsPad, h+boundsPad),
-          vx:rnd(-0.18,0.18),
-          vy:rnd(-0.14,0.14),
-          s:rnd(1.1,2.1)
-        });
+        nodes.push({ x:rnd(-pad,w+pad), y:rnd(-pad,h+pad), vx:rnd(-0.18,0.18), vy:rnd(-0.14,0.14), s:rnd(1.0,2.1) });
         dirs.push({ ang: Math.random()*Math.PI*2, rad: Math.sqrt(Math.random()) });
       }
 
-      const anchors = {
-        principles: document.getElementById('principles'),
-        footer: document.getElementById('footer')
-      };
-
-      function inRangeProgress(el, startPct, endPct){
-        if(!el) return 0;
-        const r = el.getBoundingClientRect();
-        const vh = window.innerHeight || 1;
-        const start = vh * startPct;
-        const end = vh * endPct;
-        const t = (end - r.top) / Math.max(1, (end - start));
-        return Math.max(0, Math.min(1, t));
-      }
-
-      const state = { converge:0, burst:0, focus:0, coreAlpha:0 };
-
       let mx=0.5,my=0.5;
       if(window.matchMedia("(pointer:fine)").matches){
-        window.addEventListener('mousemove', (e)=>{
-          mx = e.clientX / Math.max(1,w);
-          my = e.clientY / Math.max(1,h);
-        }, {passive:true});
+        window.addEventListener('mousemove', (e)=>{ mx=e.clientX/Math.max(1,w); my=e.clientY/Math.max(1,h); }, {passive:true});
       }
 
-      function tickState(){
-        const p = inRangeProgress(anchors.principles, 0.80, 1.10);
-        const settle = inRangeProgress(anchors.footer, 0.85, 1.10);
-        state.converge = Math.max(p, settle);
-        state.focus = p;
-        state.coreAlpha = Math.min(0.55, 0.18 + state.converge * 0.48);
-        state.burst = 0.0; /* company page: no explode */
+      function converge(){
+        const heroH = Math.max(1, window.innerHeight * 1.0);
+        const p = Math.max(0, Math.min(1, (window.scrollY || 0) / heroH));
+        return Math.max(0.35, 0.75 - p*0.60);
       }
 
       function draw(){
-        tickState();
         ctx.clearRect(0,0,w,h);
 
-        const vg = ctx.createRadialGradient(w*0.55, h*0.28, 40, w*0.5, h*0.5, Math.max(w,h)*0.9);
-        vg.addColorStop(0,'rgba(0,0,0,0.00)');
-        vg.addColorStop(1,'rgba(0,0,0,0.28)');
-        ctx.fillStyle = vg;
-        ctx.fillRect(0,0,w,h);
+        const px = (mx-0.5)*18, py = (my-0.5)*12;
+        const cx = w*0.52 + px*0.35, cy = h*0.28 + py*0.35;
 
-        const px = (mx - 0.5) * 22;
-        const py = (my - 0.5) * 14;
+        const conv = converge();
+        const baseR = Math.min(w,h)*0.18;
+        const orbitR = baseR*(0.92 - conv*0.08);
 
-        const cx = w*0.52 + px*0.35;
-        const cy = h*0.34 + py*0.35;
+        // Core rings
+        ctx.save();
+        ctx.globalAlpha = 0.34;
+        ctx.strokeStyle = 'rgba(201,164,74,0.45)';
+        ctx.lineWidth = 1.2;
+        ctx.beginPath(); ctx.arc(cx, cy, orbitR*0.38, 0, Math.PI*2); ctx.stroke();
+        ctx.globalAlpha = 0.22;
+        ctx.strokeStyle = 'rgba(201,164,74,0.18)';
+        ctx.beginPath(); ctx.arc(cx, cy, orbitR*0.78, 0, Math.PI*2); ctx.stroke();
+        ctx.restore();
 
-        const baseR = Math.min(w,h) * 0.18;
-        const orbitR = baseR * (0.92 - state.focus*0.10) * (0.92 - state.converge*0.08);
-
-        if(state.coreAlpha > 0.01){
-          ctx.save();
-          ctx.globalAlpha = state.coreAlpha;
-          ctx.strokeStyle = 'rgba(201,164,74,0.55)';
-          ctx.lineWidth = 1.3;
-          ctx.beginPath(); ctx.arc(cx, cy, orbitR*0.38, 0, Math.PI*2); ctx.stroke();
-
-          ctx.globalAlpha = state.coreAlpha * 0.75;
-          ctx.strokeStyle = 'rgba(201,164,74,0.22)';
-          ctx.lineWidth = 1.0;
-          ctx.beginPath(); ctx.arc(cx, cy, orbitR*0.78, 0, Math.PI*2); ctx.stroke();
-
-          const g = ctx.createRadialGradient(cx, cy, 0, cx, cy, orbitR*1.05);
-          g.addColorStop(0,'rgba(201,164,74,0.14)');
-          g.addColorStop(1,'rgba(201,164,74,0.0)');
-          ctx.fillStyle = g;
-          ctx.beginPath(); ctx.arc(cx, cy, orbitR*1.05, 0, Math.PI*2); ctx.fill();
-          ctx.restore();
-        }
-
-        const maxDist = 165;
-        const maxD2 = maxDist*maxDist;
-        const conv = state.converge;
-
+        // Move nodes
         for(let i=0;i<N;i++){
           const p = nodes[i];
 
-          p.x += p.vx * (1 - 0.65*conv);
-          p.y += p.vy * (1 - 0.65*conv);
+          p.x += p.vx*(1 - 0.6*conv);
+          p.y += p.vy*(1 - 0.6*conv);
 
-          if(p.x < -boundsPad) p.x = w + boundsPad;
-          if(p.x > w + boundsPad) p.x = -boundsPad;
-          if(p.y < -boundsPad) p.y = h + boundsPad;
-          if(p.y > h + boundsPad) p.y = -boundsPad;
+          if(p.x < -pad) p.x = w+pad;
+          if(p.x > w+pad) p.x = -pad;
+          if(p.y < -pad) p.y = h+pad;
+          if(p.y > h+pad) p.y = -pad;
 
-          if(conv > 0.001){
-            const d = dirs[i];
-            const ringR = orbitR * (0.62 + d.rad*0.48);
-            const t = performance.now()*0.00035;
-            const ang = d.ang + t * (0.20 + (i%7)*0.03);
+          const d = dirs[i];
+          const ringR = orbitR*(0.62 + d.rad*0.48);
+          const t = performance.now()*0.00032;
+          const ang = d.ang + t*(0.18 + (i%7)*0.03);
+          const tx = cx + Math.cos(ang)*ringR;
+          const ty = cy + Math.sin(ang)*ringR;
 
-            const tx = cx + Math.cos(ang) * ringR;
-            const ty = cy + Math.sin(ang) * ringR;
-
-            p.x += (tx - p.x) * (0.010 + 0.042*conv);
-            p.y += (ty - p.y) * (0.010 + 0.042*conv);
-          }
+          p.x += (tx - p.x)*(0.010 + 0.034*conv);
+          p.y += (ty - p.y)*(0.010 + 0.034*conv);
         }
 
-        const lineAlphaBase = 0.05 + conv*0.10;
-        const pointAlpha = 0.45 + conv*0.25;
+        const maxDist = 160;
+        const maxD2 = maxDist*maxDist;
 
+        // Lines
         for(let i=0;i<N;i++){
           const a = nodes[i];
           for(let j=i+1;j<N;j++){
             const b = nodes[j];
-            const dx = a.x - b.x;
-            const dy = a.y - b.y;
-            const d2 = dx*dx + dy*dy;
+            const dx=a.x-b.x, dy=a.y-b.y;
+            const d2=dx*dx+dy*dy;
             if(d2 < maxD2){
-              const t = 1 - (d2 / maxD2);
-              const alpha = Math.min(0.22, lineAlphaBase * t);
+              const t = 1 - (d2/maxD2);
+              const alpha = Math.min(0.20, (0.06 + conv*0.08)*t);
               ctx.strokeStyle = `rgba(201,164,74,${alpha})`;
               ctx.lineWidth = 1;
               ctx.beginPath();
-              ctx.moveTo(a.x, a.y);
-              ctx.lineTo(b.x, b.y);
+              ctx.moveTo(a.x,a.y);
+              ctx.lineTo(b.x,b.y);
               ctx.stroke();
             }
           }
         }
 
+        // Points
+        const pointAlpha = 0.42 + conv*0.18;
         for(let i=0;i<N;i++){
           const p = nodes[i];
           ctx.fillStyle = `rgba(201,164,74,${pointAlpha})`;
           ctx.beginPath();
-          ctx.arc(p.x, p.y, p.s, 0, Math.PI*2);
+          ctx.arc(p.x,p.y,p.s,0,Math.PI*2);
           ctx.fill();
         }
 
         requestAnimationFrame(draw);
       }
-
       draw();
     })();
   </script>
