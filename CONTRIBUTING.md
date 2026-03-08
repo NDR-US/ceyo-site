@@ -1,54 +1,34 @@
 # Contributing to CEYO
 
-Thank you for your interest in contributing to CEYO.
+Thank you for your interest in contributing to the CEYO project.
 
-CEYO is an experimental infrastructure prototype exploring cryptographic verification and governance mechanisms for AI systems.
+CEYO is an experimental research prototype exploring evidentiary infrastructure for AI systems. Contributions are welcome in the areas of documentation, research discussion, and protocol refinement.
 
 ## Ways to Contribute
 
-Contributions may include:
+Contributors may help by:
 
-• Improvements to documentation  
-• Clarifications to protocol specifications  
-• Reference implementation improvements  
-• Security reviews  
-• Artifact verification tooling
+- improving documentation
+- suggesting architectural improvements
+- identifying security or design issues
+- proposing protocol refinements
+- improving reference implementation examples
 
-## Contribution Process
+## Submitting Changes
 
 1. Fork the repository
 2. Create a feature branch
 3. Make your changes
-4. Submit a pull request
+4. Submit a pull request describing the improvement
 
-Please ensure:
+All contributions should maintain the neutral and research-focused goals of the project.
 
-• Documentation changes remain clear and concise
-• Code follows consistent formatting
-• New functionality includes explanation or examples
+## Code Style
 
-## Pull Request Guidelines
+Reference implementation code should remain clear, minimal, and focused on demonstrating protocol concepts rather than production-grade optimization.
 
-Pull requests should include:
+## Licensing
 
-• Clear description of the change
-• Motivation for the modification
-• Documentation updates when applicable
+By contributing to this repository, you agree that your contributions will be licensed under the Apache License 2.0 used by this project.
 
-Large architectural changes should first be discussed through an issue.
-
-## Design Philosophy
-
-CEYO follows several guiding principles:
-
-• Model neutrality  
-• Cryptographic verifiability  
-• Deterministic artifact generation  
-• Minimal operational coupling  
-• Independent verification
-
-Contributions should respect these principles.
-
-## Code of Conduct
-
-By participating in this project you agree to follow the project's Code of Conduct.
+See the LICENSE file for details.
