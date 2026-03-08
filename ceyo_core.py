@@ -1,63 +1,60 @@
+"""
+CEYO: Simplified educational demo.
+
+Uses ECDSA P-256 + SHA-256 for consistency with the reference implementation.
+For production use with RFC 8785 JSON canonicalization, see ceyo_reference_implementation.py.
+"""
+
 import base64
 import hashlib
-from cryptography.hazmat.primitives import hashes, serialization
-from cryptography.hazmat.primitives.asymmetric import padding, rsa
+from cryptography.hazmat.primitives import hashes
+from cryptography.hazmat.primitives.asymmetric import ec
+
 
 # --- CEYO LAYER 1: CANONICALIZATION (The 'Seal') ---
 def ceyo_canonicalize(text):
     """
-    Standardizes the data format (RFC 8785 logic) and creates a SHA-256 hash.
-    Ensures the 'Evidence' is unique and immutable.
+    Encodes the input as UTF-8 bytes — the canonical form for this demo.
+
+    Note: for structured JSON artifacts, the reference implementation applies
+    RFC 8785 (JCS) canonicalization before hashing, ensuring deterministic
+    serialization regardless of key ordering or whitespace.
     """
-    text_bytes = text.encode('utf-8')
-    hash_object = hashlib.sha256(text_bytes)
-    digest = hash_object.digest()
-    return base64.b64encode(digest).decode('ascii')
+    return text.encode("utf-8")
+
 
 # --- CEYO LAYER 2: CRYPTOGRAPHIC SIGNING ---
-def ceyo_sign(hashed_data, private_key):
+def ceyo_sign(data, private_key):
     """
-    Signs the hash using the Private Key of the AI operator.
-    Proves the AI company actually produced this specific output.
+    Signs the canonical bytes using ECDSA P-256 / SHA-256.
+    Returns a base64url-encoded DER signature.
     """
-    signature = private_key.sign(
-        hashed_data.encode('utf-8'),
-        padding.PSS(
-            mgf=padding.MGF1(hashes.SHA256()),
-            salt_length=padding.PSS.MAX_LENGTH
-        ),
-        hashes.SHA256()
-    )
-    return base64.b64encode(signature).decode('ascii')
+    sig_der = private_key.sign(data, ec.ECDSA(hashes.SHA256()))
+    return base64.urlsafe_b64encode(sig_der).decode("ascii").rstrip("=")
+
 
 # --- CEYO LAYER 3: INDEPENDENT VERIFICATION ---
-def ceyo_verify(hashed_data, signature_b64, public_key):
+def ceyo_verify(data, signature_b64u, public_key):
     """
-    The 'Oversight Portal' logic. Takes the public key and the seal 
-    to confirm the data has NOT been tampered with.
+    Verifies an ECDSA P-256 signature over the canonical bytes.
+    Returns True if authentic, False if tampered or invalid.
     """
-    signature = base64.b64decode(signature_b64)
+    padded = signature_b64u + "=" * ((4 - len(signature_b64u) % 4) % 4)
+    sig_der = base64.urlsafe_b64decode(padded)
     try:
-        public_key.verify(
-            signature,
-            hashed_data.encode('utf-8'),
-            padding.PSS(
-                mgf=padding.MGF1(hashes.SHA256()),
-                salt_length=padding.PSS.MAX_LENGTH
-            ),
-            hashes.SHA256()
-        )
-        return True # Evidence is Authentic
+        public_key.verify(sig_der, data, ec.ECDSA(hashes.SHA256()))
+        return True
     except Exception:
-        return False # Tampering Detected!
+        return False
 
-# --- THE 5-DAY SPRINT DEMO ---
+
+# --- DEMO ---
 
 if __name__ == "__main__":
     print("--- CEYO INFRASTRUCTURE DEMO ---\n")
 
-    # 1. Initialize CEYO Identities (Normally handled by a Secure Vault)
-    private_key = rsa.generate_private_key(public_exponent=65537, key_size=2048)
+    # 1. Generate a P-256 keypair (production: operator HSM/KMS; CEYO stays non-custodial)
+    private_key = ec.generate_private_key(ec.SECP256R1())
     public_key = private_key.public_key()
 
     # 2. The AI Generation Event
@@ -65,18 +62,17 @@ if __name__ == "__main__":
     print(f"[AI OUTPUT]: {ai_output}")
 
     # 3. Sealing the Evidence
-    sealed_hash = ceyo_canonicalize(ai_output)
-    digital_seal = ceyo_sign(sealed_hash, private_key)
+    canonical = ceyo_canonicalize(ai_output)
+    hash_hex = hashlib.sha256(canonical).hexdigest()
+    digital_seal = ceyo_sign(canonical, private_key)
+    print(f"[SHA-256]:   {hash_hex[:20]}...")
     print(f"[CEYO SEAL]: {digital_seal[:40]}...")
 
     # 4. Verification Check
-    
-    is_authentic = ceyo_verify(sealed_hash, digital_seal, public_key)
-    
-    print(f"\n[VERIFICATION STATUS]: {'✅ VALID & UNTAMPERED' if is_authentic else '❌ TAMPERED/INVALID'}")
+    is_authentic = ceyo_verify(canonical, digital_seal, public_key)
+    print(f"\n[VERIFICATION STATUS]: {'VALID & UNTAMPERED' if is_authentic else 'TAMPERED/INVALID'}")
 
-    # 5. Tamper Test (Simulating an alteration)
-    # If a malicious actor changes even one letter of the evidence...
-    tampered_hash = ceyo_canonicalize("The AI company is NOT liable.") 
-    is_still_authentic = ceyo_verify(tampered_hash, digital_seal, public_key)
-    print(f"[TAMPER TEST STATUS]: {'✅ VALID' if is_still_authentic else '❌ REJECTED (Tamper Detected)'}")
+    # 5. Tamper Test (simulating an alteration)
+    tampered = ceyo_canonicalize("The AI company is NOT liable.")
+    is_still_authentic = ceyo_verify(tampered, digital_seal, public_key)
+    print(f"[TAMPER TEST STATUS]:  {'VALID' if is_still_authentic else 'REJECTED (Tamper Detected)'}")
