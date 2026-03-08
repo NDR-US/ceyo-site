@@ -2,37 +2,33 @@
 
 ## Our Pledge
 
-We are committed to fostering an open and respectful environment for collaboration.
+We as contributors and maintainers pledge to make participation in the CEYO project a respectful and harassment-free experience for everyone, regardless of age, body size, disability, ethnicity, gender identity, experience level, nationality, personal appearance, race, religion, or sexual identity and orientation.
 
-Participants in the CEYO project are expected to treat others with respect and professionalism.
+## Our Standards
 
-## Expected Behavior
+Examples of behavior that contribute to a positive environment include:
 
-Examples of positive behavior include:
+- Using welcoming and inclusive language
+- Respecting differing viewpoints and experiences
+- Accepting constructive criticism gracefully
+- Focusing on what is best for the community
+- Showing empathy toward other contributors
 
-• Respectful communication  
-• Constructive feedback  
-• Collaboration across disciplines  
-• Responsible security disclosure
+Examples of unacceptable behavior include:
 
-## Unacceptable Behavior
-
-The following behaviors are not tolerated:
-
-• Harassment or discrimination
-• Personal attacks
-• Threats or intimidation
-• Deliberate disruption of discussions
+- Harassment or discriminatory language
+- Personal attacks or trolling
+- Publishing private information without permission
+- Any conduct which could reasonably be considered inappropriate in a professional setting
 
 ## Enforcement
 
-Project maintainers reserve the right to remove or restrict participation from individuals who violate this Code of Conduct.
+Project maintainers are responsible for clarifying and enforcing standards of acceptable behavior and may remove, edit, or reject contributions that violate these standards.
 
-## Scope
+## Reporting
 
-This Code of Conduct applies to:
+Instances of abusive or unacceptable behavior may be reported to the project maintainers.
 
-• GitHub discussions
-• Pull requests
-• Issue discussions
-• Community collaboration spaces
+---
+
+This Code of Conduct is adapted from the Contributor Covenant.
