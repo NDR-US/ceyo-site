@@ -1,0 +1,1023 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+  <title>CEYO — Artifact Verifier</title>
+  <meta name="description" content="Verify a CEYO integrity-sealed artifact in your browser. Paste a sealed envelope and public key to confirm hash integrity and ECDSA P-256 signature — no server required."/>
+  <meta name="theme-color" content="#0B0F14"/>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --ink:#0B0F14;
+      --textOnInk:#C9D1D9;
+      --accent:#3A320C;
+      --accent2:#C9A44A;
+      --maxW:1160px;
+      --readW:740px;
+      --r-lg:18px;
+      --s1:8px; --s2:16px; --s3:24px; --s4:32px; --s5:48px; --s6:64px; --s7:96px;
+      --lh:1.65;
+      --shadow:0 10px 30px rgba(0,0,0,.25);
+      --shadow2:0 18px 60px rgba(0,0,0,.35);
+      --mono:'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --ui:'Inter', system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+      --navH:72px;
+    }
+
+    *{box-sizing:border-box}
+    html{ background:var(--ink); scroll-behavior:smooth; scroll-padding-top: calc(var(--navH) + 24px); }
+    body{ margin:0; font-family:var(--ui); color:var(--textOnInk); background:var(--ink); -webkit-text-size-adjust:100%; overflow-x:hidden; }
+    a{color:inherit;text-decoration:none}
+    button{font:inherit}
+    [id]{ scroll-margin-top: calc(var(--navH) + 24px); }
+
+    .bg{
+      position:fixed; inset:0; pointer-events:none; z-index:0;
+      background:
+        radial-gradient(900px 520px at 40% 10%, rgba(58,50,12,.18), transparent 62%),
+        radial-gradient(820px 520px at 82% 34%, rgba(201,164,74,.07), transparent 64%),
+        linear-gradient(180deg, #0B0F14 0%, #0A0D12 40%, #0B0F14 100%);
+    }
+
+    .wrap{ position:relative; z-index:1; max-width:var(--maxW); margin:0 auto; padding:0 var(--s4); }
+    @media (max-width: 640px){ .wrap{ padding:0 18px; } }
+
+    header.site{
+      position:sticky; top:0; z-index:50;
+      backdrop-filter: blur(10px);
+      background: rgba(11,15,20,.72);
+      border-bottom:1px solid rgba(255,255,255,.06);
+    }
+    .nav{
+      height: calc(var(--navH) + env(safe-area-inset-top));
+      padding-top: env(safe-area-inset-top);
+      display:flex; align-items:center; justify-content:space-between; gap:var(--s3);
+    }
+
+    .logo{ display:flex; align-items:center; gap:10px; font-weight:600; letter-spacing:-.01em; flex:0 0 auto; }
+    .logo .mark{
+      display:inline-flex; align-items:center; gap:10px;
+      padding:10px 12px; border-radius:999px;
+      border:1px solid rgba(255,255,255,.08);
+      background: rgba(255,255,255,.02);
+    }
+    .logo .dot{
+      width:8px; height:8px; border-radius:50%;
+      background: var(--accent2);
+      box-shadow: 0 0 0 4px rgba(201,164,74,.12);
+    }
+
+    .actions{ display:flex; align-items:center; gap:10px; justify-content:flex-end; flex:0 0 auto; }
+
+    .btn{
+      height:48px; padding:0 18px; border-radius:999px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.02);
+      color: rgba(201,209,217,.98);
+      display:inline-flex; align-items:center; justify-content:center;
+      font-size:14px;
+      transition: transform .18s ease, border-color .18s ease, background .18s ease;
+      white-space:nowrap;
+      cursor:pointer;
+    }
+    .btn:hover{ transform: translateY(-1px); border-color: rgba(201,164,74,.35); background: rgba(255,255,255,.04); }
+    .btn.primary{
+      border-color: rgba(201,164,74,.50);
+      background: rgba(201,164,74,.10);
+      color: rgba(245,242,234,.96);
+    }
+    .btn.primary:hover{ background: rgba(201,164,74,.16); }
+    .btn .arr{ display:inline-block; margin-left:10px; transition: transform .16s ease; }
+    .btn:hover .arr{ transform: translateX(3px); }
+    .btn:disabled{ opacity:.45; cursor:default; transform:none; }
+
+    .menuBtn{
+      height:48px; padding:0 16px; border-radius:999px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.02);
+      color: rgba(201,209,217,.95);
+      display:inline-flex; align-items:center; justify-content:center;
+      gap:10px; cursor:pointer;
+      transition: transform .18s ease, border-color .18s ease, background .18s ease;
+      white-space:nowrap;
+    }
+    .menuBtn:hover{ transform: translateY(-1px); border-color: rgba(201,164,74,.35); background: rgba(255,255,255,.04); }
+    .menuBtn .m{ font-family: var(--mono); font-size: 12px; letter-spacing: .16em; text-transform: uppercase; }
+
+    @media (max-width: 980px){ .actions .btn.secondary{ display:none; } }
+
+    .drawer{
+      position:fixed; inset:0; z-index:80;
+      display:none;
+      background: rgba(11,15,20,.72);
+      backdrop-filter: blur(10px);
+      padding: calc(env(safe-area-inset-top) + 12px) 18px 18px;
+    }
+    .drawer.open{ display:block; }
+    .drawerCard{
+      max-width: 680px; margin: 0 auto;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.03);
+      border-radius: var(--r-lg);
+      box-shadow: var(--shadow2);
+      overflow:hidden;
+    }
+    .drawerHead{
+      display:flex; align-items:center; justify-content:space-between;
+      padding: 14px 14px;
+      border-bottom:1px solid rgba(255,255,255,.08);
+    }
+    .drawerHead .t{ font-family: var(--mono); font-size:12px; letter-spacing:.18em; text-transform:uppercase; color: rgba(201,209,217,.82); }
+    .close{
+      height:44px; padding:0 14px; border-radius:999px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.02);
+      color: rgba(201,209,217,.92);
+      cursor:pointer;
+    }
+    .drawerLinks{ display:grid; grid-template-columns: 1fr; padding: 10px; gap: 8px; }
+    .drawerLinks a{
+      padding: 14px 14px; border-radius: 14px;
+      border:1px solid rgba(255,255,255,.06);
+      background: rgba(255,255,255,.02);
+      font-size: 15px;
+      transition: transform .18s ease, border-color .18s ease;
+    }
+    .drawerLinks a:hover{ transform: translateY(-1px); border-color: rgba(201,164,74,.28); }
+    .drawerLinks a.active{ border-color: rgba(201,164,74,.35); background: rgba(201,164,74,.10); }
+
+    .read{ max-width: var(--readW); }
+    p{ margin: 0 0 14px 0; line-height: var(--lh); }
+    .muted{ color: rgba(201,209,217,.78); }
+
+    main{ padding-top: calc(var(--navH) + var(--s4)); padding-bottom: var(--s7); }
+    section{ padding: var(--s7) 0; border-top:1px solid rgba(255,255,255,.06); }
+    section:first-of-type{ border-top:none; padding-top: 0; }
+
+    .eyebrow{
+      font-family: var(--mono);
+      font-size: 12px; letter-spacing: .18em;
+      text-transform: uppercase;
+      color: rgba(201,164,74,.92);
+      margin-bottom: 12px;
+    }
+    h1{ font-size: 46px; line-height: 1.15; letter-spacing: -0.02em; margin: 0 0 14px 0; font-weight: 600; }
+    h2{ font-size: 30px; line-height: 1.20; letter-spacing: -0.01em; margin: 0 0 12px 0; font-weight: 600; }
+    h3{ font-size: 20px; line-height: 1.25; margin: 0 0 10px 0; font-weight: 600; }
+    @media (max-width: 640px){ h1{ font-size: 32px; } h2{ font-size: 24px; } h3{ font-size: 19px; } }
+
+    .callout{
+      border:1px solid rgba(201,164,74,.22);
+      background: rgba(11,15,20,.60);
+      border-radius: var(--r-lg);
+      padding: 16px 16px;
+      margin-top: 16px;
+    }
+    .calloutTop{
+      display:flex; align-items:baseline; justify-content:space-between; gap:12px; flex-wrap:wrap;
+      margin-bottom: 8px;
+    }
+    .labelChip{
+      display:inline-flex; align-items:center; gap:8px;
+      padding: 8px 10px; border-radius: 999px;
+      border:1px solid rgba(201,164,74,.38);
+      background: rgba(201,164,74,.10);
+      color: rgba(245,242,234,.92);
+      font-family: var(--mono);
+      font-size: 11px; letter-spacing: .12em; text-transform: uppercase;
+    }
+    .callout ul{ margin: 0; padding: 0 0 0 18px; }
+    .callout li{ margin: 8px 0; color: rgba(201,209,217,.84); line-height: 1.55; }
+
+    footer{ border-top:1px solid rgba(255,255,255,.06); padding: var(--s7) 0 var(--s6); }
+    .footGrid{
+      display:grid; grid-template-columns: 1.2fr 1fr 1fr 1fr;
+      gap: 14px; margin-bottom: 22px;
+    }
+    @media (max-width: 980px){ .footGrid{ grid-template-columns: 1fr 1fr; } }
+    @media (max-width: 640px){ .footGrid{ grid-template-columns: 1fr; } }
+    .footCol{
+      border:1px solid rgba(255,255,255,.08);
+      background: rgba(255,255,255,.02);
+      border-radius: var(--r-lg);
+      padding: 18px 18px;
+    }
+    .footCol .t{ font-family: var(--mono); font-size: 12px; letter-spacing: .18em; text-transform: uppercase; color: rgba(201,164,74,.86); margin-bottom: 10px; }
+    .footCol a{ display:block; padding: 10px 10px; border-radius: 12px; border:1px solid transparent; color: rgba(201,209,217,.84); transition: background .18s ease, border-color .18s ease; }
+    .footCol a:hover{ background: rgba(255,255,255,.03); border-color: rgba(255,255,255,.06); }
+    .footBottom{
+      display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap;
+      font-family: var(--mono); font-size: 12px; letter-spacing: .14em; text-transform: uppercase;
+      color: rgba(201,209,217,.62); padding-top: 18px; border-top:1px solid rgba(255,255,255,.06);
+    }
+
+    .reveal{ opacity:0; transform: translateY(10px); transition: opacity .55s ease, transform .55s ease; }
+    .reveal.on{ opacity:1; transform: translateY(0); }
+    @media (prefers-reduced-motion: reduce){
+      html{scroll-behavior:auto;}
+      .reveal{ opacity:1; transform:none; transition:none; }
+      .btn, .drawerLinks a, .menuBtn{ transition:none; }
+    }
+
+    /* ── Verifier-specific ── */
+
+    .inputGrid{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-top: 24px;
+    }
+    @media (max-width: 860px){ .inputGrid{ grid-template-columns: 1fr; } }
+
+    .inputBlock{
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.02);
+      border-radius: var(--r-lg);
+      overflow:hidden;
+      display:flex; flex-direction:column;
+    }
+    .inputHead{
+      display:flex; align-items:center; justify-content:space-between;
+      padding: 11px 14px;
+      border-bottom:1px solid rgba(255,255,255,.08);
+      background: rgba(255,255,255,.02);
+      flex-shrink:0;
+    }
+    .inputHead .lbl{
+      font-family: var(--mono); font-size: 11px;
+      letter-spacing: .16em; text-transform: uppercase;
+      color: rgba(201,164,74,.86);
+    }
+    .inputHead .opt{
+      font-family: var(--mono); font-size: 10px;
+      color: rgba(201,209,217,.42); letter-spacing: .08em;
+    }
+    textarea.field{
+      width: 100%; flex: 1;
+      background: transparent; border: none; outline: none;
+      color: rgba(201,209,217,.90);
+      font-family: var(--mono); font-size: 12px; line-height: 1.6;
+      padding: 14px; resize: vertical; min-height: 200px;
+    }
+    textarea.field::placeholder{ color: rgba(201,209,217,.28); }
+
+    .actionRow{ display:flex; gap:10px; flex-wrap:wrap; margin-top: 16px; align-items:center; }
+    .actionRow .hint{
+      font-family: var(--mono); font-size: 11px;
+      color: rgba(201,209,217,.42); letter-spacing: .08em;
+    }
+
+    /* Results */
+    .results{ margin-top: 32px; display:none; }
+    .results.visible{ display:block; }
+
+    .statusBanner{
+      border-radius: var(--r-lg); padding: 18px 20px;
+      display:flex; align-items:flex-start; gap:14px; margin-bottom: 20px;
+    }
+    .statusBanner.pass{ border:1px solid rgba(110,231,183,.22); background: rgba(16,185,129,.07); }
+    .statusBanner.fail{ border:1px solid rgba(239,68,68,.22); background: rgba(239,68,68,.07); }
+    .statusBanner.partial{ border:1px solid rgba(201,164,74,.26); background: rgba(201,164,74,.06); }
+    .statusBanner .sIcon{ font-size: 22px; flex:0 0 auto; margin-top:1px; }
+    .statusBanner .sBody{}
+    .statusBanner .sTitle{ font-size: 16px; font-weight: 600; letter-spacing:-.01em; margin-bottom: 4px; }
+    .statusBanner .sSub{ font-size: 13px; color: rgba(201,209,217,.70); line-height: 1.5; }
+
+    .stepGrid{
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px; margin-bottom: 20px;
+    }
+    @media (max-width: 760px){ .stepGrid{ grid-template-columns: 1fr; } }
+
+    .stepCard{
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.02);
+      border-radius: 14px; padding: 14px;
+    }
+    .stepCard .scHead{ display:flex; align-items:center; justify-content:space-between; margin-bottom: 8px; }
+    .stepCard .scTitle{
+      font-family: var(--mono); font-size: 11px;
+      letter-spacing: .14em; text-transform: uppercase;
+      color: rgba(201,209,217,.70);
+    }
+    .stepCard .scDetail{ font-size: 13px; color: rgba(201,209,217,.66); line-height: 1.55; }
+
+    .badge{
+      display:inline-flex; align-items:center; gap:5px;
+      padding: 4px 9px; border-radius: 999px;
+      font-family: var(--mono); font-size: 10px;
+      letter-spacing: .10em; text-transform: uppercase; font-weight: 500;
+    }
+    .badge.pass{ border:1px solid rgba(110,231,183,.30); background: rgba(16,185,129,.10); color: rgba(110,231,183,.92); }
+    .badge.fail{ border:1px solid rgba(239,68,68,.30); background: rgba(239,68,68,.10); color: rgba(252,165,165,.92); }
+    .badge.skip{ border:1px solid rgba(255,255,255,.12); background: rgba(255,255,255,.04); color: rgba(201,209,217,.55); }
+
+    .detailSection{ margin-top: 20px; }
+    .detailSection h3{ font-size: 17px; margin-bottom: 12px; }
+
+    .codeBlock{
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.28);
+      border-radius: 12px; overflow:hidden; margin-bottom: 14px;
+    }
+    .codeBlock .cbHead{
+      display:flex; align-items:center; justify-content:space-between;
+      padding: 9px 12px; border-bottom:1px solid rgba(255,255,255,.08);
+    }
+    .codeBlock .cbHead .t{
+      font-family: var(--mono); font-size: 10px;
+      letter-spacing: .16em; text-transform: uppercase;
+      color: rgba(201,209,217,.48);
+    }
+    .copyBtn{
+      font-family: var(--mono); font-size: 10px; letter-spacing: .10em;
+      text-transform: uppercase; color: rgba(201,164,74,.65);
+      background: none; border: none; cursor: pointer;
+      padding: 2px 6px; border-radius: 4px;
+      transition: color .15s ease;
+    }
+    .copyBtn:hover{ color: rgba(201,164,74,1); }
+    .codeBlock pre{
+      margin: 0; padding: 12px;
+      font-family: var(--mono); font-size: 12px; line-height: 1.55;
+      color: rgba(201,209,217,.82); overflow-x: auto; max-height: 220px;
+      white-space: pre-wrap; word-break: break-all;
+    }
+
+    .hashRows{ display:flex; flex-direction:column; gap: 8px; }
+    .hashRow{ display:flex; gap: 10px; align-items: baseline; }
+    .hashRow .hLbl{
+      font-family: var(--mono); font-size: 10px;
+      letter-spacing: .10em; text-transform: uppercase;
+      color: rgba(201,209,217,.48); flex: 0 0 72px;
+    }
+    .hashRow .hVal{
+      font-family: var(--mono); font-size: 12px;
+      color: rgba(201,209,217,.82); word-break: break-all; line-height: 1.5;
+    }
+    .hashRow .hVal.match{ color: rgba(110,231,183,.86); }
+    .hashRow .hVal.mismatch{ color: rgba(252,165,165,.86); }
+
+    .policyGrid{
+      display:grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 10px; margin-top: 4px;
+    }
+    .policyItem{
+      border:1px solid rgba(255,255,255,.08);
+      background: rgba(255,255,255,.02);
+      border-radius: 10px; padding: 10px 12px;
+    }
+    .policyItem .piLabel{
+      font-family: var(--mono); font-size: 10px;
+      letter-spacing: .12em; text-transform: uppercase;
+      color: rgba(201,164,74,.72); margin-bottom: 5px;
+    }
+    .policyItem .piVal{
+      font-family: var(--mono); font-size: 13px;
+      color: rgba(201,209,217,.88);
+    }
+
+    .errorBanner{
+      border:1px solid rgba(239,68,68,.22); background: rgba(239,68,68,.07);
+      border-radius: var(--r-lg); padding: 14px 16px;
+      font-family: var(--mono); font-size: 13px; color: rgba(252,165,165,.90);
+      margin-bottom: 16px; display:none;
+    }
+    .errorBanner.visible{ display:block; }
+  </style>
+</head>
+
+<body>
+  <div class="bg" aria-hidden="true"></div>
+
+  <header class="site">
+    <div class="wrap nav">
+      <a class="logo" href="index.html" aria-label="CEYO Home">
+        <span class="mark"><span class="dot" aria-hidden="true"></span><span>CEYO</span></span>
+      </a>
+      <div class="actions" aria-label="Actions">
+        <a class="btn secondary" href="resources.html#sample-artifact">Sample artifacts<span class="arr">→</span></a>
+        <a class="btn primary" href="contact.html">Request walkthrough<span class="arr">→</span></a>
+        <button class="menuBtn" id="openMenu" aria-label="Open menu" type="button">
+          <span aria-hidden="true">☰</span><span class="m">Menu</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div class="drawer" id="drawer" aria-hidden="true">
+    <div class="drawerCard" role="dialog" aria-modal="true" aria-label="Menu">
+      <div class="drawerHead">
+        <div class="t">Menu</div>
+        <button class="close" id="closeMenu" type="button">Close</button>
+      </div>
+      <div class="drawerLinks">
+        <a href="index.html">Overview</a>
+        <a href="how.html">How It Works</a>
+        <a href="platform.html">Platform</a>
+        <a href="trust.html">Trust &amp; Verification</a>
+        <a href="compliance.html">Compliance</a>
+        <a href="integrations.html">Integrations</a>
+        <a href="use-cases.html">Use Cases</a>
+        <a href="security.html">Security</a>
+        <a href="resources.html">Resources</a>
+        <a class="active" href="verify.html">Verify Artifact</a>
+        <a href="company.html">Company</a>
+        <a href="contact.html">Contact</a>
+      </div>
+    </div>
+  </div>
+
+  <main class="wrap">
+    <section>
+      <div class="read reveal">
+        <div class="eyebrow">Verify · Integrity · Provenance</div>
+        <h1>Verify an artifact.</h1>
+        <p class="muted">
+          Paste a CEYO sealed envelope below. The verifier runs entirely in your browser —
+          no data leaves your machine. Provide a public key to validate the ECDSA signature;
+          omit it to check hash integrity only.
+        </p>
+
+        <div class="callout reveal">
+          <div class="calloutTop">
+            <span class="labelChip">What this checks</span>
+          </div>
+          <ul>
+            <li><strong>Canonicalization</strong> — reproduces the RFC 8785 (JCS) canonical form of the artifact body.</li>
+            <li><strong>Hash integrity</strong> — recomputes SHA-256 and compares it to the stored value.</li>
+            <li><strong>Signature</strong> — validates the ECDSA P-256 signature over the canonical body using your provided public key.</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Inputs -->
+      <div class="inputGrid reveal" style="margin-top:32px;">
+        <div class="inputBlock">
+          <div class="inputHead">
+            <span class="lbl">Sealed Envelope</span>
+            <span class="opt">JSON</span>
+          </div>
+          <textarea class="field" id="envelopeInput" spellcheck="false"
+            placeholder='{
+  "product": "CEYO",
+  "body": { ... },
+  "canonicalization": { "scheme": "RFC8785", ... },
+  "integrity": {
+    "hash": { "alg": "SHA-256", "value_b64u": "...", ... },
+    "sig":  { "alg": "ECDSA-P256-SHA256", "format": "DER", "value_b64u": "...", ... }
+  }
+}'></textarea>
+        </div>
+
+        <div class="inputBlock">
+          <div class="inputHead">
+            <span class="lbl">Public Key</span>
+            <span class="opt">PEM · optional</span>
+          </div>
+          <textarea class="field" id="pubkeyInput" spellcheck="false"
+            placeholder="-----BEGIN PUBLIC KEY-----
+MFkwEwYHKoZIzj0CAQY...
+-----END PUBLIC KEY-----
+
+Leave blank to check hash integrity only."></textarea>
+        </div>
+      </div>
+
+      <div class="actionRow reveal">
+        <button class="btn primary" id="verifyBtn" type="button">
+          Verify<span class="arr">→</span>
+        </button>
+        <button class="btn" id="exampleBtn" type="button">
+          Generate &amp; load example
+        </button>
+        <button class="btn" id="clearBtn" type="button">Clear</button>
+        <span class="hint" id="statusHint"></span>
+      </div>
+
+      <div class="errorBanner" id="errorBanner" role="alert"></div>
+
+      <!-- Results -->
+      <div class="results" id="results" aria-live="polite">
+
+        <div class="statusBanner" id="statusBanner">
+          <div class="sIcon" id="statusIcon"></div>
+          <div class="sBody">
+            <div class="sTitle" id="statusTitle"></div>
+            <div class="sSub" id="statusSub"></div>
+          </div>
+        </div>
+
+        <div class="stepGrid">
+          <div class="stepCard">
+            <div class="scHead">
+              <span class="scTitle">Step 1 · Canonicalize</span>
+              <span class="badge pass" id="step1Badge">Done</span>
+            </div>
+            <div class="scDetail" id="step1Detail">RFC 8785 (JCS) applied to body. Keys sorted by Unicode code point; no whitespace.</div>
+          </div>
+          <div class="stepCard">
+            <div class="scHead">
+              <span class="scTitle">Step 2 · Hash</span>
+              <span class="badge" id="step2Badge">—</span>
+            </div>
+            <div class="scDetail" id="step2Detail">SHA-256 recomputed and compared to stored value.</div>
+          </div>
+          <div class="stepCard">
+            <div class="scHead">
+              <span class="scTitle">Step 3 · Signature</span>
+              <span class="badge" id="step3Badge">—</span>
+            </div>
+            <div class="scDetail" id="step3Detail">ECDSA P-256 over canonical body bytes.</div>
+          </div>
+        </div>
+
+        <div class="detailSection">
+          <div class="codeBlock">
+            <div class="cbHead">
+              <span class="t">RFC 8785 Canonical Body</span>
+              <button class="copyBtn" data-target="canonicalOutput">Copy</button>
+            </div>
+            <pre id="canonicalOutput"></pre>
+          </div>
+
+          <div class="codeBlock">
+            <div class="cbHead"><span class="t">SHA-256 Hash</span></div>
+            <div style="padding:12px;">
+              <div class="hashRows">
+                <div class="hashRow">
+                  <span class="hLbl">Computed</span>
+                  <span class="hVal" id="hashComputed">—</span>
+                </div>
+                <div class="hashRow">
+                  <span class="hLbl">Stored</span>
+                  <span class="hVal" id="hashStored">—</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div id="policySection" style="display:none; margin-bottom:14px;">
+            <div style="font-family:var(--mono); font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:rgba(201,164,74,.72); margin-bottom:10px;">Policy Scope</div>
+            <div class="policyGrid" id="policyGrid"></div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <footer id="footer">
+      <div class="footGrid reveal">
+        <div class="footCol">
+          <div class="t">Product</div>
+          <a href="index.html">Overview</a>
+          <a href="how.html">How It Works</a>
+          <a href="platform.html">Platform</a>
+          <a href="integrations.html">Integrations</a>
+        </div>
+        <div class="footCol">
+          <div class="t">Trust</div>
+          <a href="trust.html">Trust Model</a>
+          <a href="security.html">Security</a>
+          <a href="trust.html#verification-spec">Verification Spec</a>
+          <a href="verify.html">Verify Artifact</a>
+        </div>
+        <div class="footCol">
+          <div class="t">Resources</div>
+          <a href="resources.html">Library</a>
+          <a href="resources.html#sample-artifact">Sample Artifacts</a>
+          <a href="resources.html#glossary">Glossary</a>
+          <a href="resources.html#faq">FAQs</a>
+        </div>
+        <div class="footCol">
+          <div class="t">Legal</div>
+          <a href="privacy.html">Privacy</a>
+          <a href="terms.html">Terms</a>
+          <a href="vdp.html">Security Disclosure</a>
+          <a href="ethics.html">Responsible Use</a>
+        </div>
+      </div>
+      <div class="footBottom reveal">
+        <div>© <span id="year"></span> CEYO. All rights reserved.</div>
+        <div><a href="vdp.html">Vulnerability Disclosure</a></div>
+      </div>
+    </footer>
+  </main>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // ── Nav ──
+    const drawer = document.getElementById('drawer');
+    const openMenu = document.getElementById('openMenu');
+    const closeMenu = document.getElementById('closeMenu');
+    function openDrawer(){ drawer.classList.add('open'); drawer.setAttribute('aria-hidden','false'); document.body.style.overflow='hidden'; }
+    function closeDrawer(){ drawer.classList.remove('open'); drawer.setAttribute('aria-hidden','true'); document.body.style.overflow=''; }
+    openMenu.addEventListener('click', openDrawer);
+    closeMenu.addEventListener('click', closeDrawer);
+    drawer.addEventListener('click', (e)=>{ if(e.target===drawer) closeDrawer(); });
+    window.addEventListener('keydown', (e)=>{ if(e.key==='Escape' && drawer.classList.contains('open')) closeDrawer(); });
+
+    // ── Reveal ──
+    const prefersReduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const revealEls = Array.from(document.querySelectorAll('.reveal'));
+    if(!prefersReduce){
+      const io = new IntersectionObserver((entries)=>{
+        entries.forEach(en=>{ if(en.isIntersecting) en.target.classList.add('on'); });
+      }, {threshold: 0.10});
+      revealEls.forEach(el=>io.observe(el));
+    } else {
+      revealEls.forEach(el=>el.classList.add('on'));
+    }
+
+    // ── Copy buttons ──
+    document.querySelectorAll('.copyBtn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const target = document.getElementById(btn.dataset.target);
+        if (!target) return;
+        navigator.clipboard.writeText(target.textContent).then(() => {
+          const orig = btn.textContent;
+          btn.textContent = 'Copied';
+          setTimeout(() => { btn.textContent = orig; }, 1500);
+        });
+      });
+    });
+
+    // ────────────────────────────────────────────────
+    // RFC 8785 (JCS) Canonicalization
+    // ────────────────────────────────────────────────
+    function jcs(value) {
+      if (value === null) return 'null';
+      if (typeof value === 'boolean') return value ? 'true' : 'false';
+      if (typeof value === 'number') {
+        if (!isFinite(value)) throw new Error('Non-finite number in artifact body.');
+        return JSON.stringify(value);
+      }
+      if (typeof value === 'string') return JSON.stringify(value);
+      if (Array.isArray(value)) {
+        return '[' + value.map(jcs).join(',') + ']';
+      }
+      if (typeof value === 'object') {
+        const pairs = Object.keys(value)
+          .sort()  // UTF-16 code unit order — matches RFC 8785 §3.2.3
+          .map(k => JSON.stringify(k) + ':' + jcs(value[k]));
+        return '{' + pairs.join(',') + '}';
+      }
+      throw new Error('Unsupported value type: ' + typeof value);
+    }
+
+    // ────────────────────────────────────────────────
+    // Base64url helpers
+    // ────────────────────────────────────────────────
+    function toB64u(bytes) {
+      let b64 = '';
+      for (const b of bytes) b64 += String.fromCharCode(b);
+      return btoa(b64).replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
+    }
+
+    function fromB64u(str) {
+      const padded = str.replace(/-/g, '+').replace(/_/g, '/') +
+        '=='.slice(0, (4 - str.length % 4) % 4);
+      const bin = atob(padded);
+      const bytes = new Uint8Array(bin.length);
+      for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+      return bytes;
+    }
+
+    // ────────────────────────────────────────────────
+    // DER ↔ Raw P-256 signature (IEEE P1363: r‖s, 64 bytes)
+    // ────────────────────────────────────────────────
+    function derToRaw(der) {
+      let off = 0;
+      if (der[off++] !== 0x30) throw new Error('DER: expected SEQUENCE tag (0x30).');
+      // Skip length (P-256 sigs always < 127 bytes, so one-byte length)
+      off++;
+      if (der[off++] !== 0x02) throw new Error('DER: expected INTEGER tag for r.');
+      const rLen = der[off++];
+      const rBytes = der.slice(off, off + rLen); off += rLen;
+      if (der[off++] !== 0x02) throw new Error('DER: expected INTEGER tag for s.');
+      const sLen = der[off++];
+      const sBytes = der.slice(off, off + sLen);
+
+      function toFixed32(b) {
+        if (b.length === 33 && b[0] === 0) b = b.slice(1);
+        if (b.length > 32) throw new Error('DER integer too large for P-256.');
+        const out = new Uint8Array(32);
+        out.set(b, 32 - b.length);
+        return out;
+      }
+
+      const raw = new Uint8Array(64);
+      raw.set(toFixed32(rBytes), 0);
+      raw.set(toFixed32(sBytes), 32);
+      return raw;
+    }
+
+    function rawToDer(raw) {
+      function encodeInt(bytes) {
+        let i = 0;
+        while (i < bytes.length - 1 && bytes[i] === 0) i++;
+        bytes = bytes.slice(i);
+        if (bytes[0] & 0x80) {
+          const p = new Uint8Array(bytes.length + 1);
+          p[0] = 0; p.set(bytes, 1); bytes = p;
+        }
+        return bytes;
+      }
+      const r = encodeInt(raw.slice(0, 32));
+      const s = encodeInt(raw.slice(32));
+      const seqLen = 2 + r.length + 2 + s.length;
+      const der = new Uint8Array(2 + seqLen);
+      let off = 0;
+      der[off++] = 0x30; der[off++] = seqLen;
+      der[off++] = 0x02; der[off++] = r.length; der.set(r, off); off += r.length;
+      der[off++] = 0x02; der[off++] = s.length; der.set(s, off);
+      return der;
+    }
+
+    // ────────────────────────────────────────────────
+    // Key import from PEM
+    // ────────────────────────────────────────────────
+    async function importPublicKey(pem) {
+      const b64 = pem.replace(/-----[^-]+-----/g, '').replace(/\s+/g, '');
+      const bin = atob(b64);
+      const spki = new Uint8Array(bin.length);
+      for (let i = 0; i < bin.length; i++) spki[i] = bin.charCodeAt(i);
+      return crypto.subtle.importKey('spki', spki.buffer,
+        { name: 'ECDSA', namedCurve: 'P-256' }, false, ['verify']);
+    }
+
+    function exportKeyToPem(spkiBuffer) {
+      const bytes = new Uint8Array(spkiBuffer);
+      let b64 = '';
+      for (const b of bytes) b64 += String.fromCharCode(b);
+      b64 = btoa(b64);
+      const lines = [];
+      for (let i = 0; i < b64.length; i += 64) lines.push(b64.slice(i, i + 64));
+      return '-----BEGIN PUBLIC KEY-----\n' + lines.join('\n') + '\n-----END PUBLIC KEY-----';
+    }
+
+    // ────────────────────────────────────────────────
+    // Generate a fresh signed example (runs in browser)
+    // ────────────────────────────────────────────────
+    async function generateExample() {
+      const hint = document.getElementById('statusHint');
+      hint.textContent = 'Generating keypair…';
+      const exBtn = document.getElementById('exampleBtn');
+      exBtn.disabled = true;
+
+      try {
+        const kp = await crypto.subtle.generateKey(
+          { name: 'ECDSA', namedCurve: 'P-256' }, true, ['sign', 'verify']);
+
+        const body = {
+          env_fingerprint: 'env:sha256:7b2c9f1a3de4b8c02f5a6d7e8f9a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a',
+          event: { model_ref: 'opaque-ref-v1', type: 'inference' },
+          input_ref_hash: 'sha256:1a9f3b2c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a',
+          policy: { id: 'POL-001', version: '1.0' },
+          tier: 'controlled',
+          ts: new Date().toISOString(),
+        };
+
+        const canonical = jcs(body);
+        const bodyBytes = new TextEncoder().encode(canonical);
+
+        const hashBuf = await crypto.subtle.digest('SHA-256', bodyBytes);
+        const hashB64u = toB64u(new Uint8Array(hashBuf));
+
+        const sigRaw = await crypto.subtle.sign(
+          { name: 'ECDSA', hash: 'SHA-256' }, kp.privateKey, bodyBytes);
+        const sigDer = rawToDer(new Uint8Array(sigRaw));
+        const sigB64u = toB64u(sigDer);
+
+        const spki = await crypto.subtle.exportKey('spki', kp.publicKey);
+        const pubKeyPem = exportKeyToPem(spki);
+
+        const envelope = {
+          product: 'CEYO',
+          body,
+          canonicalization: { scheme: 'RFC8785', scope: 'body', version: '1.0' },
+          integrity: {
+            hash: { alg: 'SHA-256', covers: 'canonical(body)', value_b64u: hashB64u },
+            sig: { alg: 'ECDSA-P256-SHA256', covers: 'canonical(body)', format: 'DER', value_b64u: sigB64u },
+          },
+        };
+
+        document.getElementById('envelopeInput').value = JSON.stringify(envelope, null, 2);
+        document.getElementById('pubkeyInput').value = pubKeyPem;
+        hint.textContent = 'Fresh keypair generated — ready to verify.';
+      } catch (err) {
+        hint.textContent = 'Error generating example: ' + err.message;
+      } finally {
+        exBtn.disabled = false;
+      }
+    }
+
+    // ────────────────────────────────────────────────
+    // Main verify flow
+    // ────────────────────────────────────────────────
+    async function runVerify() {
+      const errorBanner = document.getElementById('errorBanner');
+      const results = document.getElementById('results');
+      errorBanner.classList.remove('visible');
+      results.classList.remove('visible');
+
+      const envelopeRaw = document.getElementById('envelopeInput').value.trim();
+      const pubKeyPem = document.getElementById('pubkeyInput').value.trim();
+
+      if (!envelopeRaw) {
+        showError('Paste a sealed envelope JSON to verify.');
+        return;
+      }
+
+      let envelope;
+      try {
+        envelope = JSON.parse(envelopeRaw);
+      } catch (e) {
+        showError('Invalid JSON: ' + e.message);
+        return;
+      }
+
+      // Validate envelope structure
+      if (!envelope || typeof envelope !== 'object') { showError('Envelope must be a JSON object.'); return; }
+      if (!envelope.body) { showError('Envelope is missing "body".'); return; }
+      if (!envelope.integrity) { showError('Envelope is missing "integrity".'); return; }
+      if (!envelope.canonicalization) { showError('Envelope is missing "canonicalization" metadata.'); return; }
+
+      const canon = envelope.canonicalization;
+      if (canon.scheme !== 'RFC8785' || canon.scope !== 'body') {
+        showError('Unsupported canonicalization scheme. Expected RFC8785 over body.');
+        return;
+      }
+
+      // ── Step 1: Canonicalize ──
+      let canonical;
+      try {
+        canonical = jcs(envelope.body);
+      } catch (e) {
+        showError('Canonicalization failed: ' + e.message);
+        return;
+      }
+      const bodyBytes = new TextEncoder().encode(canonical);
+
+      document.getElementById('step1Badge').className = 'badge pass';
+      document.getElementById('step1Badge').textContent = 'Done';
+      document.getElementById('step1Detail').textContent =
+        'RFC 8785 applied. ' + canonical.length + ' bytes canonical.';
+      document.getElementById('canonicalOutput').textContent = canonical;
+
+      // ── Step 2: Hash ──
+      const hashBuf = await crypto.subtle.digest('SHA-256', bodyBytes);
+      const computedB64u = toB64u(new Uint8Array(hashBuf));
+      const storedB64u = (envelope.integrity.hash || {}).value_b64u || '';
+      const hashMatch = computedB64u === storedB64u;
+
+      const hashComputedEl = document.getElementById('hashComputed');
+      const hashStoredEl = document.getElementById('hashStored');
+      hashComputedEl.textContent = computedB64u;
+      hashStoredEl.textContent = storedB64u || '(not present)';
+      hashComputedEl.className = 'hVal ' + (hashMatch ? 'match' : 'mismatch');
+      hashStoredEl.className = 'hVal ' + (hashMatch ? 'match' : 'mismatch');
+
+      const step2Badge = document.getElementById('step2Badge');
+      step2Badge.className = 'badge ' + (hashMatch ? 'pass' : 'fail');
+      step2Badge.textContent = hashMatch ? 'Match' : 'Mismatch';
+      document.getElementById('step2Detail').textContent = hashMatch
+        ? 'SHA-256 recomputed. Values match — body unchanged since sealing.'
+        : 'SHA-256 mismatch — body may have been altered after sealing.';
+
+      // ── Step 3: Signature ──
+      let sigValid = null;
+      const step3Badge = document.getElementById('step3Badge');
+      const step3Detail = document.getElementById('step3Detail');
+
+      if (pubKeyPem) {
+        try {
+          const pubKey = await importPublicKey(pubKeyPem);
+          const sigInfo = envelope.integrity.sig || {};
+
+          if (sigInfo.alg !== 'ECDSA-P256-SHA256') {
+            showError('Unsupported signature algorithm "' + sigInfo.alg + '". Expected ECDSA-P256-SHA256.');
+            return;
+          }
+          if (sigInfo.format !== 'DER') {
+            showError('Unsupported signature format "' + sigInfo.format + '". Expected DER.');
+            return;
+          }
+          if (!sigInfo.value_b64u) {
+            showError('Signature value (integrity.sig.value_b64u) is missing.');
+            return;
+          }
+
+          const sigDer = fromB64u(sigInfo.value_b64u);
+          const sigRaw = derToRaw(sigDer);
+          sigValid = await crypto.subtle.verify(
+            { name: 'ECDSA', hash: 'SHA-256' }, pubKey, sigRaw, bodyBytes);
+
+          step3Badge.className = 'badge ' + (sigValid ? 'pass' : 'fail');
+          step3Badge.textContent = sigValid ? 'Valid' : 'Invalid';
+          step3Detail.textContent = sigValid
+            ? 'ECDSA P-256 signature verified against provided public key.'
+            : 'Signature verification failed. Key mismatch or artifact altered.';
+        } catch (e) {
+          step3Badge.className = 'badge fail';
+          step3Badge.textContent = 'Error';
+          step3Detail.textContent = 'Verification error: ' + e.message;
+          sigValid = false;
+        }
+      } else {
+        step3Badge.className = 'badge skip';
+        step3Badge.textContent = 'Skipped';
+        step3Detail.textContent = 'No public key provided. Paste a PEM key to validate the signature.';
+      }
+
+      // ── Policy metadata ──
+      const policy = (envelope.body || {}).policy;
+      const policySection = document.getElementById('policySection');
+      const policyGrid = document.getElementById('policyGrid');
+      if (policy && typeof policy === 'object') {
+        policyGrid.innerHTML = '';
+        const fields = {
+          'Policy ID': policy.id,
+          'Version': policy.version,
+          'Product': envelope.product,
+          'Tier': envelope.body.tier,
+          'Timestamp': envelope.body.ts,
+          'Canon scheme': canon.scheme + ' ' + (canon.version || ''),
+        };
+        for (const [label, val] of Object.entries(fields)) {
+          if (val == null) continue;
+          policyGrid.innerHTML += `
+            <div class="policyItem">
+              <div class="piLabel">${label}</div>
+              <div class="piVal">${val}</div>
+            </div>`;
+        }
+        policySection.style.display = 'block';
+      } else {
+        policySection.style.display = 'none';
+      }
+
+      // ── Overall status ──
+      const banner = document.getElementById('statusBanner');
+      const icon = document.getElementById('statusIcon');
+      const title = document.getElementById('statusTitle');
+      const sub = document.getElementById('statusSub');
+
+      if (!hashMatch) {
+        banner.className = 'statusBanner fail';
+        icon.textContent = '✗';
+        title.textContent = 'Integrity Failed';
+        sub.textContent = 'Hash mismatch — the artifact body does not match its stored digest. The record may have been altered after sealing.';
+      } else if (sigValid === false) {
+        banner.className = 'statusBanner fail';
+        icon.textContent = '✗';
+        title.textContent = 'Signature Invalid';
+        sub.textContent = 'Hash matched but the ECDSA signature did not verify. The key may not correspond to the signing operator, or the artifact was re-sealed.';
+      } else if (sigValid === true) {
+        banner.className = 'statusBanner pass';
+        icon.textContent = '✓';
+        title.textContent = 'Integrity Confirmed';
+        sub.textContent = 'Hash and ECDSA P-256 signature both verified. The artifact body is unchanged since sealing and provenance is confirmed under the declared policy scope.';
+      } else {
+        banner.className = 'statusBanner partial';
+        icon.textContent = '~';
+        title.textContent = 'Hash Confirmed · Signature Not Checked';
+        sub.textContent = 'The artifact body matches its stored digest. Provide a public key (PEM) to also validate the ECDSA signature and confirm provenance.';
+      }
+
+      results.classList.add('visible');
+      results.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    function showError(msg) {
+      const el = document.getElementById('errorBanner');
+      el.textContent = msg;
+      el.classList.add('visible');
+    }
+
+    // ── Wire up buttons ──
+    document.getElementById('verifyBtn').addEventListener('click', () => {
+      runVerify().catch(err => showError('Unexpected error: ' + err.message));
+    });
+    document.getElementById('exampleBtn').addEventListener('click', () => {
+      generateExample().catch(err => {
+        document.getElementById('statusHint').textContent = 'Error: ' + err.message;
+      });
+    });
+    document.getElementById('clearBtn').addEventListener('click', () => {
+      document.getElementById('envelopeInput').value = '';
+      document.getElementById('pubkeyInput').value = '';
+      document.getElementById('results').classList.remove('visible');
+      document.getElementById('errorBanner').classList.remove('visible');
+      document.getElementById('statusHint').textContent = '';
+    });
+  </script>
+</body>
+</html>
