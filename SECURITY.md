@@ -1,42 +1,19 @@
 # Security Policy
 
-## Reporting a Vulnerability
+## Reporting Security Issues
 
-If you discover a security vulnerability related to the CEYO reference implementation or documentation, please report it responsibly.
+If you discover a security vulnerability in the CEYO project, please report it responsibly.
 
-Send vulnerability reports to:
+Do not open public issues for security vulnerabilities.
 
-security@ceyo.dev
-
-Please include:
-
-• A clear description of the vulnerability  
-• Steps required to reproduce the issue  
-• Any relevant proof-of-concept code  
-• Potential impact of the vulnerability
-
-We aim to acknowledge reports within **72 hours**.
+Instead, contact the project maintainer directly so the issue can be reviewed and addressed before public disclosure.
 
 ## Scope
 
-This repository contains a **reference implementation and conceptual architecture** for evidentiary infrastructure in AI systems.
+This repository contains experimental research code and reference implementations related to evidentiary infrastructure for AI systems.
 
-Security considerations primarily relate to:
-
-• Artifact integrity  
-• Cryptographic verification mechanisms  
-• Key management practices  
-• Artifact schema validation
-
-Operational deployments should implement additional protections such as:
-
-• Hardware Security Modules (HSM)
-• Secure key rotation policies
-• Trusted key registries
-• Environment isolation
+The code has not undergone formal security auditing and should not be used in production environments without independent security review.
 
 ## Responsible Disclosure
 
-Please do not publicly disclose vulnerabilities until they have been reviewed and addressed.
-
-We appreciate responsible disclosure and collaboration in improving the security of the CEYO architecture.
+Researchers and contributors are encouraged to report vulnerabilities responsibly and allow time for investigation before public disclosure.
