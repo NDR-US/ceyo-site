@@ -1,139 +1,134 @@
-# CEYO Security Architecture
+CEYO Security Architecture
 
-## Overview
+Overview
 
-CEYO is designed as an evidentiary infrastructure layer that provides cryptographic verification of AI system outputs without modifying the underlying models.
+CEYO is an evidentiary infrastructure layer that provides cryptographic verification of AI system inference events without modifying the underlying models.
 
-The security architecture focuses on ensuring that recorded artifacts remain:
+The security architecture is designed to ensure that generated artifacts remain:
+	•	deterministic
+	•	tamper-evident
+	•	independently verifiable
+	•	non-custodial with respect to cryptographic keys
 
-• Deterministic  
-• Tamper-evident  
-• Independently verifiable  
-• Non-custodial with respect to cryptographic keys  
+CEYO does not function as a monitoring system or enforcement mechanism. Instead, it produces verifiable records that can be validated independently by third parties.
 
-CEYO does not operate as a monitoring system or enforcement mechanism. Instead, it provides verifiable records that can be validated independently by third parties.
+⸻
 
----
-
-## Core Security Objectives
+Core Security Objectives
 
 The CEYO architecture prioritizes several security objectives.
 
-### Artifact Integrity
+Artifact Integrity
 
 Artifacts must remain unchanged after generation. Any modification must be detectable through cryptographic verification.
 
 Integrity is enforced through:
+	•	deterministic canonicalization of artifact data
+	•	SHA-256 hashing
+	•	digital signatures
 
-• Canonicalization of artifact data  
-• SHA-256 hashing  
-• Digital signatures  
+⸻
 
----
-
-### Independent Verification
+Independent Verification
 
 Any party should be able to verify artifact authenticity without requiring access to internal AI systems.
 
 Verification requires:
+	•	the artifact record
+	•	the associated signature
+	•	the corresponding public key
 
-• The artifact record  
-• The associated signature  
-• The corresponding public key  
+This enables validation without exposing model weights, proprietary internals, or decision content.
 
----
+⸻
 
-### Non-Custodial Key Ownership
+Non-Custodial Key Ownership
 
 CEYO does not manage or store cryptographic signing keys.
 
-Key ownership remains with the system operator generating artifacts.
+Key ownership remains with the system operator generating artifacts. This design prevents the infrastructure layer from becoming a centralized trust authority and preserves operational independence.
 
-This prevents the infrastructure layer from becoming a centralized trust authority.
+⸻
 
----
-
-### Deterministic Canonicalization
+Deterministic Canonicalization
 
 Artifacts are canonicalized prior to hashing.
 
 Deterministic canonicalization ensures that:
+	•	identical artifact inputs always produce identical hashes
+	•	verification can be reproduced across independent environments
 
-• The same artifact always produces the same hash
-• Verification can be reproduced across independent environments
+The reference implementation uses RFC 8785 (JSON Canonicalization Scheme) to ensure consistent serialization.
 
----
+⸻
 
-## Security Boundaries
+Security Boundaries
 
 CEYO intentionally limits its scope.
 
 CEYO does not guarantee:
-
-• Correctness of the AI decision  
-• Fairness of model outputs  
-• Ethical use of AI systems  
+	•	correctness of the AI decision
+	•	fairness of model outputs
+	•	ethical use of AI systems
 
 Instead, CEYO ensures that recorded artifacts have not been altered.
 
 Verification confirms integrity, not correctness.
 
----
+⸻
 
-## Key Security Components
+Key Security Components
 
-### Artifact Generator
+Artifact Generator
 
-Captures policy-scoped data from AI decisions.
+Captures policy-scoped data from AI inference events.
 
-Responsible for generating artifact records.
+Responsible for generating artifact records that are later sealed and verified.
 
----
+⸻
 
-### Canonicalization Layer
+Canonicalization Layer
 
 Standardizes artifact structure prior to hashing.
 
-Ensures reproducible hashing results.
+This ensures reproducible hashing results across environments.
 
----
+⸻
 
-### Cryptographic Sealing
+Cryptographic Sealing
 
 Artifacts are hashed and digitally signed.
 
-This produces a tamper-evident seal.
+This produces a tamper-evident cryptographic seal.
 
----
+⸻
 
-### Verification Layer
+Verification Layer
 
-Independent parties recompute hashes and validate signatures.
+Independent parties recompute hashes and validate signatures using the corresponding public key.
 
-Verification confirms artifact authenticity.
+Verification confirms artifact authenticity and integrity.
 
----
+⸻
 
-## Deployment Considerations
+Deployment Considerations
 
-Production deployments should include:
-
-• Hardware Security Modules (HSM) for key protection  
-• Secure key rotation policies  
-• Trusted public key registries  
-• Access control mechanisms  
+Production deployments should include additional operational protections such as:
+	•	Hardware Security Modules (HSMs) for key protection
+	•	secure key rotation policies
+	•	trusted public key registries
+	•	environment isolation and access control mechanisms
 
 These controls are external to the CEYO protocol but are recommended for operational environments.
 
----
+⸻
 
-## Security Model Summary
+Security Model Summary
 
 CEYO provides:
-
-• Tamper-evident records
-• Cryptographic artifact sealing
-• Deterministic verification
+	•	tamper-evident records
+	•	cryptographic artifact sealing
+	•	deterministic verification
 
 CEYO does not act as a centralized authority and does not adjudicate AI system behavior.
 
