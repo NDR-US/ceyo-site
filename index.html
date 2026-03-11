@@ -1,1186 +1,1077 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="en" class="no-js">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-  <title>CEYO — Evidentiary Infrastructure for AI Systems</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>CEYO — Evidentiary Infrastructure</title>
   <meta
     name="description"
-    content="CEYO is an independent evidentiary layer that generates policy-scoped, cryptographically sealed records from AI-supported operations, enabling later institutional verification without modifying the originating system."
+    content="CEYO overview page — independent evidentiary infrastructure for AI systems."
   />
-  <meta name="theme-color" content="#08101d" />
-
-  <meta property="og:type" content="website" />
-  <meta property="og:title" content="CEYO — Evidentiary Infrastructure for AI Systems" />
-  <meta
-    property="og:description"
-    content="Independent evidentiary infrastructure for AI-supported systems."
-  />
-  <meta property="og:url" content="https://ndr-us.github.io/ceyo-site/" />
-
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <meta name="theme-color" content="#07111f" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500&family=Cormorant+Garamond:wght@500;600;700&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&family=Cormorant+Garamond:wght@500;600;700&display=swap"
     rel="stylesheet"
   />
-
   <style>
-    :root{
-      --bg:#07101d;
-      --bg-2:#0a1423;
-      --bg-3:#0d182a;
-      --panel:rgba(255,255,255,.05);
-      --panel-2:rgba(255,255,255,.035);
-      --line:rgba(255,255,255,.10);
-      --line-soft:rgba(255,255,255,.06);
-
-      --text:#f4f6f9;
-      --muted:rgba(235,239,244,.76);
-      --muted-2:rgba(235,239,244,.58);
-
-      --ivory:#f2ecdf;
-      --ivory-2:#e8dfcf;
-      --ink:#0b1020;
-      --ink-soft:rgba(11,16,32,.76);
-
-      --accent:#d7cfbf;
-      --accent-2:#93a9d8;
-      --accent-3:#5f77a8;
-
-      --mono:'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-      --ui:'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      --serif:'Cormorant Garamond', Georgia, serif;
-
-      --max:1380px;
-      --read:760px;
-
-      --r-xl:32px;
-      --r-lg:24px;
-      --r-md:18px;
-      --r-sm:14px;
-      --shadow:0 24px 70px rgba(0,0,0,.30);
-
-      --s1:8px;
-      --s2:16px;
-      --s3:24px;
-      --s4:32px;
-      --s5:48px;
-      --s6:72px;
-      --s7:104px;
-
-      --navH:84px;
+    :root {
+      --bg: #06101c;
+      --bg-2: #081525;
+      --bg-3: #0b1d31;
+      --panel: rgba(255,255,255,0.055);
+      --panel-2: rgba(255,255,255,0.075);
+      --border: rgba(255,255,255,0.12);
+      --border-strong: rgba(255,255,255,0.18);
+      --text: #eef2f7;
+      --muted: rgba(238,242,247,0.72);
+      --soft: rgba(238,242,247,0.52);
+      --ivory: #efe8db;
+      --ivory-2: #e8decb;
+      --shadow: 0 20px 80px rgba(0,0,0,0.35);
+      --radius-xl: 34px;
+      --radius-lg: 24px;
+      --radius-md: 18px;
+      --radius-sm: 14px;
+      --max: 1320px;
+      --nav-h: 90px;
+      --ease: cubic-bezier(.22,1,.36,1);
     }
 
-    *{box-sizing:border-box}
-    html{scroll-behavior:smooth;background:var(--bg)}
-    body{
-      margin:0;
-      color:var(--text);
+    * { box-sizing: border-box; }
+
+    html {
+      scroll-behavior: smooth;
+      background: var(--bg);
+    }
+
+    body {
+      margin: 0;
+      color: var(--text);
       background:
-        radial-gradient(900px 540px at 15% 10%, rgba(78,113,176,.11), transparent 62%),
-        radial-gradient(760px 420px at 84% 18%, rgba(255,255,255,.05), transparent 60%),
-        linear-gradient(180deg, #06101c 0%, #07101d 42%, #08111e 100%);
-      font-family:var(--ui);
-      -webkit-text-size-adjust:100%;
-      overflow-x:hidden;
+        radial-gradient(circle at 15% 20%, rgba(41, 87, 150, 0.18), transparent 34%),
+        radial-gradient(circle at 80% 18%, rgba(34, 68, 120, 0.2), transparent 30%),
+        radial-gradient(circle at 50% 120%, rgba(17, 49, 91, 0.22), transparent 42%),
+        linear-gradient(180deg, #05101d 0%, #071424 28%, #06101c 100%);
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      overflow-x: hidden;
+      min-height: 100vh;
+      position: relative;
     }
 
-    a{color:inherit;text-decoration:none}
-    button,input,textarea{font:inherit}
-
-    .site-bg,
-    .site-grid,
-    .site-noise,
-    #heroFx{
-      position:fixed;
-      inset:0;
-      pointer-events:none;
+    body::before,
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: -2;
     }
 
-    .site-bg{
-      z-index:0;
+    body::before {
       background:
-        radial-gradient(540px 540px at 72% 30%, rgba(102,132,189,.10), transparent 60%),
-        radial-gradient(340px 340px at 28% 58%, rgba(255,255,255,.04), transparent 64%);
-      opacity:.95;
+        linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+      background-size: 88px 88px;
+      mask-image: radial-gradient(circle at center, black 32%, transparent 92%);
+      opacity: 0.5;
     }
 
-    .site-grid{
-      z-index:0;
-      opacity:.06;
+    body::after {
       background-image:
-        linear-gradient(rgba(255,255,255,.05) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,.05) 1px, transparent 1px);
-      background-size:52px 52px;
-      mask-image:radial-gradient(circle at center, black 22%, transparent 78%);
-      -webkit-mask-image:radial-gradient(circle at center, black 22%, transparent 78%);
+        radial-gradient(rgba(255,255,255,0.05) 0.6px, transparent 0.6px),
+        radial-gradient(rgba(255,255,255,0.03) 0.7px, transparent 0.7px);
+      background-position: 0 0, 17px 19px;
+      background-size: 19px 19px, 23px 23px;
+      mix-blend-mode: soft-light;
+      opacity: 0.15;
+      z-index: -1;
     }
 
-    .site-noise{
-      z-index:0;
-      opacity:.03;
-      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23n)'/%3E%3C/svg%3E");
-      mix-blend-mode:soft-light;
+    img, svg, canvas { display: block; max-width: 100%; }
+
+    a {
+      color: inherit;
+      text-decoration: none;
     }
 
-    #heroFx{
-      z-index:0;
-      width:100%;
-      height:100%;
-      opacity:.95;
+    button {
+      font: inherit;
+      border: 0;
+      background: none;
+      color: inherit;
+      cursor: pointer;
     }
 
-    .wrap{
-      width:min(var(--max), calc(100vw - 40px));
-      margin:0 auto;
-      position:relative;
-      z-index:2;
+    .page-wipe {
+      position: fixed;
+      inset: 0;
+      background:
+        linear-gradient(180deg, rgba(6,16,28,0.98), rgba(8,20,36,0.99));
+      transform: translateY(100%);
+      z-index: 120;
+      pointer-events: none;
+      transition: transform 900ms var(--ease);
     }
 
-    @media (max-width:640px){
-      .wrap{width:min(var(--max), calc(100vw - 24px))}
+    .page-wipe.active {
+      transform: translateY(0%);
+      pointer-events: auto;
     }
 
-    [id]{scroll-margin-top:calc(var(--navH) + 18px)}
-
-    header.site{
-      position:sticky;
-      top:0;
-      z-index:60;
-      backdrop-filter:blur(18px) saturate(140%);
-      -webkit-backdrop-filter:blur(18px) saturate(140%);
-      background:rgba(9,18,31,.52);
-      border-bottom:1px solid rgba(255,255,255,.06);
+    .shell {
+      width: min(calc(100% - 32px), var(--max));
+      margin: 0 auto;
     }
 
-    .nav{
-      min-height:calc(var(--navH) + env(safe-area-inset-top));
-      padding:calc(env(safe-area-inset-top) + 12px) 0 12px;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:16px;
+    .sticky-header {
+      position: sticky;
+      top: 0;
+      z-index: 60;
+      padding: 16px 0 0;
+      transition: transform 450ms var(--ease), padding 450ms var(--ease);
+    }
+
+    .sticky-header.scrolled {
+      padding-top: 10px;
+    }
+
+    .header-row {
+      display: flex;
+      gap: 14px;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .glass-pill {
+      backdrop-filter: blur(18px) saturate(140%);
+      -webkit-backdrop-filter: blur(18px) saturate(140%);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.09), rgba(255,255,255,0.05));
+      border: 1px solid rgba(255,255,255,0.13);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.08), var(--shadow);
     }
 
     .brand-pill,
-    .menu-pill{
-      height:78px;
-      border-radius:999px;
-      border:1px solid rgba(255,255,255,.10);
-      background:linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.03));
-      box-shadow:inset 0 1px 0 rgba(255,255,255,.05);
+    .menu-pill {
+      min-height: 74px;
+      border-radius: 999px;
     }
 
-    .brand-pill{
-      display:flex;
-      align-items:center;
-      gap:16px;
-      padding:0 24px;
-      min-width:360px;
-      position:relative;
-      overflow:hidden;
+    .brand-pill {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 12px 24px 12px 16px;
+      flex: 1 1 auto;
+      max-width: 420px;
+      position: relative;
+      overflow: hidden;
+      isolation: isolate;
     }
 
-    .brand-pill::before{
-      content:"";
-      position:absolute;
-      inset:-1px;
-      background:linear-gradient(120deg, transparent 10%, rgba(255,255,255,.10) 32%, transparent 50%);
-      transform:translateX(-140%);
-      animation:brandSweep 8s linear infinite;
+    .brand-pill::before,
+    .menu-pill::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(120deg, transparent 20%, rgba(255,255,255,0.12) 48%, transparent 74%);
+      transform: translateX(-120%);
+      animation: sheen 8s linear infinite;
+      opacity: 0.8;
+      z-index: -1;
     }
 
-    @keyframes brandSweep{
-      to{transform:translateX(140%)}
+    @keyframes sheen {
+      to { transform: translateX(120%); }
     }
 
-    .brand-mark{
-      width:54px;
-      height:54px;
-      border-radius:999px;
-      border:1px solid rgba(255,255,255,.10);
-      position:relative;
-      flex:0 0 auto;
+    .brand-mark {
+      width: 58px;
+      height: 58px;
+      border-radius: 999px;
+      position: relative;
+      flex: 0 0 58px;
+      border: 1px solid rgba(255,255,255,0.12);
+      background:
+        radial-gradient(circle at center, rgba(255,255,255,0.13) 0 2px, transparent 2px 100%),
+        radial-gradient(circle at center, transparent 0 10px, rgba(255,255,255,0.08) 10px 11px, transparent 11px 100%),
+        radial-gradient(circle at center, transparent 0 19px, rgba(255,255,255,0.08) 19px 20px, transparent 20px 100%),
+        radial-gradient(circle at center, transparent 0 28px, rgba(255,255,255,0.08) 28px 29px, transparent 29px 100%);
+      box-shadow: inset 0 0 30px rgba(255,255,255,0.03);
     }
 
-    .brand-mark::before,
-    .brand-mark::after{
-      content:"";
-      position:absolute;
-      border-radius:999px;
-      border:1px solid rgba(255,255,255,.10);
-      inset:7px;
+    .brand-copy {
+      display: grid;
+      gap: 2px;
+      line-height: 1;
     }
 
-    .brand-mark::after{
-      inset:16px;
-      background:radial-gradient(circle at center, rgba(255,255,255,.14), transparent 68%);
+    .brand-copy strong {
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      font-size: 1.05rem;
     }
 
-    .brand-copy{
-      display:flex;
-      flex-direction:column;
-      justify-content:center;
-      line-height:1;
-      position:relative;
-      z-index:1;
+    .brand-copy span {
+      font-size: 0.68rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: rgba(238,242,247,0.78);
+      font-weight: 700;
     }
 
-    .brand-copy .name{
-      font-size:28px;
-      font-weight:800;
-      letter-spacing:-.03em;
+    .menu-pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      min-width: 220px;
+      padding: 0 24px 0 28px;
+      position: relative;
+      overflow: hidden;
     }
 
-    .brand-copy .sub{
-      margin-top:4px;
-      font-size:11px;
-      font-weight:700;
-      letter-spacing:.16em;
-      text-transform:uppercase;
-      color:rgba(244,246,249,.80);
+    .menu-pill-label {
+      font-size: clamp(1rem, 1.6vw, 1.15rem);
+      font-weight: 500;
+      letter-spacing: -0.02em;
     }
 
-    .nav-actions{
-      display:flex;
-      align-items:center;
-      gap:14px;
+    .hamburger {
+      width: 34px;
+      height: 24px;
+      position: relative;
+      display: inline-block;
+      flex: 0 0 34px;
     }
 
-    .menu-pill{
-      padding:0 24px;
-      min-width:190px;
-      display:inline-flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:18px;
-      color:var(--text);
-      cursor:pointer;
-      transition:transform .2s ease,border-color .2s ease,background .2s ease;
+    .hamburger span {
+      position: absolute;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: rgba(238,242,247,0.96);
+      border-radius: 999px;
+      transform-origin: center;
+      transition: transform 360ms var(--ease), opacity 280ms ease, top 360ms var(--ease);
     }
 
-    .menu-pill:hover{
-      transform:translateY(-1px);
-      border-color:rgba(255,255,255,.16);
-      background:linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.04));
+    .hamburger span:nth-child(1) { top: 2px; }
+    .hamburger span:nth-child(2) { top: 11px; }
+    .hamburger span:nth-child(3) { top: 20px; }
+
+    .menu-open .hamburger span:nth-child(1) {
+      top: 11px;
+      transform: rotate(45deg);
+    }
+    .menu-open .hamburger span:nth-child(2) { opacity: 0; }
+    .menu-open .hamburger span:nth-child(3) {
+      top: 11px;
+      transform: rotate(-45deg);
     }
 
-    .menu-pill .label{
-      font-size:22px;
-      font-weight:500;
-      letter-spacing:-.02em;
+    .nav-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 80;
+      display: grid;
+      place-items: start center;
+      padding: max(18px, env(safe-area-inset-top)) 16px 20px;
+      background:
+        linear-gradient(180deg, rgba(4,11,19,0.88), rgba(4,11,19,0.95));
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 420ms ease, visibility 420ms ease;
     }
 
-    .menu-icon{
-      width:30px;
-      height:20px;
-      position:relative;
-      flex:0 0 auto;
+    .nav-overlay.open {
+      opacity: 1;
+      visibility: visible;
     }
 
-    .menu-icon span{
-      position:absolute;
-      left:0;
-      right:0;
-      height:2px;
-      border-radius:999px;
-      background:rgba(244,246,249,.88);
-      transition:transform .25s ease,opacity .25s ease,top .25s ease;
+    .nav-sheet {
+      width: min(100%, 1320px);
+      transform: translateY(-24px);
+      opacity: 0;
+      transition: transform 520ms var(--ease), opacity 520ms ease;
+      border-radius: 34px;
+      padding: 30px;
+      min-height: min(720px, calc(100vh - 42px));
+      background:
+        linear-gradient(180deg, rgba(10,23,40,0.96), rgba(7,18,31,0.98));
+      border: 1px solid rgba(255,255,255,0.12);
+      box-shadow: 0 40px 120px rgba(0,0,0,0.45);
+      position: relative;
+      overflow: hidden;
     }
 
-    .menu-icon span:nth-child(1){top:0}
-    .menu-icon span:nth-child(2){top:9px}
-    .menu-icon span:nth-child(3){top:18px}
-
-    .menu-pill[aria-expanded="true"] .menu-icon span:nth-child(1){
-      top:9px; transform:rotate(45deg);
-    }
-    .menu-pill[aria-expanded="true"] .menu-icon span:nth-child(2){
-      opacity:0;
-    }
-    .menu-pill[aria-expanded="true"] .menu-icon span:nth-child(3){
-      top:9px; transform:rotate(-45deg);
+    .nav-overlay.open .nav-sheet {
+      transform: translateY(0);
+      opacity: 1;
     }
 
-    @media (max-width:980px){
-      .brand-pill{
-        min-width:0;
-        flex:1 1 auto;
+    .nav-sheet::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 15% 15%, rgba(80,132,220,0.18), transparent 30%),
+        radial-gradient(circle at 80% 20%, rgba(110,150,210,0.14), transparent 28%);
+      pointer-events: none;
+    }
+
+    .nav-grid {
+      display: grid;
+      grid-template-columns: 1fr minmax(260px, 360px);
+      gap: 36px;
+      position: relative;
+      z-index: 1;
+      height: 100%;
+    }
+
+    .nav-links {
+      display: grid;
+      align-content: start;
+      gap: 8px;
+      padding-top: 8px;
+    }
+
+    .nav-kicker,
+    .section-label,
+    .mono {
+      font-family: "IBM Plex Mono", monospace;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      font-size: 0.72rem;
+      color: rgba(238,242,247,0.62);
+    }
+
+    .nav-link {
+      display: block;
+      padding: 18px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      font-family: "Cormorant Garamond", serif;
+      font-size: clamp(2.1rem, 5vw, 4.6rem);
+      line-height: 0.98;
+      letter-spacing: -0.04em;
+      color: rgba(239,232,219,0.96);
+      transition: transform 320ms var(--ease), color 220ms ease, opacity 220ms ease;
+    }
+
+    .nav-link:hover,
+    .nav-link:focus-visible {
+      transform: translateX(10px);
+      color: #fff7ea;
+      outline: none;
+    }
+
+    .nav-side {
+      align-self: end;
+      padding: 26px;
+      border-radius: 28px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .nav-side p {
+      margin: 12px 0 0;
+      font-size: 0.98rem;
+      line-height: 1.7;
+      color: rgba(238,242,247,0.72);
+      max-width: 28ch;
+    }
+
+    .hero {
+      position: relative;
+      min-height: min(980px, 100svh);
+      display: grid;
+      align-items: center;
+      padding: 36px 0 34px;
+      overflow: clip;
+    }
+
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      z-index: 0;
+    }
+
+    #heroCanvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0.5;
+      filter: saturate(110%) blur(0.15px);
+    }
+
+    .hero-vignette {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 50% 45%, transparent 0%, rgba(6,16,28,0.06) 42%, rgba(6,16,28,0.28) 68%, rgba(6,16,28,0.66) 100%),
+        linear-gradient(180deg, rgba(5,12,21,0.08) 0%, rgba(5,12,21,0.42) 58%, rgba(5,12,21,0.82) 100%);
+    }
+
+    .hero-inner {
+      position: relative;
+      z-index: 1;
+      padding-top: clamp(38px, 8vh, 78px);
+      display: grid;
+      grid-template-columns: minmax(0, 1.05fr) minmax(260px, 0.68fr);
+      gap: 48px;
+      align-items: end;
+    }
+
+    .hero-left {
+      max-width: 860px;
+    }
+
+    .eyebrow-wrap {
+      display: flex;
+      align-items: center;
+      gap: 22px;
+      margin-bottom: 24px;
+    }
+
+    .eyebrow-line {
+      width: clamp(46px, 9vw, 82px);
+      height: 1px;
+      background: rgba(239,232,219,0.42);
+      flex: 0 0 auto;
+    }
+
+    .hero-headline {
+      margin: 0 0 24px;
+      font-family: "Cormorant Garamond", serif;
+      font-weight: 600;
+      font-size: clamp(3.4rem, 10vw, 8.6rem);
+      line-height: 0.9;
+      letter-spacing: -0.055em;
+      color: var(--ivory);
+      max-width: 10.2ch;
+      text-wrap: balance;
+    }
+
+    .hero-copy {
+      margin: 0;
+      max-width: 20ch;
+      font-size: clamp(1.15rem, 2.2vw, 1.68rem);
+      line-height: 1.58;
+      color: rgba(238,242,247,0.88);
+      letter-spacing: -0.02em;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-top: 30px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 58px;
+      padding: 0 24px;
+      border-radius: 999px;
+      font-weight: 650;
+      letter-spacing: -0.02em;
+      transition:
+        transform 260ms var(--ease),
+        background 240ms ease,
+        border-color 240ms ease,
+        box-shadow 240ms ease,
+        color 240ms ease;
+    }
+
+    .btn:hover,
+    .btn:focus-visible {
+      transform: translateY(-2px);
+      outline: none;
+    }
+
+    .btn-primary {
+      background: var(--ivory);
+      color: #152235;
+      box-shadow: 0 18px 45px rgba(0,0,0,0.18);
+    }
+
+    .btn-primary:hover,
+    .btn-primary:focus-visible {
+      background: #f6f0e6;
+    }
+
+    .btn-secondary {
+      border: 1px solid rgba(255,255,255,0.14);
+      background: rgba(255,255,255,0.045);
+      color: var(--text);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+    }
+
+    .hero-right {
+      justify-self: end;
+      width: min(100%, 380px);
+    }
+
+    .hero-side-card {
+      border-radius: 28px;
+      padding: 22px;
+      background: rgba(255,255,255,0.045);
+      border: 1px solid rgba(255,255,255,0.12);
+      box-shadow: var(--shadow);
+    }
+
+    .type-line {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      font-family: "IBM Plex Mono", monospace;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      font-size: 0.72rem;
+      color: rgba(239,232,219,0.8);
+      margin-bottom: 18px;
+    }
+
+    .type-line-dot {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: rgba(239,232,219,0.88);
+      box-shadow: 0 0 16px rgba(239,232,219,0.52);
+    }
+
+    .typewriter {
+      min-height: 1.4em;
+      font-size: clamp(1.05rem, 1.5vw, 1.2rem);
+      color: var(--ivory);
+      font-weight: 600;
+      letter-spacing: -0.02em;
+    }
+
+    .typewriter .cursor {
+      display: inline-block;
+      width: 1ch;
+      color: rgba(239,232,219,0.9);
+      animation: blink 0.9s step-end infinite;
+    }
+
+    @keyframes blink {
+      50% { opacity: 0; }
+    }
+
+    main {
+      position: relative;
+      z-index: 2;
+      padding-bottom: 80px;
+    }
+
+    .section {
+      padding: 120px 0;
+      position: relative;
+    }
+
+    .section.reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 850ms ease, transform 850ms var(--ease);
+    }
+
+    .section.reveal.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .section-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.12fr) minmax(260px, 0.75fr);
+      gap: 34px;
+      align-items: start;
+    }
+
+    .section-top {
+      margin-bottom: 22px;
+      display: grid;
+      gap: 16px;
+    }
+
+    .section-heading {
+      margin: 0;
+      font-family: "Cormorant Garamond", serif;
+      font-weight: 600;
+      letter-spacing: -0.04em;
+      line-height: 0.95;
+      font-size: clamp(2.6rem, 5vw, 5.3rem);
+      color: var(--ivory);
+      max-width: 11ch;
+    }
+
+    .section-copy {
+      margin: 0;
+      max-width: 64ch;
+      font-size: clamp(1rem, 1.35vw, 1.14rem);
+      line-height: 1.82;
+      color: var(--muted);
+    }
+
+    .stack-copy > * + * {
+      margin-top: 20px;
+    }
+
+    .panel {
+      border-radius: 28px;
+      padding: clamp(20px, 3vw, 30px);
+      border: 1px solid var(--border);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.035));
+      box-shadow: var(--shadow);
+    }
+
+    .note-panel {
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.04));
+    }
+
+    .note-grid {
+      display: grid;
+      gap: 18px;
+    }
+
+    .note-item {
+      padding-bottom: 16px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .note-item:last-child {
+      border-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    .note-item h3 {
+      margin: 0 0 8px;
+      font-size: 0.76rem;
+      line-height: 1.2;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      font-family: "IBM Plex Mono", monospace;
+      color: rgba(239,232,219,0.76);
+    }
+
+    .note-item p {
+      margin: 0;
+      color: rgba(238,242,247,0.84);
+      line-height: 1.65;
+      font-size: 0.98rem;
+    }
+
+    .ivory-break {
+      background:
+        radial-gradient(circle at 8% 10%, rgba(255,255,255,0.28), transparent 28%),
+        linear-gradient(180deg, #f0e7d8 0%, #e7dac4 100%);
+      color: #172437;
+    }
+
+    .ivory-break .section-label,
+    .ivory-break .mono,
+    .ivory-break .section-copy,
+    .ivory-break .mechanism-intro {
+      color: rgba(23,36,55,0.78);
+    }
+
+    .ivory-break .section-heading,
+    .ivory-break .pill,
+    .ivory-break .mechanism-title,
+    .ivory-break .mechanism-card p,
+    .ivory-break .mechanism-card strong {
+      color: #172437;
+    }
+
+    .ivory-break .panel {
+      background: rgba(255,255,255,0.42);
+      border-color: rgba(23,36,55,0.12);
+      box-shadow: 0 24px 60px rgba(60,48,33,0.12);
+    }
+
+    .properties {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin: 26px 0 18px;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      min-height: 42px;
+      padding: 0 16px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.04);
+      color: var(--ivory);
+      letter-spacing: -0.02em;
+      font-size: 0.97rem;
+      font-weight: 600;
+    }
+
+    .ivory-break .pill {
+      background: rgba(23,36,55,0.05);
+      border-color: rgba(23,36,55,0.1);
+    }
+
+    .mechanism-intro {
+      margin: 0 0 26px;
+      line-height: 1.8;
+    }
+
+    .mechanism-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .mechanism-card {
+      min-height: 260px;
+      display: grid;
+      align-content: start;
+      gap: 14px;
+      border-radius: 24px;
+      padding: 22px;
+      border: 1px solid rgba(23,36,55,0.12);
+      background: rgba(255,255,255,0.4);
+    }
+
+    .mechanism-kicker {
+      font-family: "IBM Plex Mono", monospace;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      font-size: 0.72rem;
+      color: rgba(23,36,55,0.66);
+    }
+
+    .mechanism-title {
+      margin: 0;
+      font-size: 1.4rem;
+      letter-spacing: -0.03em;
+      font-weight: 700;
+    }
+
+    .mechanism-card p {
+      margin: 0;
+      line-height: 1.75;
+      font-size: 0.99rem;
+    }
+
+    .dark-stack {
+      display: grid;
+      gap: 18px;
+    }
+
+    .next-grid {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 16px;
+      margin-top: 28px;
+    }
+
+    .next-card {
+      position: relative;
+      border-radius: 24px;
+      padding: 22px 18px 18px;
+      border: 1px solid rgba(255,255,255,0.11);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.045), rgba(255,255,255,0.03));
+      min-height: 220px;
+      display: grid;
+      align-content: end;
+      gap: 12px;
+      overflow: hidden;
+      transition:
+        transform 320ms var(--ease),
+        border-color 240ms ease,
+        background 240ms ease,
+        box-shadow 240ms ease;
+    }
+
+    .next-card::before {
+      content: "";
+      position: absolute;
+      inset: auto -20% -40% auto;
+      width: 180px;
+      height: 180px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(91,123,175,0.18), transparent 65%);
+      pointer-events: none;
+    }
+
+    .next-card:hover,
+    .next-card:focus-visible {
+      transform: translateY(-6px);
+      border-color: rgba(255,255,255,0.18);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.065), rgba(255,255,255,0.035));
+      box-shadow: var(--shadow);
+      outline: none;
+    }
+
+    .next-card h3 {
+      margin: 0;
+      font-size: 1.15rem;
+      letter-spacing: -0.03em;
+      font-weight: 700;
+      color: var(--ivory);
+    }
+
+    .next-card p {
+      margin: 0;
+      line-height: 1.72;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    footer {
+      padding: 0 0 34px;
+    }
+
+    .footer-line {
+      border-top: 1px solid rgba(255,255,255,0.1);
+      padding-top: 24px;
+      color: rgba(238,242,247,0.6);
+      font-size: 0.88rem;
+      letter-spacing: 0.02em;
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      border: 0;
+      white-space: nowrap;
+    }
+
+    @media (max-width: 1180px) {
+      .hero-inner,
+      .section-grid,
+      .nav-grid {
+        grid-template-columns: 1fr;
       }
-      .menu-pill{
-        min-width:150px;
+
+      .hero-right {
+        justify-self: start;
+        width: 100%;
+        max-width: 480px;
+      }
+
+      .section-heading {
+        max-width: none;
+      }
+
+      .next-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
       }
     }
 
-    @media (max-width:680px){
-      .nav{
-        gap:12px;
+    @media (max-width: 860px) {
+      :root { --nav-h: 84px; }
+
+      .shell {
+        width: min(calc(100% - 22px), var(--max));
       }
+
+      .brand-pill {
+        min-width: 0;
+        max-width: none;
+        padding-right: 18px;
+      }
+
+      .menu-pill {
+        min-width: 138px;
+        padding: 0 18px 0 20px;
+      }
+
+      .menu-pill-label {
+        font-size: 1rem;
+      }
+
+      .nav-sheet {
+        padding: 20px;
+        border-radius: 28px;
+      }
+
+      .nav-link {
+        font-size: clamp(2rem, 9vw, 3.4rem);
+      }
+
+      .hero {
+        min-height: auto;
+        padding-bottom: 22px;
+      }
+
+      .hero-inner {
+        padding-top: 26px;
+        gap: 28px;
+      }
+
+      .hero-headline {
+        max-width: 7.5ch;
+      }
+
+      .hero-copy {
+        max-width: 100%;
+      }
+
+      .section {
+        padding: 86px 0;
+      }
+
+      .mechanism-grid,
+      .next-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .mechanism-card,
+      .next-card {
+        min-height: 0;
+      }
+
+      .section-copy {
+        max-width: none;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .header-row {
+        gap: 10px;
+      }
+
       .brand-pill,
-      .menu-pill{
-        height:70px;
+      .menu-pill {
+        min-height: 66px;
       }
-      .brand-pill{
-        padding:0 16px;
-        gap:12px;
+
+      .brand-pill {
+        padding: 10px 14px 10px 12px;
       }
-      .brand-mark{
-        width:44px;
-        height:44px;
+
+      .brand-mark {
+        width: 48px;
+        height: 48px;
+        flex-basis: 48px;
       }
-      .brand-copy .name{
-        font-size:22px;
+
+      .brand-copy strong {
+        font-size: 0.95rem;
       }
-      .brand-copy .sub{
-        font-size:10px;
-        letter-spacing:.14em;
+
+      .brand-copy span {
+        font-size: 0.58rem;
       }
-      .menu-pill{
-        min-width:146px;
-        padding:0 18px;
+
+      .menu-pill {
+        min-width: 122px;
+        padding: 0 16px 0 18px;
       }
-      .menu-pill .label{
-        font-size:18px;
+
+      .menu-pill-label {
+        display: none;
       }
-    }
 
-    .menu-overlay{
-      position:fixed;
-      inset:0;
-      z-index:90;
-      opacity:0;
-      visibility:hidden;
-      pointer-events:none;
-      transition:opacity .28s ease,visibility .28s ease;
-      background:rgba(5,10,18,.74);
-      backdrop-filter:blur(16px);
-      -webkit-backdrop-filter:blur(16px);
-    }
+      .eyebrow-wrap {
+        gap: 14px;
+        margin-bottom: 18px;
+      }
 
-    .menu-overlay.open{
-      opacity:1;
-      visibility:visible;
-      pointer-events:auto;
-    }
+      .hero-actions {
+        flex-direction: column;
+        align-items: stretch;
+      }
 
-    .menu-sheet{
-      position:absolute;
-      inset:0;
-      transform:translateY(-102%);
-      transition:transform .45s cubic-bezier(.2,.9,.2,1);
-      background:
-        radial-gradient(900px 560px at 18% 10%, rgba(120,146,196,.12), transparent 58%),
-        linear-gradient(180deg, #08101d 0%, #0a1322 100%);
-      border-bottom:1px solid rgba(255,255,255,.08);
-      overflow:auto;
-    }
+      .btn {
+        width: 100%;
+      }
 
-    .menu-overlay.open .menu-sheet{
-      transform:translateY(0);
-    }
-
-    .menu-inner{
-      width:min(1200px, calc(100vw - 32px));
-      margin:0 auto;
-      padding:calc(env(safe-area-inset-top) + 120px) 0 40px;
-    }
-
-    .menu-grid{
-      display:grid;
-      grid-template-columns:1.2fr 1fr;
-      gap:18px;
-    }
-
-    .menu-col{
-      border:1px solid rgba(255,255,255,.08);
-      background:rgba(255,255,255,.03);
-      border-radius:28px;
-      padding:22px;
-      box-shadow:var(--shadow);
-    }
-
-    .menu-eyebrow{
-      font-family:var(--mono);
-      font-size:11px;
-      letter-spacing:.16em;
-      text-transform:uppercase;
-      color:rgba(244,246,249,.62);
-      margin-bottom:16px;
-    }
-
-    .menu-nav a{
-      display:flex;
-      align-items:flex-end;
-      justify-content:space-between;
-      gap:16px;
-      padding:18px 0;
-      border-bottom:1px solid rgba(255,255,255,.08);
-      transition:opacity .18s ease,transform .18s ease;
-    }
-
-    .menu-nav a:last-child{
-      border-bottom:none;
-    }
-
-    .menu-nav a:hover{
-      transform:translateX(3px);
-    }
-
-    .menu-nav .txt{
-      font-size:clamp(26px,3vw,48px);
-      line-height:.96;
-      letter-spacing:-.05em;
-      font-weight:700;
-    }
-
-    .menu-nav .meta{
-      font-family:var(--mono);
-      font-size:11px;
-      letter-spacing:.12em;
-      text-transform:uppercase;
-      color:rgba(244,246,249,.52);
-      white-space:nowrap;
-    }
-
-    .menu-copy h2{
-      margin:0 0 14px 0;
-      font-family:var(--serif);
-      font-size:clamp(40px,4vw,66px);
-      line-height:.92;
-      letter-spacing:-.04em;
-      font-weight:600;
-    }
-
-    .menu-copy p{
-      margin:0;
-      max-width:38ch;
-      color:rgba(244,246,249,.76);
-      line-height:1.6;
-      font-size:16px;
-    }
-
-    @media (max-width:980px){
-      .menu-grid{
-        grid-template-columns:1fr;
+      .panel,
+      .next-card,
+      .mechanism-card {
+        border-radius: 22px;
       }
     }
 
-    main{
-      position:relative;
-      z-index:2;
-      padding:22px 0 110px;
-    }
-
-    section{
-      position:relative;
-    }
-
-    .hero{
-      min-height:calc(100vh - 96px);
-      display:flex;
-      align-items:flex-start;
-      padding-top:42px;
-    }
-
-    .hero-shell{
-      position:relative;
-      width:100%;
-      border-radius:36px;
-      border:1px solid rgba(255,255,255,.08);
-      background:
-        radial-gradient(740px 440px at 72% 28%, rgba(93,117,166,.18), transparent 58%),
-        linear-gradient(180deg, rgba(7,16,29,.52), rgba(7,16,29,.28));
-      box-shadow:inset 0 1px 0 rgba(255,255,255,.04);
-      overflow:hidden;
-    }
-
-    .hero-shell::before{
-      content:"";
-      position:absolute;
-      inset:0;
-      background:
-        linear-gradient(90deg, rgba(255,255,255,.03) 1px, transparent 1px),
-        linear-gradient(rgba(255,255,255,.03) 1px, transparent 1px);
-      background-size:44px 44px;
-      opacity:.22;
-      mask-image:linear-gradient(180deg, rgba(0,0,0,.8), transparent 92%);
-      -webkit-mask-image:linear-gradient(180deg, rgba(0,0,0,.8), transparent 92%);
-      pointer-events:none;
-    }
-
-    .hero-grid{
-      display:grid;
-      grid-template-columns:minmax(0, 1fr) 380px;
-      gap:26px;
-      padding:54px 54px 42px;
-      align-items:end;
-      min-height:calc(100vh - 160px);
-      position:relative;
-      z-index:1;
-    }
-
-    .hero-copy{
-      max-width:880px;
-    }
-
-    .eyebrow{
-      display:flex;
-      align-items:center;
-      gap:14px;
-      margin-bottom:28px;
-      font-family:var(--mono);
-      font-size:14px;
-      letter-spacing:.18em;
-      text-transform:uppercase;
-      color:rgba(235,239,244,.78);
-    }
-
-    .eyebrow::before{
-      content:"";
-      width:44px;
-      height:1px;
-      background:rgba(235,239,244,.36);
-      display:block;
-      flex:0 0 auto;
-    }
-
-    .hero h1{
-      margin:0;
-      max-width:8.4ch;
-      font-family:var(--serif);
-      font-size:clamp(72px,10vw,124px);
-      line-height:.87;
-      letter-spacing:-.06em;
-      font-weight:600;
-      color:#f3eee6;
-      text-wrap:balance;
-    }
-
-    .hero-copy p{
-      max-width:18ch;
-      margin:30px 0 0;
-      font-size:clamp(22px,2.25vw,30px);
-      line-height:1.5;
-      font-weight:500;
-      color:rgba(236,239,244,.90);
-    }
-
-    .hero-actions{
-      margin-top:34px;
-      display:flex;
-      gap:14px;
-      flex-wrap:wrap;
-    }
-
-    .cta{
-      min-height:78px;
-      padding:0 30px;
-      border-radius:999px;
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      font-size:18px;
-      font-weight:700;
-      letter-spacing:-.02em;
-      border:1px solid rgba(255,255,255,.10);
-      transition:transform .22s ease,border-color .22s ease,background .22s ease,box-shadow .22s ease;
-      box-shadow:inset 0 1px 0 rgba(255,255,255,.05);
-    }
-
-    .cta:hover{
-      transform:translateY(-2px);
-    }
-
-    .cta.primary{
-      min-width:320px;
-      background:var(--ivory);
-      color:#10162a;
-      border-color:rgba(255,255,255,.22);
-    }
-
-    .cta.primary:hover{
-      background:#f7f1e5;
-      box-shadow:0 18px 42px rgba(0,0,0,.18);
-    }
-
-    .cta.secondary{
-      min-width:320px;
-      background:rgba(255,255,255,.03);
-      color:var(--text);
-    }
-
-    .cta.secondary:hover{
-      background:rgba(255,255,255,.06);
-      border-color:rgba(255,255,255,.18);
-    }
-
-    .hero-side{
-      align-self:end;
-      justify-self:end;
-      width:100%;
-      max-width:360px;
-      display:grid;
-      gap:14px;
-    }
-
-    .micro-card{
-      border:1px solid rgba(255,255,255,.08);
-      background:rgba(255,255,255,.03);
-      border-radius:24px;
-      padding:18px;
-      box-shadow:inset 0 1px 0 rgba(255,255,255,.05);
-      backdrop-filter:blur(10px);
-      -webkit-backdrop-filter:blur(10px);
-    }
-
-    .micro-card .k{
-      font-family:var(--mono);
-      font-size:11px;
-      letter-spacing:.16em;
-      text-transform:uppercase;
-      color:rgba(235,239,244,.58);
-      margin-bottom:10px;
-    }
-
-    .micro-card .v{
-      font-size:28px;
-      line-height:1.02;
-      letter-spacing:-.04em;
-      font-weight:700;
-      color:#f3eee6;
-      margin-bottom:8px;
-    }
-
-    .micro-card p{
-      margin:0;
-      color:rgba(235,239,244,.70);
-      font-size:14px;
-      line-height:1.55;
-    }
-
-    .hero-divider{
-      margin-top:38px;
-      height:4px;
-      width:100%;
-      border-radius:999px;
-      background:linear-gradient(90deg, rgba(2,6,15,.85), rgba(2,6,15,.55));
-      opacity:.86;
-    }
-
-    @media (max-width:1100px){
-      .hero-grid{
-        grid-template-columns:1fr;
-        min-height:auto;
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *,
+      *::before,
+      *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
       }
-      .hero-side{
-        justify-self:start;
-        max-width:520px;
+      .page-wipe {
+        display: none;
       }
-      .hero-copy p{
-        max-width:24ch;
-      }
-    }
-
-    @media (max-width:740px){
-      .hero{
-        min-height:auto;
-      }
-      .hero-grid{
-        padding:34px 20px 26px;
-      }
-      .hero h1{
-        max-width:8ch;
-        font-size:clamp(58px,15vw,90px);
-      }
-      .hero-copy p{
-        max-width:none;
-        font-size:clamp(18px,5vw,24px);
-      }
-      .cta{
-        min-height:64px;
-        min-width:100%;
-        width:100%;
-        font-size:17px;
-      }
-      .eyebrow{
-        font-size:12px;
-        gap:10px;
-      }
-      .eyebrow::before{
-        width:28px;
-      }
-    }
-
-    .type-line{
-      margin-top:18px;
-      font-family:var(--mono);
-      font-size:12px;
-      letter-spacing:.16em;
-      text-transform:uppercase;
-      color:rgba(235,239,244,.54);
-      min-height:1.2em;
-    }
-
-    .page-block{
-      padding:34px 0 0;
-    }
-
-    .ivory-band{
-      margin-top:26px;
-      border-radius:34px;
-      background:linear-gradient(180deg, #f4eee2 0%, #efe6d6 100%);
-      color:var(--ink);
-      border:1px solid rgba(11,16,32,.06);
-      box-shadow:0 26px 80px rgba(0,0,0,.18);
-      overflow:hidden;
-    }
-
-    .ivory-grid{
-      display:grid;
-      grid-template-columns:1.12fr .88fr;
-      gap:28px;
-      padding:40px 36px;
-      align-items:start;
-    }
-
-    .section-k{
-      font-family:var(--mono);
-      font-size:12px;
-      letter-spacing:.16em;
-      text-transform:uppercase;
-      color:rgba(11,16,32,.54);
-      margin-bottom:12px;
-    }
-
-    .ivory-grid h2{
-      margin:0 0 14px 0;
-      font-size:clamp(34px,4vw,62px);
-      line-height:.98;
-      letter-spacing:-.055em;
-      font-weight:800;
-      text-wrap:balance;
-    }
-
-    .ivory-grid p{
-      margin:0 0 14px 0;
-      color:rgba(11,16,32,.76);
-      font-size:18px;
-      line-height:1.62;
-      max-width:34ch;
-    }
-
-    .ivory-note{
-      border:1px solid rgba(11,16,32,.10);
-      background:rgba(255,255,255,.42);
-      border-radius:24px;
-      padding:22px;
-      display:grid;
-      gap:14px;
-    }
-
-    .ivory-note .line{
-      border-top:1px solid rgba(11,16,32,.10);
-      padding-top:14px;
-    }
-
-    .ivory-note .line:first-child{
-      border-top:none;
-      padding-top:0;
-    }
-
-    .ivory-note .title{
-      font-family:var(--mono);
-      font-size:11px;
-      letter-spacing:.14em;
-      text-transform:uppercase;
-      color:rgba(11,16,32,.52);
-      margin-bottom:8px;
-    }
-
-    .ivory-note .body{
-      font-size:15px;
-      line-height:1.6;
-      color:rgba(11,16,32,.80);
-    }
-
-    @media (max-width:980px){
-      .ivory-grid{
-        grid-template-columns:1fr;
-      }
-      .ivory-grid p{
-        max-width:none;
-      }
-    }
-
-    .dark-section{
-      padding:30px 0 0;
-    }
-
-    .stack-grid{
-      display:grid;
-      grid-template-columns:1fr;
-      gap:18px;
-    }
-
-    .panel{
-      border:1px solid rgba(255,255,255,.08);
-      background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.03));
-      border-radius:30px;
-      padding:28px;
-      box-shadow:inset 0 1px 0 rgba(255,255,255,.05);
-      overflow:hidden;
-      position:relative;
-    }
-
-    .panel::before{
-      content:"";
-      position:absolute;
-      inset:0;
-      background:radial-gradient(400px 180px at 82% 18%, rgba(114,136,181,.10), transparent 60%);
-      pointer-events:none;
-    }
-
-    .panel h3{
-      margin:0 0 12px 0;
-      font-size:clamp(30px,3vw,48px);
-      line-height:1;
-      letter-spacing:-.05em;
-      font-weight:800;
-      color:#f3eee6;
-      position:relative;
-      z-index:1;
-    }
-
-    .panel p{
-      margin:0;
-      max-width:42ch;
-      color:var(--muted);
-      line-height:1.62;
-      font-size:17px;
-      position:relative;
-      z-index:1;
-    }
-
-    .property-panel{
-      display:grid;
-      grid-template-columns:320px 1fr;
-      gap:24px;
-      align-items:start;
-    }
-
-    .property-pills{
-      display:flex;
-      flex-wrap:wrap;
-      gap:14px;
-      position:relative;
-      z-index:1;
-    }
-
-    .property-pill{
-      min-height:68px;
-      padding:0 22px;
-      display:inline-flex;
-      align-items:center;
-      border-radius:999px;
-      border:1px solid rgba(255,255,255,.10);
-      background:rgba(255,255,255,.03);
-      font-family:var(--mono);
-      font-size:14px;
-      letter-spacing:.12em;
-      text-transform:uppercase;
-      color:rgba(244,246,249,.86);
-    }
-
-    @media (max-width:900px){
-      .property-panel{
-        grid-template-columns:1fr;
-      }
-    }
-
-    .boundary-panel p{
-      max-width:40ch;
-      font-size:20px;
-      color:rgba(235,239,244,.84);
-    }
-
-    .mechanism-grid{
-      display:grid;
-      grid-template-columns:1fr 1fr 1fr;
-      gap:14px;
-      margin-top:18px;
-      position:relative;
-      z-index:1;
-    }
-
-    .mech-card{
-      border:1px solid rgba(255,255,255,.08);
-      background:rgba(255,255,255,.03);
-      border-radius:24px;
-      padding:22px;
-      min-height:220px;
-      position:relative;
-      overflow:hidden;
-    }
-
-    .mech-card::after{
-      content:"";
-      position:absolute;
-      left:0;
-      top:0;
-      bottom:0;
-      width:2px;
-      background:linear-gradient(180deg, rgba(211,221,241,.88), rgba(113,136,183,.42));
-    }
-
-    .mech-step{
-      font-family:var(--mono);
-      font-size:11px;
-      letter-spacing:.16em;
-      text-transform:uppercase;
-      color:rgba(235,239,244,.56);
-      margin-bottom:10px;
-    }
-
-    .mech-title{
-      font-size:30px;
-      line-height:1;
-      letter-spacing:-.05em;
-      font-weight:800;
-      color:#f3eee6;
-      margin-bottom:10px;
-    }
-
-    .mech-card p{
-      font-size:16px;
-      line-height:1.62;
-      color:var(--muted);
-      max-width:none;
-    }
-
-    @media (max-width:980px){
-      .mechanism-grid{
-        grid-template-columns:1fr;
-      }
-      .mech-card{
-        min-height:auto;
-      }
-    }
-
-    .claims-band{
-      margin-top:24px;
-      border-radius:34px;
-      background:linear-gradient(180deg, #f4eee2 0%, #ece2d0 100%);
-      color:var(--ink);
-      border:1px solid rgba(11,16,32,.06);
-      box-shadow:0 24px 70px rgba(0,0,0,.16);
-      overflow:hidden;
-    }
-
-    .claims-grid{
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:20px;
-      padding:36px;
-      align-items:start;
-    }
-
-    .claims-grid h3{
-      margin:0 0 12px 0;
-      font-size:clamp(30px,3vw,46px);
-      line-height:1;
-      letter-spacing:-.05em;
-      font-weight:800;
-      color:var(--ink);
-    }
-
-    .claims-grid p{
-      margin:0;
-      color:rgba(11,16,32,.78);
-      font-size:17px;
-      line-height:1.62;
-    }
-
-    .claim-list{
-      display:grid;
-      gap:12px;
-    }
-
-    .claim-item{
-      min-height:68px;
-      padding:0 18px;
-      border-radius:999px;
-      display:flex;
-      align-items:center;
-      border:1px solid rgba(11,16,32,.10);
-      background:rgba(255,255,255,.38);
-      font-family:var(--mono);
-      font-size:13px;
-      letter-spacing:.10em;
-      text-transform:uppercase;
-      color:rgba(11,16,32,.84);
-    }
-
-    @media (max-width:980px){
-      .claims-grid{
-        grid-template-columns:1fr;
-      }
-    }
-
-    .next-grid{
-      display:grid;
-      grid-template-columns:1fr 1fr 1fr 1fr 1fr;
-      gap:14px;
-      margin-top:20px;
-    }
-
-    .next-card{
-      min-height:170px;
-      border-radius:24px;
-      border:1px solid rgba(255,255,255,.08);
-      background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.03));
-      padding:20px;
-      display:flex;
-      flex-direction:column;
-      justify-content:space-between;
-      transition:transform .22s ease,border-color .22s ease,background .22s ease;
-      box-shadow:inset 0 1px 0 rgba(255,255,255,.04);
-    }
-
-    .next-card:hover{
-      transform:translateY(-3px);
-      border-color:rgba(255,255,255,.14);
-      background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.04));
-    }
-
-    .next-card .k{
-      font-family:var(--mono);
-      font-size:11px;
-      letter-spacing:.16em;
-      text-transform:uppercase;
-      color:rgba(235,239,244,.50);
-    }
-
-    .next-card .title{
-      font-size:28px;
-      line-height:1;
-      letter-spacing:-.05em;
-      font-weight:800;
-      color:#f3eee6;
-    }
-
-    .next-card .meta{
-      font-size:14px;
-      color:var(--muted);
-      line-height:1.55;
-    }
-
-    @media (max-width:1180px){
-      .next-grid{
-        grid-template-columns:1fr 1fr 1fr;
-      }
-    }
-
-    @media (max-width:820px){
-      .next-grid{
-        grid-template-columns:1fr 1fr;
-      }
-    }
-
-    @media (max-width:560px){
-      .next-grid{
-        grid-template-columns:1fr;
-      }
-    }
-
-    footer{
-      padding:38px 0 0;
-    }
-
-    .footer-band{
-      border-top:1px solid rgba(255,255,255,.08);
-      padding-top:18px;
-      display:flex;
-      justify-content:space-between;
-      gap:14px;
-      flex-wrap:wrap;
-      font-family:var(--mono);
-      font-size:12px;
-      letter-spacing:.14em;
-      text-transform:uppercase;
-      color:rgba(235,239,244,.52);
-    }
-
-    .reveal{
-      opacity:0;
-      transform:translateY(18px);
-      transition:opacity .75s ease, transform .75s cubic-bezier(.2,.9,.2,1);
-    }
-
-    .reveal.on{
-      opacity:1;
-      transform:translateY(0);
-    }
-
-    .wipe{
-      position:fixed;
-      inset:0;
-      z-index:120;
-      transform:translateY(100%);
-      pointer-events:none;
-      background:linear-gradient(180deg, #08101d, #0c1830);
-      border-top:1px solid rgba(255,255,255,.08);
-      transition:transform .55s cubic-bezier(.2,.9,.2,1);
-    }
-
-    .wipe.active{
-      transform:translateY(0);
-      pointer-events:auto;
-    }
-
-    @media (prefers-reduced-motion:reduce){
-      html{scroll-behavior:auto}
-      .reveal{opacity:1;transform:none;transition:none}
-      .brand-pill::before,
-      .menu-sheet,
-      .wipe,
-      .menu-overlay,
-      .menu-pill,
-      .cta,
-      .next-card{transition:none}
-      #heroFx,.site-grid,.site-noise{display:none}
     }
   </style>
 </head>
 <body>
-  <div class="site-bg" aria-hidden="true"></div>
-  <div class="site-grid" aria-hidden="true"></div>
-  <div class="site-noise" aria-hidden="true"></div>
-  <canvas id="heroFx" aria-hidden="true"></canvas>
+  <div class="page-wipe" id="pageWipe" aria-hidden="true"></div>
 
-  <div class="wipe" id="pageWipe" aria-hidden="true"></div>
+  <div class="nav-overlay" id="navOverlay" aria-hidden="true">
+    <div class="nav-sheet">
+      <div class="nav-grid">
+        <div class="nav-links">
+          <div class="nav-kicker">Overview Navigation</div>
+          <a class="nav-link nav-destination" href="#hero">Overview</a>
+          <a class="nav-link nav-destination" href="#what-ceyo-is">What CEYO Is</a>
+          <a class="nav-link nav-destination" href="#core-properties">Core Properties</a>
+          <a class="nav-link nav-destination" href="#boundary">Boundary</a>
+          <a class="nav-link nav-destination" href="#mechanism">Mechanism</a>
+          <a class="nav-link nav-destination" href="#non-claims">What CEYO Does Not Claim</a>
+          <a class="nav-link nav-destination" href="#next">Next</a>
+        </div>
+        <aside class="nav-side">
+          <div class="nav-kicker">CEYO</div>
+          <p>
+            Overview page for independent evidentiary infrastructure, designed for institutional clarity,
+            constrained disclosure, and independent review.
+          </p>
+        </aside>
+      </div>
+    </div>
+  </div>
 
-  <header class="site">
-    <div class="wrap nav">
-      <a class="brand-pill" href="index.html" aria-label="CEYO home">
-        <span class="brand-mark" aria-hidden="true"></span>
-        <span class="brand-copy">
-          <span class="name">CEYO</span>
-          <span class="sub">Evidentiary Infrastructure</span>
-        </span>
-      </a>
+  <header class="sticky-header" id="siteHeader">
+    <div class="shell">
+      <div class="header-row">
+        <a href="#hero" class="brand-pill glass-pill nav-destination" aria-label="CEYO home">
+          <div class="brand-mark" aria-hidden="true"></div>
+          <div class="brand-copy">
+            <strong>CEYO</strong>
+            <span>Evidentiary Infrastructure</span>
+          </div>
+        </a>
 
-      <div class="nav-actions">
         <button
-          class="menu-pill"
+          class="menu-pill glass-pill"
           id="menuToggle"
           type="button"
           aria-expanded="false"
-          aria-controls="menuOverlay"
-          aria-label="Open menu"
+          aria-controls="navOverlay"
+          aria-label="Open navigation"
         >
-          <span class="label">Menu</span>
-          <span class="menu-icon" aria-hidden="true">
+          <span class="menu-pill-label">Menu</span>
+          <span class="hamburger" aria-hidden="true">
             <span></span><span></span><span></span>
           </span>
         </button>
@@ -1188,443 +1079,406 @@
     </div>
   </header>
 
-  <div class="menu-overlay" id="menuOverlay" aria-hidden="true">
-    <div class="menu-sheet">
-      <div class="menu-inner">
-        <div class="menu-grid">
-          <div class="menu-col">
-            <div class="menu-eyebrow">Navigation</div>
-            <nav class="menu-nav" aria-label="Primary">
-              <a href="index.html" data-transition>
-                <span class="txt">Overview</span>
-                <span class="meta">Index</span>
-              </a>
-              <a href="how.html" data-transition>
-                <span class="txt">How It Works</span>
-                <span class="meta">Mechanism</span>
-              </a>
-              <a href="platform.html" data-transition>
-                <span class="txt">Platform</span>
-                <span class="meta">Structure</span>
-              </a>
-              <a href="trust.html" data-transition>
-                <span class="txt">Trust</span>
-                <span class="meta">Verification</span>
-              </a>
-              <a href="compliance.html" data-transition>
-                <span class="txt">Compliance</span>
-                <span class="meta">Boundary</span>
-              </a>
-              <a href="resources.html" data-transition>
-                <span class="txt">Resources</span>
-                <span class="meta">Library</span>
-              </a>
-              <a href="company.html" data-transition>
-                <span class="txt">Company</span>
-                <span class="meta">Institution</span>
-              </a>
-              <a href="contact.html" data-transition>
-                <span class="txt">Contact</span>
-                <span class="meta">Reach out</span>
-              </a>
-            </nav>
-          </div>
+  <section class="hero" id="hero" aria-label="CEYO overview hero">
+    <div class="hero-bg" aria-hidden="true">
+      <canvas id="heroCanvas"></canvas>
+      <div class="hero-vignette"></div>
+    </div>
 
-          <div class="menu-col menu-copy">
-            <div class="menu-eyebrow">CEYO</div>
-            <h2>Evidentiary infrastructure for AI-supported systems.</h2>
-            <p>
-              CEYO introduces an independent evidentiary layer for AI-supported systems. It generates policy-scoped,
-              cryptographically sealed records from AI-supported operations, enabling later institutional verification
-              without modifying the originating system.
-            </p>
+    <div class="shell hero-inner">
+      <div class="hero-left">
+        <div class="eyebrow-wrap">
+          <div class="eyebrow-line"></div>
+          <div class="mono">Independent Evidentiary Infrastructure</div>
+        </div>
+
+        <h1 class="hero-headline">Evidentiary Infrastructure for AI Systems</h1>
+
+        <p class="hero-copy">
+          CEYO is an independent evidentiary layer that generates policy-scoped, cryptographically sealed records from AI-supported operations, enabling later institutional verification without modifying the originating system.
+        </p>
+
+        <div class="hero-actions">
+          <a class="btn btn-primary nav-destination" href="#what-ceyo-is">Enter overview</a>
+          <a class="btn btn-secondary nav-destination" href="#mechanism">Explore platform</a>
+        </div>
+      </div>
+
+      <div class="hero-right">
+        <div class="hero-side-card">
+          <div class="type-line">
+            <span class="type-line-dot"></span>
+            <span>Type line</span>
           </div>
+          <div class="typewriter" aria-live="polite">
+            <span id="typewriterText"></span><span class="cursor">|</span>
+          </div>
+          <div class="sr-only">Record. Seal. Verify.</div>
         </div>
       </div>
     </div>
-  </div>
+  </section>
 
   <main>
-    <section class="hero">
-      <div class="wrap">
-        <div class="hero-shell reveal">
-          <div class="hero-grid">
-            <div class="hero-copy">
-              <div class="eyebrow">Independent Evidentiary Infrastructure</div>
+    <section class="section reveal" id="what-ceyo-is">
+      <div class="shell section-grid">
+        <div>
+          <div class="section-top">
+            <div class="section-label">What CEYO Is</div>
+            <h2 class="section-heading">A verification layer for consequential AI operations.</h2>
+          </div>
 
-              <h1>Evidentiary Infrastructure for AI Systems</h1>
-
-              <p>
-                CEYO is an independent evidentiary layer that generates policy-scoped, cryptographically sealed records
-                from AI-supported operations, enabling later institutional verification without modifying the originating system.
-              </p>
-
-              <div class="hero-actions">
-                <a class="cta primary" href="#overview">Enter overview</a>
-                <a class="cta secondary" href="platform.html" data-transition>Explore platform</a>
-              </div>
-
-              <div class="type-line" id="typeLine" aria-label="Typewriter line"></div>
-
-              <div class="hero-divider" aria-hidden="true"></div>
-            </div>
-
-            <aside class="hero-side" aria-label="Overview highlights">
-              <div class="micro-card">
-                <div class="k">Signal</div>
-                <div class="v">Policy-Scoped</div>
-                <p>Artifacts are generated within a declared capture boundary.</p>
-              </div>
-
-              <div class="micro-card">
-                <div class="k">Integrity</div>
-                <div class="v">Deterministic</div>
-                <p>Canonicalization produces a repeatable verification path.</p>
-              </div>
-
-              <div class="micro-card">
-                <div class="k">Review</div>
-                <div class="v">Independently Verifiable</div>
-                <p>Verification confirms integrity and provenance under declared policy scope.</p>
-              </div>
-            </aside>
+          <div class="stack-copy">
+            <p class="section-copy">
+              CEYO produces deterministic evidentiary artifacts from policy-scoped inference events.
+            </p>
+            <p class="section-copy">
+              Those artifacts are designed to support later institutional review, chain-of-custody integrity, and independent verification without default disclosure of model internals, proprietary weights, or full system logic.
+            </p>
+            <p class="section-copy">
+              It is built for environments where AI-supported actions may require trusted review after the fact.
+            </p>
           </div>
         </div>
 
-        <div class="page-block" id="overview">
-          <div class="ivory-band reveal">
-            <div class="ivory-grid">
-              <div>
-                <div class="section-k">What CEYO Is</div>
-                <h2>A verification layer for consequential AI operations.</h2>
-                <p>
-                  CEYO produces deterministic evidentiary artifacts from policy-scoped inference events.
-                </p>
-                <p>
-                  Those artifacts are designed to support later institutional review, chain-of-custody integrity,
-                  and independent verification without default disclosure of model internals, proprietary weights,
-                  or full system logic.
-                </p>
-                <p>
-                  It is built for environments where AI-supported actions may require trusted review after the fact.
-                </p>
-              </div>
-
-              <div class="ivory-note">
-                <div class="line">
-                  <div class="title">Objective</div>
-                  <div class="body">
-                    CEYO introduces an independent evidentiary layer for AI-supported systems.
-                  </div>
-                </div>
-                <div class="line">
-                  <div class="title">Output</div>
-                  <div class="body">
-                    Policy-scoped, cryptographically sealed records of AI-supported operations.
-                  </div>
-                </div>
-                <div class="line">
-                  <div class="title">Review posture</div>
-                  <div class="body">
-                    Later institutional verification without modifying the originating system.
-                  </div>
-                </div>
-              </div>
+        <aside class="panel note-panel">
+          <div class="note-grid">
+            <div class="note-item">
+              <h3>Objective</h3>
+              <p>CEYO introduces an independent evidentiary layer for AI-supported systems.</p>
+            </div>
+            <div class="note-item">
+              <h3>Output</h3>
+              <p>Policy-scoped, cryptographically sealed records of AI-supported operations.</p>
+            </div>
+            <div class="note-item">
+              <h3>Review posture</h3>
+              <p>Later institutional verification without modifying the originating system.</p>
             </div>
           </div>
+        </aside>
+      </div>
+    </section>
 
-          <div class="dark-section">
-            <div class="stack-grid">
-              <div class="panel property-panel reveal">
-                <div>
-                  <div class="section-k">Core Properties</div>
-                  <h3>What remains fixed.</h3>
-                </div>
+    <section class="section reveal ivory-break" id="core-properties">
+      <div class="shell">
+        <div class="section-top">
+          <div class="section-label">Core Properties</div>
+          <h2 class="section-heading">What remains fixed.</h2>
+        </div>
 
-                <div>
-                  <div class="property-pills" aria-label="Core properties">
-                    <div class="property-pill">Policy-Scoped</div>
-                    <div class="property-pill">Deterministic</div>
-                    <div class="property-pill">Cryptographically Sealed</div>
-                    <div class="property-pill">Independently Verifiable</div>
-                  </div>
-                  <p style="margin-top:18px;">
-                    Each artifact is generated within a declared capture boundary and sealed for later verification.
-                  </p>
-                </div>
-              </div>
+        <div class="properties" aria-label="Property pills">
+          <div class="pill">Policy-Scoped</div>
+          <div class="pill">Deterministic</div>
+          <div class="pill">Cryptographically Sealed</div>
+          <div class="pill">Independently Verifiable</div>
+        </div>
 
-              <div class="panel boundary-panel reveal">
-                <div class="section-k">Boundary</div>
-                <h3>CEYO operates outside the model.</h3>
-                <p>
-                  It does not modify, instrument, or interfere with AI inference.
-                </p>
-                <p style="margin-top:12px;">
-                  It records only what a governing capture policy explicitly permits.
-                </p>
-              </div>
+        <p class="section-copy">
+          Each artifact is generated within a declared capture boundary and sealed for later verification.
+        </p>
+      </div>
+    </section>
 
-              <div class="panel reveal">
-                <div class="section-k">Mechanism</div>
-                <h3>Record. Seal. Verify.</h3>
-                <p>CEYO follows a fixed evidentiary sequence.</p>
+    <section class="section reveal" id="boundary">
+      <div class="shell section-grid">
+        <div>
+          <div class="section-top">
+            <div class="section-label">Boundary</div>
+            <h2 class="section-heading">CEYO operates outside the model.</h2>
+          </div>
 
-                <div class="mechanism-grid">
-                  <div class="mech-card">
-                    <div class="mech-step">01 · Record</div>
-                    <div class="mech-title">Record</div>
-                    <p>Capture only declared fields within policy scope.</p>
-                  </div>
+          <div class="stack-copy">
+            <p class="section-copy">
+              It does not modify, instrument, or interfere with AI inference.
+            </p>
+            <p class="section-copy">
+              It records only what a governing capture policy explicitly permits.
+            </p>
+          </div>
+        </div>
 
-                  <div class="mech-card">
-                    <div class="mech-step">02 · Seal</div>
-                    <div class="mech-title">Seal</div>
-                    <p>Canonicalize deterministically, hash the record, and apply cryptographic signature controls.</p>
-                  </div>
+        <aside class="panel">
+          <div class="mono">Boundary posture</div>
+          <p class="section-copy" style="margin-top:12px;">
+            Independent evidentiary operation is maintained through declared capture scope, restrained collection, and later verification under policy-defined conditions.
+          </p>
+        </aside>
+      </div>
+    </section>
 
-                  <div class="mech-card">
-                    <div class="mech-step">03 · Verify</div>
-                    <div class="mech-title">Verify</div>
-                    <p>Allow an independent party to recompute integrity checks and validate provenance under declared policy scope.</p>
-                  </div>
-                </div>
-              </div>
+    <section class="section reveal ivory-break" id="mechanism">
+      <div class="shell">
+        <div class="section-top">
+          <div class="section-label">Mechanism</div>
+          <h2 class="section-heading">Record. Seal. Verify.</h2>
+        </div>
 
-              <div class="claims-band reveal">
-                <div class="claims-grid">
-                  <div>
-                    <div class="section-k">What CEYO Does Not Claim</div>
-                    <h3>Institutional discipline matters.</h3>
-                    <p>
-                      CEYO is an evidentiary infrastructure. It is not a truth engine, a fairness engine,
-                      a compliance certification, a model auditor, or a replacement for institutional judgment.
-                    </p>
-                    <p style="margin-top:14px;">
-                      Verification confirms integrity and provenance under declared policy scope. It does not prove
-                      decision correctness, legal sufficiency, or regulatory compliance outcomes.
-                    </p>
-                  </div>
+        <p class="section-copy mechanism-intro">CEYO follows a fixed evidentiary sequence.</p>
 
-                  <div class="claim-list" aria-label="Non-claims">
-                    <div class="claim-item">A Truth Engine</div>
-                    <div class="claim-item">A Fairness Engine</div>
-                    <div class="claim-item">A Compliance Certification</div>
-                    <div class="claim-item">A Model Auditor</div>
-                    <div class="claim-item">A Replacement for Institutional Judgment</div>
-                  </div>
-                </div>
-              </div>
+        <div class="mechanism-grid" aria-label="Mechanism cards">
+          <article class="mechanism-card">
+            <div class="mechanism-kicker">01 · Record</div>
+            <h3 class="mechanism-title">Record</h3>
+            <p>Capture only declared fields within policy scope.</p>
+          </article>
 
-              <div class="panel reveal">
-                <div class="section-k">Next</div>
-                <h3>Review the system at the level you need.</h3>
-                <p>
-                  Built for institutional clarity, constrained disclosure, and independent review.
-                </p>
+          <article class="mechanism-card">
+            <div class="mechanism-kicker">02 · Seal</div>
+            <h3 class="mechanism-title">Seal</h3>
+            <p>Canonicalize deterministically, hash the record, and apply cryptographic signature controls.</p>
+          </article>
 
-                <div class="next-grid">
-                  <a class="next-card" href="how.html" data-transition>
-                    <div class="k">Mechanism</div>
-                    <div class="title">How It Works</div>
-                    <div class="meta">Sequence, boundaries, and verification flow.</div>
-                  </a>
+          <article class="mechanism-card">
+            <div class="mechanism-kicker">03 · Verify</div>
+            <h3 class="mechanism-title">Verify</h3>
+            <p>Allow an independent party to recompute integrity checks and validate provenance under declared policy scope.</p>
+          </article>
+        </div>
+      </div>
+    </section>
 
-                  <a class="next-card" href="platform.html" data-transition>
-                    <div class="k">Structure</div>
-                    <div class="title">Platform</div>
-                    <div class="meta">System placement, operational architecture, and evidentiary posture.</div>
-                  </a>
+    <section class="section reveal" id="non-claims">
+      <div class="shell">
+        <div class="section-top">
+          <div class="section-label">What CEYO Does Not Claim</div>
+          <h2 class="section-heading">Institutional discipline matters.</h2>
+        </div>
 
-                  <a class="next-card" href="trust.html" data-transition>
-                    <div class="k">Assurance</div>
-                    <div class="title">Trust</div>
-                    <div class="meta">Verification model, non-custodial controls, and review confidence.</div>
-                  </a>
+        <div class="dark-stack">
+          <p class="section-copy">
+            CEYO is an evidentiary infrastructure. It is not a truth engine, a fairness engine, a compliance certification, a model auditor, or a replacement for institutional judgment.
+          </p>
+          <p class="section-copy">
+            Verification confirms integrity and provenance under declared policy scope. It does not prove decision correctness, legal sufficiency, or regulatory compliance outcomes.
+          </p>
 
-                  <a class="next-card" href="resources.html" data-transition>
-                    <div class="k">Reference</div>
-                    <div class="title">Resources</div>
-                    <div class="meta">Sample artifacts, glossary, documentation, and supporting material.</div>
-                  </a>
+          <div class="properties" aria-label="Non-claim pills">
+            <div class="pill">A Truth Engine</div>
+            <div class="pill">A Fairness Engine</div>
+            <div class="pill">A Compliance Certification</div>
+            <div class="pill">A Model Auditor</div>
+            <div class="pill">A Replacement for Institutional Judgment</div>
+          </div>
+        </div>
+      </div>
+    </section>
 
-                  <a class="next-card" href="contact.html" data-transition>
-                    <div class="k">Reach</div>
-                    <div class="title">Contact</div>
-                    <div class="meta">Request a walkthrough or continue the discussion directly.</div>
-                  </a>
-                </div>
-              </div>
+    <section class="section reveal" id="next">
+      <div class="shell">
+        <div class="section-top">
+          <div class="section-label">Next</div>
+          <h2 class="section-heading">Review the system at the level you need.</h2>
+        </div>
 
-              <footer class="reveal">
-                <div class="footer-band">
-                  <div>© <span id="year"></span> CEYO. All rights reserved.</div>
-                  <div>Independent Evidentiary Infrastructure</div>
-                </div>
-              </footer>
-            </div>
+        <div class="dark-stack">
+          <p class="section-copy">
+            Built for institutional clarity, constrained disclosure, and independent review.
+          </p>
+
+          <div class="next-grid">
+            <a class="next-card nav-destination" href="#mechanism">
+              <h3>How It Works</h3>
+              <p>Sequence, boundaries, and verification flow.</p>
+            </a>
+
+            <a class="next-card nav-destination" href="#boundary">
+              <h3>Platform</h3>
+              <p>System placement, operational architecture, and evidentiary posture.</p>
+            </a>
+
+            <a class="next-card nav-destination" href="#non-claims">
+              <h3>Trust</h3>
+              <p>Verification model, non-custodial controls, and review confidence.</p>
+            </a>
+
+            <a class="next-card nav-destination" href="#what-ceyo-is">
+              <h3>Resources</h3>
+              <p>Sample artifacts, glossary, documentation, and supporting material.</p>
+            </a>
+
+            <a class="next-card nav-destination" href="#hero">
+              <h3>Contact</h3>
+              <p>Request a walkthrough or continue the discussion directly.</p>
+            </a>
           </div>
         </div>
       </div>
     </section>
   </main>
 
-  <script>
-    const yearEl = document.getElementById('year');
-    if (yearEl) yearEl.textContent = new Date().getFullYear();
+  <footer>
+    <div class="shell">
+      <div class="footer-line">CEYO. All rights reserved.</div>
+    </div>
+  </footer>
 
-    const menuToggle = document.getElementById('menuToggle');
-    const menuOverlay = document.getElementById('menuOverlay');
+  <script>
+    document.documentElement.classList.remove("no-js");
+
+    const body = document.body;
+    const header = document.getElementById("siteHeader");
+    const menuToggle = document.getElementById("menuToggle");
+    const navOverlay = document.getElementById("navOverlay");
+    const pageWipe = document.getElementById("pageWipe");
+    const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
     function openMenu() {
-      menuOverlay.classList.add('open');
-      menuOverlay.setAttribute('aria-hidden', 'false');
-      menuToggle.setAttribute('aria-expanded', 'true');
-      document.body.style.overflow = 'hidden';
+      body.classList.add("menu-open");
+      navOverlay.classList.add("open");
+      navOverlay.setAttribute("aria-hidden", "false");
+      menuToggle.setAttribute("aria-expanded", "true");
+      menuToggle.setAttribute("aria-label", "Close navigation");
     }
 
     function closeMenu() {
-      menuOverlay.classList.remove('open');
-      menuOverlay.setAttribute('aria-hidden', 'true');
-      menuToggle.setAttribute('aria-expanded', 'false');
-      document.body.style.overflow = '';
+      body.classList.remove("menu-open");
+      navOverlay.classList.remove("open");
+      navOverlay.setAttribute("aria-hidden", "true");
+      menuToggle.setAttribute("aria-expanded", "false");
+      menuToggle.setAttribute("aria-label", "Open navigation");
     }
 
-    menuToggle?.addEventListener('click', () => {
-      const isOpen = menuOverlay.classList.contains('open');
-      if (isOpen) closeMenu();
+    menuToggle.addEventListener("click", () => {
+      if (navOverlay.classList.contains("open")) closeMenu();
       else openMenu();
     });
 
-    menuOverlay?.addEventListener('click', (e) => {
-      if (e.target === menuOverlay) closeMenu();
+    navOverlay.addEventListener("click", (e) => {
+      if (e.target === navOverlay) closeMenu();
     });
 
-    window.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && menuOverlay.classList.contains('open')) {
-        closeMenu();
-      }
+    window.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && navOverlay.classList.contains("open")) closeMenu();
     });
 
-    const wipe = document.getElementById('pageWipe');
-    document.querySelectorAll('[data-transition]').forEach((link) => {
-      link.addEventListener('click', (e) => {
-        const href = link.getAttribute('href');
-        if (!href || href.startsWith('#')) return;
+    let lastScroll = 0;
+    window.addEventListener("scroll", () => {
+      const y = window.scrollY || 0;
+      header.classList.toggle("scrolled", y > 18);
+      lastScroll = y;
+    }, { passive: true });
+
+    const internalLinks = document.querySelectorAll(".nav-destination");
+    internalLinks.forEach((link) => {
+      link.addEventListener("click", (e) => {
+        const href = link.getAttribute("href");
+        if (!href || !href.startsWith("#")) return;
+        const target = document.querySelector(href);
+        if (!target) return;
+
         e.preventDefault();
-        wipe.classList.add('active');
         closeMenu();
+
+        if (prefersReduced) {
+          target.scrollIntoView({ behavior: "auto", block: "start" });
+          history.replaceState(null, "", href);
+          return;
+        }
+
+        pageWipe.classList.add("active");
+
         setTimeout(() => {
-          window.location.href = href;
-        }, 440);
+          target.scrollIntoView({ behavior: "smooth", block: "start" });
+          history.replaceState(null, "", href);
+        }, 360);
+
+        setTimeout(() => {
+          pageWipe.classList.remove("active");
+        }, 980);
       });
     });
 
-    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const revealItems = document.querySelectorAll(".reveal");
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("is-visible");
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.16, rootMargin: "0px 0px -8% 0px" });
 
-    if (!prefersReduced) {
-      const revealEls = [...document.querySelectorAll('.reveal')];
-      const io = new IntersectionObserver((entries) => {
-        entries.forEach((entry, i) => {
-          if (entry.isIntersecting) {
-            entry.target.style.transitionDelay = `${Math.min(i * 40, 180)}ms`;
-            entry.target.classList.add('on');
-          }
-        });
-      }, { threshold: 0.14 });
-      revealEls.forEach((el) => io.observe(el));
-    } else {
-      document.querySelectorAll('.reveal').forEach((el) => el.classList.add('on'));
-    }
+    revealItems.forEach((el) => revealObserver.observe(el));
 
-    // Typewriter line
-    const typeLine = document.getElementById('typeLine');
-    const typeText = 'Record. Seal. Verify.';
-    let typeIndex = 0;
+    // Typewriter
+    const typeTarget = document.getElementById("typewriterText");
+    const typeText = "Record. Seal. Verify.";
+    let tIndex = 0;
 
-    function typeWriter() {
-      if (!typeLine) return;
-      if (typeIndex <= typeText.length) {
-        typeLine.textContent = typeText.slice(0, typeIndex);
-        typeIndex += 1;
-        setTimeout(typeWriter, 70);
+    function typeStep() {
+      if (!typeTarget) return;
+      if (tIndex <= typeText.length) {
+        typeTarget.textContent = typeText.slice(0, tIndex);
+        tIndex += 1;
+        setTimeout(typeStep, tIndex < typeText.length ? 92 : 140);
       }
     }
 
     if (!prefersReduced) {
-      setTimeout(typeWriter, 600);
-    } else if (typeLine) {
-      typeLine.textContent = typeText;
+      setTimeout(typeStep, 520);
+    } else if (typeTarget) {
+      typeTarget.textContent = typeText;
     }
 
-    // Hero effects canvas
-    (function(){
-      if (prefersReduced) return;
+    // Hero canvas effect
+    const canvas = document.getElementById("heroCanvas");
+    const ctx = canvas ? canvas.getContext("2d") : null;
 
-      const canvas = document.getElementById('heroFx');
-      if (!canvas) return;
-      const ctx = canvas.getContext('2d', { alpha: true });
+    if (canvas && ctx && !prefersReduced) {
+      let width = 0;
+      let height = 0;
+      let dpr = Math.min(window.devicePixelRatio || 1, 2);
+      let nodes = [];
+      let rafId = null;
+      let pointer = { x: null, y: null };
 
-      let w = 0, h = 0, dpr = 1;
-      let mx = window.innerWidth * 0.72;
-      let my = window.innerHeight * 0.26;
-
-      const nodes = [];
-      const total = 130;
-
-      function resize(){
+      function resizeCanvas() {
+        const rect = canvas.getBoundingClientRect();
+        width = rect.width;
+        height = rect.height;
         dpr = Math.min(window.devicePixelRatio || 1, 2);
-        w = window.innerWidth;
-        h = window.innerHeight;
-        canvas.width = Math.floor(w * dpr);
-        canvas.height = Math.floor(h * dpr);
-        canvas.style.width = `${w}px`;
-        canvas.style.height = `${h}px`;
+        canvas.width = Math.floor(width * dpr);
+        canvas.height = Math.floor(height * dpr);
         ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-        if (!nodes.length) {
-          for (let i = 0; i < total; i++) {
-            nodes.push({
-              x: Math.random() * w,
-              y: Math.random() * h * 0.9,
-              vx: (Math.random() - 0.5) * 0.16,
-              vy: (Math.random() - 0.5) * 0.12,
-              r: 1 + Math.random() * 1.8
-            });
-          }
-        }
+        const count = width < 700 ? 28 : width < 1100 ? 42 : 58;
+        nodes = Array.from({ length: count }, () => ({
+          x: Math.random() * width,
+          y: Math.random() * height,
+          vx: (Math.random() - 0.5) * 0.22,
+          vy: (Math.random() - 0.5) * 0.22,
+          r: Math.random() * 1.8 + 1.2
+        }));
       }
 
-      function draw(){
-        ctx.clearRect(0, 0, w, h);
+      function draw() {
+        ctx.clearRect(0, 0, width, height);
 
-        const glow = ctx.createRadialGradient(mx, my, 0, mx, my, 260);
-        glow.addColorStop(0, 'rgba(255,255,255,0.08)');
-        glow.addColorStop(0.35, 'rgba(115,145,196,0.08)');
-        glow.addColorStop(1, 'rgba(115,145,196,0)');
-        ctx.fillStyle = glow;
-        ctx.beginPath();
-        ctx.arc(mx, my, 260, 0, Math.PI * 2);
-        ctx.fill();
+        const gradient = ctx.createRadialGradient(width * 0.5, height * 0.42, 0, width * 0.5, height * 0.42, Math.max(width, height) * 0.8);
+        gradient.addColorStop(0, "rgba(71, 113, 175, 0.10)");
+        gradient.addColorStop(1, "rgba(7, 16, 28, 0)");
+        ctx.fillStyle = gradient;
+        ctx.fillRect(0, 0, width, height);
 
         for (let i = 0; i < nodes.length; i++) {
           const a = nodes[i];
           a.x += a.vx;
           a.y += a.vy;
 
-          if (a.x < -20) a.x = w + 20;
-          if (a.x > w + 20) a.x = -20;
-          if (a.y < -20) a.y = h * 0.9 + 20;
-          if (a.y > h * 0.9 + 20) a.y = -20;
+          if (a.x < -20 || a.x > width + 20) a.vx *= -1;
+          if (a.y < -20 || a.y > height + 20) a.vy *= -1;
 
           for (let j = i + 1; j < nodes.length; j++) {
             const b = nodes[j];
             const dx = a.x - b.x;
             const dy = a.y - b.y;
-            const dist2 = dx * dx + dy * dy;
-            if (dist2 < 130 * 130) {
-              const alpha = Math.max(0, 0.10 - dist2 / 240000);
-              ctx.strokeStyle = `rgba(163,185,225,${alpha})`;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+            const maxDist = width < 700 ? 130 : 170;
+
+            if (dist < maxDist) {
+              const alpha = (1 - dist / maxDist) * 0.18;
+              ctx.strokeStyle = `rgba(214, 227, 255, ${alpha})`;
               ctx.lineWidth = 1;
               ctx.beginPath();
               ctx.moveTo(a.x, a.y);
@@ -1632,27 +1486,56 @@
               ctx.stroke();
             }
           }
+
+          if (pointer.x !== null && pointer.y !== null) {
+            const pdx = a.x - pointer.x;
+            const pdy = a.y - pointer.y;
+            const pdist = Math.sqrt(pdx * pdx + pdy * pdy);
+            if (pdist < 170) {
+              a.x += pdx / pdist * 0.08;
+              a.y += pdy / pdist * 0.08;
+            }
+          }
+
+          ctx.fillStyle = "rgba(244, 247, 252, 0.7)";
+          ctx.beginPath();
+          ctx.arc(a.x, a.y, a.r, 0, Math.PI * 2);
+          ctx.fill();
+
+          ctx.fillStyle = "rgba(175, 201, 240, 0.12)";
+          ctx.beginPath();
+          ctx.arc(a.x, a.y, a.r * 3.1, 0, Math.PI * 2);
+          ctx.fill();
         }
 
-        nodes.forEach((p) => {
-          ctx.fillStyle = 'rgba(235,239,244,0.62)';
-          ctx.beginPath();
-          ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-          ctx.fill();
-        });
-
-        requestAnimationFrame(draw);
+        rafId = requestAnimationFrame(draw);
       }
 
-      resize();
+      resizeCanvas();
       draw();
 
-      window.addEventListener('resize', resize, { passive: true });
-      window.addEventListener('pointermove', (e) => {
-        mx += (e.clientX - mx) * 0.08;
-        my += (e.clientY - my) * 0.08;
-      }, { passive: true });
-    })();
+      window.addEventListener("resize", resizeCanvas);
+      canvas.addEventListener("mousemove", (e) => {
+        const rect = canvas.getBoundingClientRect();
+        pointer.x = e.clientX - rect.left;
+        pointer.y = e.clientY - rect.top;
+      });
+      canvas.addEventListener("mouseleave", () => {
+        pointer.x = null;
+        pointer.y = null;
+      });
+
+      document.addEventListener("visibilitychange", () => {
+        if (document.hidden && rafId) cancelAnimationFrame(rafId);
+        if (!document.hidden) draw();
+      });
+    } else if (canvas && ctx) {
+      const rect = canvas.getBoundingClientRect();
+      canvas.width = rect.width;
+      canvas.height = rect.height;
+      ctx.fillStyle = "rgba(255,255,255,0)";
+      ctx.fillRect(0, 0, rect.width, rect.height);
+    }
   </script>
 </body>
 </html>
