@@ -80,4 +80,6 @@ This repository is the **presentation layer** for CEYO. It contains the public-f
 
 ## License
 
-MIT
+Copyright © 2026 Brian Covarrubias. All rights reserved.
+
+This repository contains research materials, experimental code, and architectural concepts that are not licensed for reuse, modification, or commercial deployment without explicit written permission from the author.

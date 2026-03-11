@@ -2,7 +2,8 @@
 CEYO: Evidentiary Infrastructure for Autonomous Systems
 Reference Implementation (v1.0)
 
-Copyright (c) 2026 CEYO. All Rights Reserved.
+Copyright © 2026 Brian Covarrubias. All Rights Reserved.
+Not licensed for reuse, modification, or commercial deployment without explicit written permission.
 Design: Policy-scoped, canonical artifacts via RFC 8785 and ECDSA P-256.
 """
 """
