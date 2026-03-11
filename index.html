@@ -927,15 +927,14 @@
   <div class="nav-overlay" id="navOverlay" aria-hidden="true">
     <div class="nav-sheet">
       <nav class="nav-links" aria-label="Primary">
-        <div class="mono">Overview Navigation</div>
-        <a class="nav-link nav-destination" href="#hero">Overview</a>
-        <a class="nav-link nav-destination" href="#why">Why This Layer Exists</a>
-        <a class="nav-link nav-destination" href="#what">What CEYO Is</a>
-        <a class="nav-link nav-destination" href="#properties">Core Properties</a>
-        <a class="nav-link nav-destination" href="#boundary">Boundary</a>
-        <a class="nav-link nav-destination" href="#mechanism">Mechanism</a>
-        <a class="nav-link nav-destination" href="#nonclaims">What CEYO Does Not Claim</a>
-        <a class="nav-link nav-destination" href="#next">Next</a>
+        <div class="mono">Navigation</div>
+        <a class="nav-link page-link" href="index.html">Overview</a>
+        <a class="nav-link page-link" href="platform.html">Platform</a>
+        <a class="nav-link page-link" href="protocol.html">Protocol</a>
+        <a class="nav-link page-link" href="verify.html">Verification</a>
+        <a class="nav-link page-link" href="trust.html">Trust</a>
+        <a class="nav-link page-link" href="resources.html">Resources</a>
+        <a class="nav-link page-link" href="contact.html">Contact</a>
       </nav>
 
       <aside class="nav-side">
@@ -948,7 +947,7 @@
   <header id="siteHeader">
     <div class="shell">
       <div class="header-row">
-        <a href="#hero" class="brand-pill glass-pill nav-destination" aria-label="CEYO home">
+        <a href="index.html" class="brand-pill glass-pill page-link" aria-label="CEYO home">
           <span class="brand-mark" aria-hidden="true"></span>
           <span class="brand-copy">
             <strong>CEYO</strong>
@@ -985,8 +984,8 @@
         </div>
 
         <div class="hero-actions">
-          <a class="btn btn-primary nav-destination" href="#why">Enter Overview</a>
-          <a class="btn btn-secondary nav-destination" href="#mechanism">Explore Platform</a>
+          <a class="btn btn-primary anchor-link" href="#why">Enter Overview</a>
+          <a class="btn btn-secondary page-link" href="platform.html">Explore Platform</a>
         </div>
       </div>
 
@@ -1134,23 +1133,27 @@
         <p style="margin-top:24px;max-width:44ch;">Built for institutional clarity, constrained disclosure, and independent review.</p>
 
         <div class="next-index">
-          <a class="next-link nav-destination" href="#mechanism">
-            <strong>How It Works</strong>
-            <span>Sequence, boundaries, and verification flow.</span>
-          </a>
-          <a class="next-link nav-destination" href="#boundary">
+          <a class="next-link page-link" href="platform.html">
             <strong>Platform</strong>
             <span>System placement, operational architecture, and evidentiary posture.</span>
           </a>
-          <a class="next-link nav-destination" href="#nonclaims">
+          <a class="next-link page-link" href="protocol.html">
+            <strong>Protocol</strong>
+            <span>Artifact structure, canonicalization rules, and sealing model.</span>
+          </a>
+          <a class="next-link page-link" href="verify.html">
+            <strong>Verification</strong>
+            <span>How integrity is checked independently after generation.</span>
+          </a>
+          <a class="next-link page-link" href="trust.html">
             <strong>Trust</strong>
             <span>Verification model, non-custodial controls, and review confidence.</span>
           </a>
-          <a class="next-link nav-destination" href="#what">
+          <a class="next-link page-link" href="resources.html">
             <strong>Resources</strong>
             <span>Sample artifacts, glossary, documentation, and supporting material.</span>
           </a>
-          <a class="next-link nav-destination" href="#hero">
+          <a class="next-link page-link" href="contact.html">
             <strong>Contact</strong>
             <span>Request a walkthrough or continue the discussion directly.</span>
           </a>
@@ -1210,7 +1213,7 @@
       header.classList.toggle("scrolled", (window.scrollY || 0) > 16);
     }, { passive: true });
 
-    document.querySelectorAll(".nav-destination").forEach((link) => {
+    document.querySelectorAll(".anchor-link").forEach((link) => {
       link.addEventListener("click", (e) => {
         const href = link.getAttribute("href");
         if (!href || !href.startsWith("#")) return;
@@ -1218,7 +1221,6 @@
         if (!target) return;
 
         e.preventDefault();
-        closeMenu();
 
         if (reduceMotion) {
           target.scrollIntoView({ behavior: "auto", block: "start" });
@@ -1226,15 +1228,28 @@
           return;
         }
 
+        target.scrollIntoView({ behavior: "smooth", block: "start" });
+        history.replaceState(null, "", href);
+      });
+    });
+
+    document.querySelectorAll(".page-link").forEach((link) => {
+      link.addEventListener("click", (e) => {
+        const href = link.getAttribute("href");
+        if (!href || href.startsWith("#")) return;
+
+        e.preventDefault();
+        closeMenu();
+
+        if (reduceMotion) {
+          window.location.href = href;
+          return;
+        }
+
         pageWipe.classList.add("active");
         setTimeout(() => {
-          target.scrollIntoView({ behavior: "smooth", block: "start" });
-          history.replaceState(null, "", href);
-        }, 320);
-
-        setTimeout(() => {
-          pageWipe.classList.remove("active");
-        }, 920);
+          window.location.href = href;
+        }, 420);
       });
     });
 
