@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
-  <title>CEYO — How it works</title>
-  <meta name="description" content="How CEYO works: policy-scoped capture, deterministic canonicalization, cryptographic sealing, and independent verification under constrained disclosure."/>
+  <title>CEYO — Evidentiary infrastructure for AI-supported systems</title>
+  <meta name="description" content="CEYO is an evidentiary architecture for AI-supported systems: policy-scoped capture, deterministic canonicalization, cryptographic sealing, and independent verification under constrained disclosure."/>
   <meta name="theme-color" content="#07090D"/>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -117,7 +117,7 @@
 
     .wrap{
       position:relative;
-      z-index:1;
+      z-index:2;
       max-width:var(--maxW);
       margin:0 auto;
       padding:0 28px;
@@ -126,10 +126,23 @@
       .wrap{padding:0 18px}
     }
 
+    .wipe{
+      position:fixed;
+      inset:0;
+      z-index:200;
+      background:linear-gradient(180deg,#09101A 0%,#07090D 100%);
+      transform:translateY(100%);
+      pointer-events:none;
+    }
+    .wipe.on{
+      transition:transform .72s cubic-bezier(.2,.9,.2,1);
+      transform:translateY(0%);
+    }
+
     header.site{
       position:sticky;
       top:0;
-      z-index:60;
+      z-index:80;
       backdrop-filter:blur(18px) saturate(140%);
       -webkit-backdrop-filter:blur(18px) saturate(140%);
       background:linear-gradient(180deg, rgba(7,9,13,.78), rgba(7,9,13,.46));
@@ -239,6 +252,7 @@
       transition:transform .18s ease,border-color .18s ease,background .18s ease,box-shadow .18s ease;
       box-shadow:inset 0 1px 0 rgba(255,255,255,.05);
       white-space:nowrap;
+      cursor:pointer;
     }
     .btn::before{
       content:"";
@@ -265,6 +279,9 @@
     .btn.primary:hover{
       border-color:rgba(123,162,255,.50);
       background:linear-gradient(180deg, rgba(123,162,255,.22), rgba(123,162,255,.12));
+    }
+    .btn.ghost{
+      background:rgba(255,255,255,.02);
     }
 
     .menuBtn{
@@ -297,71 +314,238 @@
       .btn.primary{display:none}
     }
 
-    .drawer{
+    .overlay{
       position:fixed;
       inset:0;
-      z-index:80;
-      display:none;
-      background:rgba(8,10,14,.78);
-      backdrop-filter:blur(18px);
-      -webkit-backdrop-filter:blur(18px);
-      padding:calc(env(safe-area-inset-top) + 12px) 18px 18px;
+      z-index:120;
+      background:rgba(6,8,12,.78);
+      backdrop-filter:blur(20px);
+      -webkit-backdrop-filter:blur(20px);
+      opacity:0;
+      pointer-events:none;
+      transition:opacity .35s ease;
     }
-    .drawer.open{display:block}
-    .drawerCard{
-      max-width:780px;
-      margin:0 auto;
-      border:1px solid rgba(255,255,255,.10);
-      background:rgba(255,255,255,.05);
-      border-radius:28px;
+    .overlay.open{
+      opacity:1;
+      pointer-events:auto;
+    }
+
+    .overlayPanel{
+      position:absolute;
+      inset:0;
+      transform:translateY(100%);
+      transition:transform .72s cubic-bezier(.2,.9,.2,1);
+      background:
+        radial-gradient(900px 480px at 15% 10%, rgba(123,162,255,.12), transparent 50%),
+        radial-gradient(920px 560px at 100% 0%, rgba(255,255,255,.05), transparent 48%),
+        linear-gradient(180deg, rgba(10,14,20,.94) 0%, rgba(7,9,13,.98) 100%);
+      border-top:1px solid rgba(255,255,255,.08);
+      display:flex;
+      flex-direction:column;
+      justify-content:flex-end;
       overflow:hidden;
-      box-shadow:var(--shadow-2);
     }
-    .drawerHead{
+    .overlay.open .overlayPanel{
+      transform:translateY(0%);
+    }
+
+    .overlayHead{
+      position:absolute;
+      top:0;
+      left:0;
+      right:0;
+      padding:calc(env(safe-area-inset-top) + 18px) 24px 18px;
       display:flex;
       align-items:center;
       justify-content:space-between;
-      padding:16px;
-      border-bottom:1px solid rgba(255,255,255,.08);
+      gap:16px;
+      border-bottom:1px solid rgba(255,255,255,.06);
     }
-    .drawerHead .t{
+    .overlayHead .label{
       font-family:var(--mono);
       font-size:12px;
       letter-spacing:.18em;
       text-transform:uppercase;
-      color:rgba(228,235,244,.76);
+      color:rgba(230,236,244,.72);
     }
-    .close{
-      height:44px;
-      padding:0 14px;
+    .closeBtn{
+      height:48px;
+      padding:0 16px;
       border-radius:999px;
       border:1px solid rgba(255,255,255,.10);
       background:rgba(255,255,255,.04);
       color:var(--text);
       cursor:pointer;
     }
-    .drawerLinks{
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:10px;
-      padding:12px;
+
+    .slideHint{
+      position:absolute;
+      top:98px;
+      left:24px;
+      right:24px;
+      display:flex;
+      justify-content:flex-start;
     }
-    .drawerLinks a{
-      padding:16px;
-      border-radius:18px;
-      border:1px solid rgba(255,255,255,.08);
+    .slider{
+      width:min(440px, 100%);
+      padding:8px;
+      border:1px solid rgba(255,255,255,.10);
+      border-radius:999px;
+      background:rgba(255,255,255,.04);
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.04);
+    }
+    .sliderTrack{
+      position:relative;
+      height:58px;
+      border-radius:999px;
       background:rgba(255,255,255,.03);
-      color:rgba(228,235,244,.84);
-      transition:transform .18s ease,border-color .18s ease,background .18s ease;
+      overflow:hidden;
+      user-select:none;
+      touch-action:none;
     }
-    .drawerLinks a:hover,
-    .drawerLinks a.active{
-      transform:translateY(-1px);
+    .sliderText{
+      position:absolute;
+      inset:0;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-family:var(--mono);
+      font-size:12px;
+      letter-spacing:.16em;
+      text-transform:uppercase;
+      color:rgba(230,236,244,.56);
+      pointer-events:none;
+    }
+    .sliderKnob{
+      position:absolute;
+      top:4px;
+      left:4px;
+      width:168px;
+      height:50px;
+      border-radius:999px;
+      background:linear-gradient(180deg, rgba(123,162,255,.24), rgba(123,162,255,.12));
+      border:1px solid rgba(123,162,255,.34);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      font-family:var(--mono);
+      font-size:11px;
+      letter-spacing:.16em;
+      text-transform:uppercase;
+      color:#F4F7FB;
+      box-shadow:0 18px 40px rgba(0,0,0,.28);
+      cursor:grab;
+    }
+    .sliderKnob.dragging{cursor:grabbing}
+
+    .overlayInner{
+      width:100%;
+      max-width:1380px;
+      margin:0 auto;
+      padding:160px 28px 34px;
+      display:grid;
+      grid-template-columns:1.2fr .8fr;
+      gap:22px;
+      min-height:100%;
+      align-items:end;
+    }
+    @media (max-width:1100px){
+      .overlayInner{
+        grid-template-columns:1fr;
+        padding-top:180px;
+      }
+    }
+    @media (max-width:640px){
+      .overlayInner{padding-left:18px;padding-right:18px}
+    }
+
+    .overlayLinks{
+      display:grid;
+      gap:10px;
+      align-content:end;
+    }
+    .overlayLink{
+      position:relative;
+      padding:18px 18px;
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:24px;
+      background:rgba(255,255,255,.03);
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-end;
+      gap:16px;
+      transform:translateY(26px);
+      opacity:0;
+      transition:transform .55s cubic-bezier(.2,.9,.2,1), opacity .55s ease, border-color .2s ease, background .2s ease;
+    }
+    .overlay.open .overlayLink{
+      transform:translateY(0);
+      opacity:1;
+    }
+    .overlay.open .overlayLink:nth-child(1){transition-delay:.08s}
+    .overlay.open .overlayLink:nth-child(2){transition-delay:.12s}
+    .overlay.open .overlayLink:nth-child(3){transition-delay:.16s}
+    .overlay.open .overlayLink:nth-child(4){transition-delay:.20s}
+    .overlay.open .overlayLink:nth-child(5){transition-delay:.24s}
+    .overlay.open .overlayLink:nth-child(6){transition-delay:.28s}
+    .overlay.open .overlayLink:nth-child(7){transition-delay:.32s}
+    .overlay.open .overlayLink:nth-child(8){transition-delay:.36s}
+    .overlayLink:hover{
       border-color:rgba(123,162,255,.22);
       background:rgba(255,255,255,.05);
     }
-    @media (max-width:680px){
-      .drawerLinks{grid-template-columns:1fr}
+    .overlayLink .num{
+      font-family:var(--mono);
+      font-size:11px;
+      letter-spacing:.16em;
+      text-transform:uppercase;
+      color:rgba(123,162,255,.88);
+      margin-bottom:8px;
+    }
+    .overlayLink .ttl{
+      font-size:clamp(20px, 3vw, 38px);
+      line-height:1;
+      letter-spacing:-.05em;
+      font-weight:800;
+      color:#F4F7FB;
+    }
+    .overlayLink .sub{
+      color:rgba(230,236,244,.68);
+      font-size:14px;
+      max-width:400px;
+      line-height:1.5;
+      text-align:right;
+    }
+
+    .overlayAside{
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:28px;
+      background:rgba(255,255,255,.03);
+      padding:24px;
+      min-height:340px;
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+      box-shadow:var(--shadow-1);
+    }
+    .overlayAside .k{
+      font-family:var(--mono);
+      font-size:11px;
+      letter-spacing:.16em;
+      text-transform:uppercase;
+      color:rgba(123,162,255,.88);
+      margin-bottom:10px;
+    }
+    .overlayAside h3{
+      font-size:32px;
+      line-height:1.02;
+      letter-spacing:-.05em;
+      margin:0 0 12px 0;
+    }
+    .overlayAside p{
+      color:rgba(230,236,244,.70);
+      margin:0;
     }
 
     main{padding:44px 0 var(--s8)}
@@ -374,68 +558,15 @@
       padding-top:var(--s6);
     }
 
-    .pageShell{
+    .heroGrid{
       display:grid;
-      grid-template-columns:220px minmax(0,1fr);
-      gap:32px;
+      grid-template-columns:minmax(0, 700px) minmax(320px, 1fr);
+      gap:34px;
       align-items:start;
+      min-height:calc(100vh - 160px);
     }
     @media (max-width:1100px){
-      .pageShell{grid-template-columns:1fr}
-    }
-
-    .indexNav{
-      position:sticky;
-      top:calc(var(--navH) + 26px);
-      align-self:start;
-      border-left:1px solid rgba(255,255,255,.08);
-      padding-left:18px;
-      min-width:0;
-    }
-    .indexNav .label{
-      font-family:var(--mono);
-      font-size:11px;
-      letter-spacing:.16em;
-      text-transform:uppercase;
-      color:rgba(228,235,244,.62);
-      margin-bottom:18px;
-    }
-    .indexNav a{
-      display:block;
-      position:relative;
-      padding:10px 0 10px 18px;
-      color:rgba(228,235,244,.68);
-      font-size:14px;
-      transition:color .18s ease,transform .18s ease;
-    }
-    .indexNav a::before{
-      content:"└";
-      position:absolute;
-      left:0;
-      top:10px;
-      color:rgba(255,255,255,.34);
-      font-family:var(--mono);
-    }
-    .indexNav a:hover{
-      color:var(--text);
-      transform:translateX(2px);
-    }
-    @media (max-width:1100px){
-      .indexNav{
-        position:static;
-        border-left:none;
-        padding-left:0;
-        display:grid;
-        grid-template-columns:1fr 1fr;
-        gap:4px 18px;
-      }
-      .indexNav .label{
-        grid-column:1 / -1;
-        margin-bottom:10px;
-      }
-    }
-    @media (max-width:640px){
-      .indexNav{grid-template-columns:1fr}
+      .heroGrid{grid-template-columns:1fr; min-height:auto;}
     }
 
     .eyebrow{
@@ -462,11 +593,11 @@
     }
     h1{
       margin:0 0 18px 0;
-      font-size:clamp(46px, 6vw, 92px);
+      font-size:clamp(48px, 7vw, 96px);
       line-height:.94;
-      letter-spacing:-.075em;
+      letter-spacing:-.078em;
       font-weight:900;
-      max-width:760px;
+      max-width:900px;
       text-wrap:balance;
     }
     h2{
@@ -485,24 +616,48 @@
     }
     @media (max-width:640px){
       h1{
-        font-size:clamp(36px, 12vw, 56px);
+        font-size:clamp(38px, 12vw, 58px);
         line-height:.96;
       }
     }
 
-    .heroGrid{
-      display:grid;
-      grid-template-columns:minmax(0, 620px) minmax(320px, 1fr);
-      gap:34px;
-      align-items:start;
+    .heroCopy .lead{
+      font-size:18px;
+      color:rgba(240,245,250,.82);
+      max-width:720px;
     }
-    @media (max-width:1100px){
-      .heroGrid{grid-template-columns:1fr}
+
+    .heroActions{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top:22px;
+    }
+
+    .chips{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top:20px;
+    }
+    .chip{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:10px 12px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(255,255,255,.03);
+      font-family:var(--mono);
+      font-size:11px;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      color:rgba(226,235,248,.84);
     }
 
     .heroPanel{
       position:relative;
-      min-height:540px;
+      min-height:640px;
       border-radius:32px;
       border:1px solid rgba(255,255,255,.10);
       background:
@@ -516,7 +671,7 @@
       overflow:hidden;
     }
     @media (max-width:640px){
-      .heroPanel{min-height:420px}
+      .heroPanel{min-height:480px}
     }
 
     .heroPanel::before{
@@ -532,7 +687,7 @@
       -webkit-mask-image:linear-gradient(180deg, rgba(0,0,0,.8), transparent 95%);
     }
 
-    .flowStage{
+    .cinema{
       position:absolute;
       inset:22px;
       border-radius:24px;
@@ -541,7 +696,7 @@
       overflow:hidden;
     }
 
-    .flowHeader{
+    .cinemaHeader{
       position:absolute;
       left:0;
       right:0;
@@ -554,14 +709,14 @@
       border-bottom:1px solid rgba(255,255,255,.08);
       background:rgba(255,255,255,.025);
     }
-    .flowHeader .tag{
+    .cinemaHeader .tag{
       font-family:var(--mono);
       font-size:11px;
       letter-spacing:.14em;
       text-transform:uppercase;
       color:rgba(226,235,248,.78);
     }
-    .flowHeader .mode{
+    .cinemaHeader .mode{
       font-family:var(--mono);
       font-size:10px;
       letter-spacing:.14em;
@@ -573,11 +728,76 @@
       background:rgba(255,255,255,.03);
     }
 
-    .flowBody{
+    .revealStage{
       position:absolute;
-      inset:72px 18px 18px;
+      inset:74px 18px 18px;
       display:grid;
-      gap:12px;
+      grid-template-rows:1fr auto;
+      gap:14px;
+    }
+
+    .revealTop{
+      position:relative;
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:22px;
+      background:linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.015));
+      overflow:hidden;
+      min-height:320px;
+    }
+    .revealTop::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:
+        radial-gradient(240px 240px at 30% 40%, rgba(123,162,255,.18), transparent 60%),
+        radial-gradient(300px 300px at 70% 36%, rgba(255,255,255,.06), transparent 60%);
+      opacity:.9;
+    }
+    .revealBeam{
+      position:absolute;
+      inset:auto 0 0 0;
+      height:2px;
+      background:linear-gradient(90deg, transparent, rgba(123,162,255,.9), rgba(255,255,255,.85), rgba(123,162,255,.9), transparent);
+      box-shadow:0 0 20px rgba(123,162,255,.24);
+      animation:scan 5.2s linear infinite;
+    }
+    @keyframes scan{
+      0%{transform:translateY(-280px)}
+      100%{transform:translateY(280px)}
+    }
+
+    .revealCopy{
+      position:absolute;
+      left:22px;
+      right:22px;
+      bottom:22px;
+      display:grid;
+      gap:10px;
+      z-index:1;
+    }
+    .revealCopy .lineA{
+      font-family:var(--mono);
+      font-size:11px;
+      letter-spacing:.16em;
+      text-transform:uppercase;
+      color:rgba(123,162,255,.86);
+    }
+    .revealCopy .lineB{
+      font-size:clamp(24px, 4vw, 44px);
+      line-height:1;
+      letter-spacing:-.05em;
+      font-weight:800;
+      max-width:420px;
+    }
+    .revealCopy .lineC{
+      color:rgba(230,236,244,.70);
+      max-width:480px;
+      font-size:14px;
+    }
+
+    .revealBottom{
+      display:grid;
+      gap:10px;
     }
 
     .stepCard{
@@ -661,21 +881,23 @@
       margin-bottom:22px;
     }
 
-    .callout{
-      border:1px solid rgba(123,162,255,.18);
-      background:rgba(123,162,255,.06);
-      border-radius:24px;
-      padding:18px 18px;
+    .grid3{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:16px;
+    }
+    @media (max-width:980px){
+      .grid3{grid-template-columns:1fr}
+    }
+
+    .card{
+      border-radius:28px;
+      border:1px solid rgba(255,255,255,.08);
+      background:rgba(255,255,255,.03);
       box-shadow:inset 0 1px 0 rgba(255,255,255,.04);
+      padding:22px;
     }
-    .calloutTop{
-      display:flex;
-      align-items:baseline;
-      justify-content:space-between;
-      gap:12px;
-      flex-wrap:wrap;
-      margin-bottom:8px;
-    }
+
     .labelChip{
       display:inline-flex;
       align-items:center;
@@ -689,6 +911,15 @@
       font-size:11px;
       letter-spacing:.12em;
       text-transform:uppercase;
+      margin-bottom:14px;
+    }
+
+    .callout{
+      border:1px solid rgba(123,162,255,.18);
+      background:rgba(123,162,255,.06);
+      border-radius:24px;
+      padding:18px 18px;
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.04);
     }
     .callout ul{
       margin:0;
@@ -707,41 +938,6 @@
     }
     @media (max-width:980px){
       .bento{grid-template-columns:1fr}
-    }
-
-    .card{
-      border-radius:28px;
-      border:1px solid rgba(255,255,255,.08);
-      background:rgba(255,255,255,.03);
-      box-shadow:inset 0 1px 0 rgba(255,255,255,.04);
-      padding:22px;
-    }
-
-    .metric{
-      padding:14px 0;
-      border-top:1px solid rgba(255,255,255,.08);
-    }
-    .metric:first-child{border-top:none; padding-top:0}
-    .metricNum{
-      font-size:clamp(34px, 5vw, 58px);
-      line-height:.95;
-      letter-spacing:-.06em;
-      font-weight:900;
-      margin-bottom:8px;
-      color:var(--text);
-    }
-    .metricLabel{
-      font-family:var(--mono);
-      font-size:11px;
-      letter-spacing:.14em;
-      text-transform:uppercase;
-      color:rgba(228,235,244,.60);
-      margin-bottom:8px;
-    }
-    .metricText{
-      color:rgba(228,235,244,.72);
-      line-height:1.55;
-      font-size:14px;
     }
 
     .stack{
@@ -817,46 +1013,41 @@
       white-space:nowrap;
     }
 
-    .noteBox{
-      margin-top:16px;
-      border:1px solid rgba(255,255,255,.10);
-      background:rgba(255,255,255,.02);
-      border-radius:24px;
-      padding:16px;
+    .metric{
+      padding:14px 0;
+      border-top:1px solid rgba(255,255,255,.08);
     }
-    .noteBox .k{
+    .metric:first-child{border-top:none; padding-top:0}
+    .metricNum{
+      font-size:clamp(34px, 5vw, 58px);
+      line-height:.95;
+      letter-spacing:-.06em;
+      font-weight:900;
+      margin-bottom:8px;
+      color:var(--text);
+    }
+    .metricLabel{
       font-family:var(--mono);
       font-size:11px;
       letter-spacing:.14em;
       text-transform:uppercase;
-      color:rgba(123,162,255,.86);
-      margin-bottom:10px;
+      color:rgba(228,235,244,.60);
+      margin-bottom:8px;
     }
-    .noteBox p{margin:0 0 10px 0}
-    .noteBox p:last-child{margin-bottom:0}
+    .metricText{
+      color:rgba(228,235,244,.72);
+      line-height:1.55;
+      font-size:14px;
+    }
 
-    @media (max-width:760px){
-      table, thead, tbody, th, td, tr { display:block; }
-      thead{ display:none; }
-      tbody td{
-        border-bottom:none;
-        padding:10px 14px;
-      }
-      tbody tr{
-        border-bottom:1px solid rgba(255,255,255,.08);
-        padding:10px 0;
-      }
-      tbody tr:last-child{ border-bottom:none; }
-      tbody td::before{
-        content: attr(data-label);
-        display:block;
-        font-family: var(--mono);
-        font-size: 11px;
-        letter-spacing:.12em;
-        text-transform: uppercase;
-        color: rgba(201,209,217,.62);
-        margin-bottom: 6px;
-      }
+    .footerHero{
+      display:grid;
+      grid-template-columns:1.1fr .9fr;
+      gap:18px;
+      align-items:stretch;
+    }
+    @media (max-width:980px){
+      .footerHero{grid-template-columns:1fr}
     }
 
     footer{
@@ -867,6 +1058,7 @@
       display:grid;
       grid-template-columns:1.15fr 1fr 1fr 1fr;
       gap:16px;
+      margin-top:24px;
       margin-bottom:24px;
     }
     @media (max-width:980px){
@@ -926,12 +1118,40 @@
       transform:translateY(0);
     }
 
+    @media (max-width:760px){
+      table, thead, tbody, th, td, tr { display:block; }
+      thead{ display:none; }
+      tbody td{
+        border-bottom:none;
+        padding:10px 14px;
+      }
+      tbody tr{
+        border-bottom:1px solid rgba(255,255,255,.08);
+        padding:10px 0;
+      }
+      tbody tr:last-child{ border-bottom:none; }
+      tbody td::before{
+        content: attr(data-label);
+        display:block;
+        font-family: var(--mono);
+        font-size: 11px;
+        letter-spacing:.12em;
+        text-transform: uppercase;
+        color: rgba(201,209,217,.62);
+        margin-bottom: 6px;
+      }
+    }
+
     @media (prefers-reduced-motion: reduce){
       html{scroll-behavior:auto}
       .reveal{opacity:1;transform:none;transition:none}
-      .btn,.menuBtn,.drawerLinks a,.footCol a,.stepCard,.stackRow{transition:none}
+      .btn,.menuBtn,.overlayLink,.footCol a,.stepCard,.stackRow{transition:none}
       .bg-spot{display:none}
-      .stepCard::after{animation:none}
+      .stepCard::after,
+      .logo .mark::before,
+      .revealBeam{animation:none}
+      .overlayPanel{transition:none}
+      .wipe.on{transition:none}
     }
   </style>
 </head>
@@ -939,6 +1159,7 @@
   <div class="bg-grid" aria-hidden="true"></div>
   <div class="bg-noise" aria-hidden="true"></div>
   <div class="bg-spot" aria-hidden="true"></div>
+  <div class="wipe" id="pageWipe" aria-hidden="true"></div>
 
   <header class="site">
     <div class="wrap nav">
@@ -950,139 +1171,263 @@
       </a>
 
       <nav class="navLinks" aria-label="Primary">
-        <a href="how.html" class="active">How it works</a>
+        <a href="index.html" class="active">Overview</a>
+        <a href="how.html">How It Works</a>
         <a href="platform.html">Platform</a>
         <a href="trust.html">Trust</a>
-        <a href="resources.html">Resources</a>
       </nav>
 
       <div class="actions" aria-label="Actions">
-        <a class="btn secondary" href="resources.html#sample-artifact">Sample artifacts</a>
-        <a class="btn primary" href="contact.html">Request walkthrough <span aria-hidden="true">→</span></a>
+        <a class="btn secondary js-wipe" href="resources.html">Resources</a>
+        <a class="btn primary js-wipe" href="contact.html">Request walkthrough <span aria-hidden="true">→</span></a>
         <button class="menuBtn" id="openMenu" type="button" aria-label="Open menu">☰</button>
       </div>
     </div>
   </header>
 
-  <div class="drawer" id="drawer" aria-hidden="true">
-    <div class="drawerCard" role="dialog" aria-modal="true" aria-label="Menu">
-      <div class="drawerHead">
-        <div class="t">Menu</div>
-        <button class="close" id="closeMenu" type="button">Close</button>
+  <div class="overlay" id="overlay" aria-hidden="true">
+    <div class="overlayPanel">
+      <div class="overlayHead">
+        <div class="label">Navigation overlay</div>
+        <button class="closeBtn" id="closeMenu" type="button">Close</button>
       </div>
-      <div class="drawerLinks">
-        <a href="index.html">Overview</a>
-        <a href="how.html" class="active">How It Works</a>
-        <a href="platform.html">Platform</a>
-        <a href="trust.html">Trust</a>
-        <a href="compliance.html">Compliance</a>
-        <a href="integrations.html">Integrations</a>
-        <a href="resources.html">Resources</a>
-        <a href="company.html">Company</a>
-        <a href="contact.html">Contact</a>
+
+      <div class="slideHint">
+        <div class="slider" aria-hidden="true">
+          <div class="sliderTrack" id="sliderTrack">
+            <div class="sliderText">Slide to open navigation</div>
+            <div class="sliderKnob" id="sliderKnob">Slide →</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="overlayInner">
+        <div class="overlayLinks">
+          <a class="overlayLink js-wipe" href="index.html">
+            <div>
+              <div class="num">01</div>
+              <div class="ttl">Overview</div>
+            </div>
+            <div class="sub">Homepage positioning, objective, boundaries, and decision-record premise.</div>
+          </a>
+
+          <a class="overlayLink js-wipe" href="how.html">
+            <div>
+              <div class="num">02</div>
+              <div class="ttl">How it works</div>
+            </div>
+            <div class="sub">Policy-scoped capture, deterministic canonicalization, cryptographic sealing, and independent verification.</div>
+          </a>
+
+          <a class="overlayLink js-wipe" href="platform.html">
+            <div>
+              <div class="num">03</div>
+              <div class="ttl">Platform</div>
+            </div>
+            <div class="sub">Deployment posture, boundary placement, artifact handling, and operator-side integration model.</div>
+          </a>
+
+          <a class="overlayLink js-wipe" href="trust.html">
+            <div>
+              <div class="num">04</div>
+              <div class="ttl">Trust</div>
+            </div>
+            <div class="sub">Verification model, key custody posture, constrained disclosure, and integrity boundaries.</div>
+          </a>
+
+          <a class="overlayLink js-wipe" href="compliance.html">
+            <div>
+              <div class="num">05</div>
+              <div class="ttl">Compliance</div>
+            </div>
+            <div class="sub">Oversight posture, control mapping direction, and institutional review framing.</div>
+          </a>
+
+          <a class="overlayLink js-wipe" href="resources.html">
+            <div>
+              <div class="num">06</div>
+              <div class="ttl">Resources</div>
+            </div>
+            <div class="sub">Sample artifacts, terminology, reference materials, and project documentation.</div>
+          </a>
+
+          <a class="overlayLink js-wipe" href="company.html">
+            <div>
+              <div class="num">07</div>
+              <div class="ttl">Company</div>
+            </div>
+            <div class="sub">Project framing, research context, and institutional positioning.</div>
+          </a>
+
+          <a class="overlayLink js-wipe" href="contact.html">
+            <div>
+              <div class="num">08</div>
+              <div class="ttl">Contact</div>
+            </div>
+            <div class="sub">Request walkthrough, project discussion, and external inquiry channel.</div>
+          </a>
+        </div>
+
+        <div class="overlayAside">
+          <div>
+            <div class="k">Objective</div>
+            <h3>Evidentiary infrastructure for AI-supported systems.</h3>
+            <p>
+              CEYO is a conceptual evidentiary infrastructure for AI-supported decision systems.
+            </p>
+          </div>
+
+          <div>
+            <div class="k">Core sequence</div>
+            <p>
+              Record only what policy permits. Canonicalize deterministically. Seal cryptographically. Verify independently.
+            </p>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 
   <main class="wrap">
     <section>
-      <div class="pageShell">
-        <aside class="indexNav reveal" aria-label="Page navigation">
-          <div class="label">Flow</div>
-          <a href="#overview">Overview</a>
-          <a href="#sequence">Sequence</a>
-          <a href="#deployment">Deployment</a>
-          <a href="#verification">Verification</a>
-        </aside>
+      <div class="heroGrid">
+        <div class="heroCopy reveal">
+          <div class="eyebrow">Neutral evidentiary layer · Policy-scoped capture · Independent verification</div>
+          <h1>Evidentiary infrastructure for AI-supported systems.</h1>
 
-        <div>
-          <div class="heroGrid" id="overview">
-            <div class="reveal">
-              <div class="eyebrow">Mechanics chain · policy scope · deterministic verification</div>
-              <h1>How CEYO works.</h1>
-              <p>
-                CEYO attaches at the inference boundary and produces integrity-sealed artifacts under explicit policy scope.
-              </p>
-              <p>
-                The mechanism is intentionally narrow: capture only what has been declared, canonicalize it deterministically, seal it cryptographically, and make it independently verifiable without default disclosure of proprietary internals.
-              </p>
+          <p class="lead">
+            CEYO is a conceptual evidentiary infrastructure for AI-supported decision systems.
+          </p>
 
-              <div class="callout" style="margin-top:18px;">
-                <div class="calloutTop">
-                  <span class="labelChip">Mechanism summary</span>
-                  <span style="font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:rgba(228,235,244,.62);">
-                    Capture → Canonicalize → Seal → Verify
-                  </span>
-                </div>
-                <ul>
-                  <li>Operators define capture scope before artifacts are generated.</li>
-                  <li>Only declared fields are included; exclusions and masking occur before sealing.</li>
-                  <li>Verification confirms integrity and provenance under policy scope, not decision correctness.</li>
-                </ul>
-              </div>
+          <p>
+            It produces policy-scoped, deterministic, cryptographically sealed records of AI inference events. These records can be independently verified by any party who holds the sealed artifact and the corresponding public key — without access to model weights, proprietary internals, or the contents of the underlying decision.
+          </p>
 
-              <div style="margin-top:20px; display:flex; gap:10px; flex-wrap:wrap;">
-                <a class="btn primary" href="#sequence">View sequence <span aria-hidden="true">→</span></a>
-                <a class="btn" href="#verification">Verification model <span aria-hidden="true">→</span></a>
-              </div>
+          <p>
+            CEYO operates outside the model. It does not modify, instrument, or interfere with AI inference. It records only what a governing capture policy explicitly permits.
+          </p>
+
+          <div class="chips" aria-label="Key properties">
+            <div class="chip">Deterministic</div>
+            <div class="chip">Policy-scoped</div>
+            <div class="chip">Cryptographically sealed</div>
+            <div class="chip">Independently verifiable</div>
+          </div>
+
+          <div class="heroActions">
+            <a class="btn primary js-wipe" href="how.html">How it works <span aria-hidden="true">→</span></a>
+            <a class="btn ghost js-wipe" href="trust.html">Trust model</a>
+            <button class="btn ghost" id="openMenu2" type="button">Open navigation overlay</button>
+          </div>
+        </div>
+
+        <div class="heroPanel reveal" aria-hidden="true">
+          <div class="cinema">
+            <div class="cinemaHeader">
+              <div class="tag">Cinematic reveal</div>
+              <div class="mode">record · seal · verify</div>
             </div>
 
-            <div class="heroPanel reveal" aria-hidden="true">
-              <div class="flowStage">
-                <div class="flowHeader">
-                  <div class="tag">Process sequence</div>
-                  <div class="mode">deterministic</div>
+            <div class="revealStage">
+              <div class="revealTop">
+                <div class="revealBeam"></div>
+                <div class="revealCopy">
+                  <div class="lineA">Decision record boundary</div>
+                  <div class="lineB">Policy first. Artifact second.</div>
+                  <div class="lineC">
+                    The capture boundary is declared before the artifact exists. Integrity begins at scope definition.
+                  </div>
+                </div>
+              </div>
+
+              <div class="revealBottom">
+                <div class="stepCard">
+                  <div class="stepTop">
+                    <div class="stepNum">01 · Record</div>
+                    <div class="stepState">policy scope</div>
+                  </div>
+                  <div class="stepTitle">Capture only what has been declared</div>
+                  <div class="stepText">Inclusion, exclusion, masking, and disclosure tiers are defined before artifact generation.</div>
                 </div>
 
-                <div class="flowBody">
-                  <div class="stepCard">
-                    <div class="stepTop">
-                      <div class="stepNum">01 · Attach</div>
-                      <div class="stepState">boundary</div>
-                    </div>
-                    <div class="stepTitle">Deploy at the inference edge</div>
-                    <div class="stepText">CEYO is positioned as a sidecar, gateway, or wrapper so the capture boundary is explicit and auditable.</div>
+                <div class="stepCard">
+                  <div class="stepTop">
+                    <div class="stepNum">02 · Seal</div>
+                    <div class="stepState">deterministic</div>
                   </div>
+                  <div class="stepTitle">Canonicalize and sign the record</div>
+                  <div class="stepText">The captured body is normalized deterministically, hashed, and sealed so alteration becomes detectable.</div>
+                </div>
 
-                  <div class="stepCard">
-                    <div class="stepTop">
-                      <div class="stepNum">02 · Scope</div>
-                      <div class="stepState">policy</div>
-                    </div>
-                    <div class="stepTitle">Apply policy-defined capture rules</div>
-                    <div class="stepText">Inclusion, exclusion, masking, and disclosure tiers are defined before artifact generation begins.</div>
+                <div class="stepCard">
+                  <div class="stepTop">
+                    <div class="stepNum">03 · Verify</div>
+                    <div class="stepState">independent</div>
                   </div>
-
-                  <div class="stepCard">
-                    <div class="stepTop">
-                      <div class="stepNum">03 · Canonicalize</div>
-                      <div class="stepState">normalization</div>
-                    </div>
-                    <div class="stepTitle">Serialize deterministically</div>
-                    <div class="stepText">Captured data is transformed into canonical bytes so independent parties can reproduce the exact same input to hashing.</div>
-                  </div>
-
-                  <div class="stepCard">
-                    <div class="stepTop">
-                      <div class="stepNum">04 · Seal</div>
-                      <div class="stepState">integrity</div>
-                    </div>
-                    <div class="stepTitle">Hash and sign the artifact</div>
-                    <div class="stepText">The canonical payload is hashed and signed under operator-controlled keys, producing a tamper-evident record.</div>
-                  </div>
-
-                  <div class="stepCard">
-                    <div class="stepTop">
-                      <div class="stepNum">05 · Verify</div>
-                      <div class="stepState">independent</div>
-                    </div>
-                    <div class="stepTitle">Recompute and confirm</div>
-                    <div class="stepText">Reviewers re-run canonicalization, recompute hashes, validate signatures, and confirm policy alignment.</div>
-                  </div>
+                  <div class="stepTitle">Recompute and confirm</div>
+                  <div class="stepText">Reviewers reproduce the verification path without requiring default access to model internals.</div>
                 </div>
               </div>
             </div>
           </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="objective">
+      <div class="sectionTop reveal">
+        <div class="read">
+          <div class="eyebrow">Objective</div>
+          <h2>Why this exists.</h2>
+          <p>
+            AI systems increasingly influence consequential outcomes: credit, employment, healthcare, benefits, autonomous control. In regulated and high-stakes contexts, there is a distinct requirement that cannot be met by internal logging alone: the ability to demonstrate that a system behaved as declared, to an external party, without disclosing what it decided.
+          </p>
+        </div>
+      </div>
+
+      <div class="callout reveal">
+        <ul>
+          <li>CEYO addresses this gap.</li>
+          <li>A sealed artifact proves that a record was produced at a specific time, under a specific policy, and has not been altered since — without revealing what the underlying system processed or concluded.</li>
+          <li>The focus is evidentiary integrity, not operational dependency.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="pillars">
+      <div class="sectionTop reveal">
+        <div class="read">
+          <div class="eyebrow">Core mechanics</div>
+          <h2>Record · Seal · Verify</h2>
+          <p>
+            CEYO operates as a neutral evidentiary layer attached to an AI inference boundary. It captures policy-scoped decision records and produces deterministic, cryptographically sealed artifacts that can be independently verified.
+          </p>
+        </div>
+      </div>
+
+      <div class="grid3">
+        <div class="card reveal">
+          <div class="labelChip">Record</div>
+          <h3>Policy-scoped capture</h3>
+          <p>
+            Recording only fields permitted by an explicit, declared capture policy.
+          </p>
+        </div>
+
+        <div class="card reveal">
+          <div class="labelChip">Seal</div>
+          <h3>Deterministic canonicalization + cryptographic integrity</h3>
+          <p>
+            Serialization that produces identical bytes for identical inputs, followed by hashing and digital signatures that make post-hoc alteration detectable.
+          </p>
+        </div>
+
+        <div class="card reveal">
+          <div class="labelChip">Verify</div>
+          <h3>Independent verification</h3>
+          <p>
+            Recomputing the hash and validating the signature using only the artifact and a public key.
+          </p>
         </div>
       </div>
     </section>
@@ -1090,225 +1435,250 @@
     <section id="sequence">
       <div class="sectionTop reveal">
         <div class="read">
-          <div class="eyebrow">Sequence</div>
-          <h2>Five operational stages.</h2>
+          <div class="eyebrow">Five steps</div>
+          <h2>The mechanics chain is fixed.</h2>
           <p>
-            CEYO is not an open-ended telemetry layer. It follows a fixed evidentiary sequence with declared boundaries at each stage.
+            Each step produces a verifiable boundary.
           </p>
         </div>
       </div>
 
       <div class="bento">
         <div class="card reveal">
-          <h3>Stage logic</h3>
+          <h3>Operational sequence</h3>
           <div class="stack" style="margin-top:16px;">
             <div class="stackRow">
-              <div class="k">Attach</div>
-              <p>Place CEYO at a defined boundary where inference-time events can be observed without modifying model weights by default.</p>
+              <div class="k">01 · Attach</div>
+              <p>Deploy as a sidecar, gateway, or wrapper at the inference boundary.</p>
             </div>
             <div class="stackRow">
-              <div class="k">Capture</div>
-              <p>Collect only policy-scoped fields. Anything excluded or masked is handled before artifact creation.</p>
+              <div class="k">02 · Capture</div>
+              <p>Define scope first. Policy-scoped fields only. Masking applied before sealing.</p>
             </div>
             <div class="stackRow">
-              <div class="k">Canonicalize</div>
-              <p>Produce deterministic serialized bytes so verification does not depend on implementation quirks, formatting differences, or output ordering.</p>
+              <div class="k">03 · Canonicalize</div>
+              <p>Normalize deterministically so identical inputs produce identical serialized bytes.</p>
             </div>
             <div class="stackRow">
-              <div class="k">Seal</div>
-              <p>Apply hashing and digital signatures to make post-seal alteration detectable and provenance reviewable.</p>
+              <div class="k">04 · Seal</div>
+              <p>Apply hashing and digital signatures under operator-controlled key custody.</p>
             </div>
             <div class="stackRow">
-              <div class="k">Verify</div>
-              <p>Allow an independent party to reproduce the validation path without requiring default exposure of proprietary internals.</p>
+              <div class="k">05 · Verify</div>
+              <p>Recompute canonicalization, recompute hashes, validate signatures, and confirm policy alignment.</p>
             </div>
           </div>
         </div>
 
         <div class="card reveal">
-          <h3>Operational properties</h3>
+          <h3>Artifact properties</h3>
+
           <div class="metric">
-            <div class="metricLabel">Capture boundary</div>
-            <div class="metricNum">1</div>
-            <div class="metricText">A declared policy boundary determines what enters the artifact and what stays out.</div>
+            <div class="metricLabel">Canonicalization</div>
+            <div class="metricNum">RFC 8785</div>
+            <div class="metricText">The captured body is serialized deterministically so independent parties can reproduce the same verification input.</div>
           </div>
+
           <div class="metric">
-            <div class="metricLabel">Verification checks</div>
-            <div class="metricNum">4</div>
-            <div class="metricText">Canonicalization, hash recomputation, signature validation, and policy alignment make the review path repeatable.</div>
+            <div class="metricLabel">Hashing</div>
+            <div class="metricNum">SHA-256</div>
+            <div class="metricText">Digest recomputation provides integrity comparison against the recorded artifact envelope.</div>
           </div>
+
           <div class="metric">
-            <div class="metricLabel">Key custody transfer</div>
-            <div class="metricNum">0</div>
-            <div class="metricText">CEYO is non-custodial. Signing keys remain in the operator environment.</div>
+            <div class="metricLabel">Signing</div>
+            <div class="metricNum">ECDSA P-256</div>
+            <div class="metricText">Digital signatures bind provenance to the sealed record without default disclosure of proprietary internals.</div>
           </div>
         </div>
       </div>
     </section>
 
-    <section id="deployment">
+    <section id="table">
       <div class="sectionTop reveal">
         <div class="read">
-          <div class="eyebrow">Deployment posture</div>
-          <h2>Where CEYO sits in the stack.</h2>
+          <div class="eyebrow">How it works</div>
+          <h2>Evidence path at a glance.</h2>
           <p>
-            CEYO is designed to operate beside inference workflows, not as a replacement for decision authority and not as a requirement to expose model internals by default.
+            Every CEYO artifact passes through a fixed lifecycle.
           </p>
         </div>
       </div>
 
-      <div class="tableWrap reveal" role="region" aria-label="Deployment patterns table">
+      <div class="tableWrap reveal" role="region" aria-label="Lifecycle table">
         <table>
           <thead>
             <tr>
-              <th style="width:22%;">Pattern</th>
-              <th style="width:31%;">What it means</th>
-              <th style="width:25%;">Why it may be used</th>
-              <th style="width:22%;">Boundary</th>
+              <th style="width:24%;">Step</th>
+              <th>What happens</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td data-label="Pattern"><span class="pill">Sidecar</span></td>
-              <td data-label="What it means">CEYO runs adjacent to an application or model-serving process.</td>
-              <td data-label="Why it may be used">Local capture posture with clearer operational separation.</td>
-              <td data-label="Boundary">No modification of model weights by default.</td>
+              <td data-label="Step"><span class="pill">Policy-scoped capture</span></td>
+              <td data-label="What happens">An inference event is recorded within the bounds of a declared capture policy; out-of-scope fields are excluded by design.</td>
             </tr>
             <tr>
-              <td data-label="Pattern"><span class="pill">Gateway</span></td>
-              <td data-label="What it means">CEYO observes requests and responses at a controlled ingress or egress boundary.</td>
-              <td data-label="Why it may be used">Centralized evidentiary control across multiple downstream systems.</td>
-              <td data-label="Boundary">Scope remains limited to gateway-visible policy fields.</td>
+              <td data-label="Step"><span class="pill">Deterministic canonicalization</span></td>
+              <td data-label="What happens">The captured body is serialized using RFC 8785, producing identical bytes for identical inputs regardless of key ordering or whitespace.</td>
             </tr>
             <tr>
-              <td data-label="Pattern"><span class="pill">Wrapper</span></td>
-              <td data-label="What it means">CEYO encapsulates a call boundary around an inference operation.</td>
-              <td data-label="Why it may be used">Explicit integration path for teams that want a narrow evidentiary layer.</td>
-              <td data-label="Boundary">Still policy-scoped, not a general telemetry feed.</td>
+              <td data-label="Step"><span class="pill">Cryptographic sealing</span></td>
+              <td data-label="What happens">A SHA-256 hash and an ECDSA P-256 signature are computed over the canonical bytes.</td>
+            </tr>
+            <tr>
+              <td data-label="Step"><span class="pill">Independent verification</span></td>
+              <td data-label="What happens">Any party with the sealed artifact and the corresponding public key can recompute the hash and validate the signature, with no access to the originating system.</td>
             </tr>
           </tbody>
         </table>
       </div>
+    </section>
 
-      <div class="noteBox reveal">
-        <div class="k">Availability posture</div>
-        <p>
-          CEYO can support fail-open deployment posture. If sealing fails, inference continuity can remain independent while the event is flagged or logged for later review.
-        </p>
-        <p>
-          That means artifact generation can support oversight without becoming the default operational gate unless an operator deliberately configures it that way.
-        </p>
+    <section id="boundary">
+      <div class="sectionTop reveal">
+        <div class="read">
+          <div class="eyebrow">Boundary statement</div>
+          <h2>What CEYO does not claim.</h2>
+          <p>
+            CEYO is an evidentiary infrastructure. It is not:
+          </p>
+        </div>
+      </div>
+
+      <div class="grid3">
+        <div class="card reveal">
+          <div class="labelChip">Not a truth engine</div>
+          <p>CEYO does not verify that an AI decision was correct.</p>
+        </div>
+
+        <div class="card reveal">
+          <div class="labelChip">Not a fairness engine</div>
+          <p>CEYO does not assess whether a decision was equitable or unbiased.</p>
+        </div>
+
+        <div class="card reveal">
+          <div class="labelChip">Not a compliance certification</div>
+          <p>CEYO does not certify conformance with any regulatory standard.</p>
+        </div>
+      </div>
+
+      <div class="callout reveal" style="margin-top:18px;">
+        <ul>
+          <li>CEYO does not access, analyze, or evaluate model internals.</li>
+          <li>CEYO proves that a sealed record is unaltered and was produced under a declared policy.</li>
+          <li>It does not prove anything about the quality, legality, or appropriateness of the underlying AI output.</li>
+        </ul>
       </div>
     </section>
 
-    <section id="verification">
+    <section id="repository">
       <div class="sectionTop reveal">
         <div class="read">
-          <div class="eyebrow">Verification model</div>
-          <h2>What reviewers actually do.</h2>
+          <div class="eyebrow">Public project site</div>
+          <h2>This repository is the presentation layer for CEYO.</h2>
           <p>
-            Independent verification is mechanical. It does not depend solely on trusting the producer’s narrative about what happened.
+            It contains the public-facing website explaining the concept, architecture, and verification approach.
           </p>
         </div>
       </div>
 
       <div class="bento">
         <div class="card reveal">
-          <h3>Verification sequence</h3>
+          <h3>What is here</h3>
           <div class="stack" style="margin-top:16px;">
             <div class="stackRow">
-              <div class="k">1 · Canonicalize</div>
-              <p>Re-run the declared canonicalization procedure to reproduce the byte representation used for sealing.</p>
+              <div class="k">Static website</div>
+              <p>Public-facing HTML/CSS/JS pages explaining the project and its evidentiary model.</p>
             </div>
             <div class="stackRow">
-              <div class="k">2 · Recompute hash</div>
-              <p>Calculate the digest over canonical bytes and compare the result to the artifact’s declared digest.</p>
+              <div class="k">Interactive verifier page</div>
+              <p>Presentation-layer verification walkthroughs and artifact-facing interfaces.</p>
             </div>
             <div class="stackRow">
-              <div class="k">3 · Validate signature</div>
-              <p>Use the public key reference or trusted key chain to confirm that the signature matches the declared digest.</p>
-            </div>
-            <div class="stackRow">
-              <div class="k">4 · Confirm policy alignment</div>
-              <p>Check that policy ID, policy version, disclosure tier, and other declared policy metadata match expected values.</p>
+              <div class="k">Reference demonstration material</div>
+              <p>Sample artifacts and public demonstration utilities.</p>
             </div>
           </div>
         </div>
 
         <div class="card reveal">
-          <h3>What verification does not prove</h3>
+          <h3>What is not here</h3>
           <div class="stack" style="margin-top:16px;">
             <div class="stackRow">
-              <div class="k">Not decision correctness</div>
-              <p>Integrity of record is not the same as correctness of model output or operator judgment.</p>
+              <div class="k">Protocol specification</div>
+              <p>Maintained in the CEYO protocol repository.</p>
             </div>
             <div class="stackRow">
-              <div class="k">Not legal sufficiency</div>
-              <p>Acceptance in any judicial, regulatory, or internal proceeding is determined by the relevant authority.</p>
+              <div class="k">Internal core architecture</div>
+              <p>Maintained separately from the public presentation layer.</p>
             </div>
             <div class="stackRow">
-              <div class="k">Not full replay of all conditions</div>
-              <p>Verification confirms the declared artifact path, not universal replay of every inference condition beyond scope.</p>
+              <div class="k">Production SDK or deployment tooling</div>
+              <p>This site explains the system; it is not the internal operating substrate.</p>
             </div>
           </div>
         </div>
       </div>
-
-      <div class="callout reveal" style="margin-top:18px;">
-        <div class="calloutTop">
-          <span class="labelChip">Boundary declaration</span>
-          <span style="font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:rgba(228,235,244,.62);">
-            Integrity · Provenance · Scope
-          </span>
-        </div>
-        <ul>
-          <li>CEYO produces integrity-sealed records.</li>
-          <li>Verification confirms integrity and provenance under declared policy scope.</li>
-          <li>CEYO does not certify compliance, legality, fairness, or correctness of model output.</li>
-        </ul>
-      </div>
-
-      <div style="margin-top:18px; display:flex; gap:10px; flex-wrap:wrap;">
-        <a class="btn primary" href="trust.html">View trust model <span aria-hidden="true">→</span></a>
-        <a class="btn" href="resources.html#sample-artifact">Review sample artifacts <span aria-hidden="true">→</span></a>
-      </div>
     </section>
 
     <footer id="footer">
+      <div class="footerHero reveal">
+        <div class="card">
+          <div class="eyebrow" style="margin-bottom:14px;">Closing boundary</div>
+          <h2 style="max-width:740px;">Verification confirms integrity and provenance under declared policy scope.</h2>
+          <p style="max-width:700px;">
+            It does not confirm output correctness, legality, or compliance conclusions.
+          </p>
+          <div style="margin-top:18px; display:flex; gap:10px; flex-wrap:wrap;">
+            <a class="btn primary js-wipe" href="how.html">Continue to how it works <span aria-hidden="true">→</span></a>
+            <a class="btn ghost js-wipe" href="resources.html">Open resources</a>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="labelChip">Navigation</div>
+          <p style="margin-bottom:16px;">
+            Continue through the system, overview first, then mechanism, then trust, then resources.
+          </p>
+          <button class="btn ghost" id="openMenu3" type="button">Open full-screen menu</button>
+        </div>
+      </div>
+
       <div class="footGrid reveal">
         <div class="footCol">
           <div class="t">Product</div>
-          <a href="index.html">Overview</a>
-          <a href="how.html">How It Works</a>
-          <a href="platform.html">Platform</a>
-          <a href="integrations.html">Integrations</a>
+          <a class="js-wipe" href="index.html">Overview</a>
+          <a class="js-wipe" href="how.html">How It Works</a>
+          <a class="js-wipe" href="platform.html">Platform</a>
+          <a class="js-wipe" href="integrations.html">Integrations</a>
         </div>
         <div class="footCol">
           <div class="t">Trust</div>
-          <a href="trust.html">Trust Model</a>
-          <a href="security.html">Security</a>
-          <a href="trust.html#verification-spec">Verification Spec</a>
-          <a href="resources.html">Resources</a>
+          <a class="js-wipe" href="trust.html">Trust Model</a>
+          <a class="js-wipe" href="security.html">Security</a>
+          <a class="js-wipe" href="compliance.html">Compliance</a>
+          <a class="js-wipe" href="vdp.html">Security Disclosure</a>
         </div>
         <div class="footCol">
           <div class="t">Resources</div>
-          <a href="resources.html">Library</a>
-          <a href="resources.html#sample-artifact">Sample Artifacts</a>
-          <a href="resources.html#glossary">Glossary</a>
-          <a href="resources.html#faq">FAQs</a>
+          <a class="js-wipe" href="resources.html">Library</a>
+          <a class="js-wipe" href="resources.html#sample-artifact">Sample Artifacts</a>
+          <a class="js-wipe" href="resources.html#glossary">Glossary</a>
+          <a class="js-wipe" href="resources.html#faq">FAQs</a>
         </div>
         <div class="footCol">
-          <div class="t">Legal</div>
-          <a href="privacy.html">Privacy</a>
-          <a href="terms.html">Terms</a>
-          <a href="vdp.html">Security Disclosure</a>
-          <a href="ethics.html">Responsible Use</a>
+          <div class="t">Company</div>
+          <a class="js-wipe" href="company.html">Company</a>
+          <a class="js-wipe" href="legal.html">Legal</a>
+          <a class="js-wipe" href="privacy.html">Privacy</a>
+          <a class="js-wipe" href="contact.html">Contact</a>
         </div>
       </div>
 
       <div class="footBottom reveal">
         <div>© <span id="year"></span> CEYO. All rights reserved.</div>
-        <div><a href="vdp.html">Vulnerability Disclosure</a></div>
+        <div>Evidentiary infrastructure · Public presentation layer</div>
       </div>
     </footer>
   </main>
@@ -1316,35 +1686,14 @@
   <script>
     document.getElementById('year').textContent = new Date().getFullYear();
 
-    const drawer = document.getElementById('drawer');
-    const openMenu = document.getElementById('openMenu');
-    const closeMenu = document.getElementById('closeMenu');
-
-    function openDrawer(){
-      drawer.classList.add('open');
-      drawer.setAttribute('aria-hidden','false');
-      document.body.style.overflow='hidden';
-    }
-    function closeDrawer(){
-      drawer.classList.remove('open');
-      drawer.setAttribute('aria-hidden','true');
-      document.body.style.overflow='';
-    }
-
-    if(openMenu) openMenu.addEventListener('click', openDrawer);
-    if(closeMenu) closeMenu.addEventListener('click', closeDrawer);
-    drawer.addEventListener('click', (e)=>{ if(e.target === drawer) closeDrawer(); });
-    window.addEventListener('keydown', (e)=>{ if(e.key === 'Escape' && drawer.classList.contains('open')) closeDrawer(); });
-
     const prefersReduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const revealEls = Array.from(document.querySelectorAll('.reveal'));
-
     if(!prefersReduce){
       const io = new IntersectionObserver((entries)=>{
-        entries.forEach((en, idx)=>{
-          if(en.isIntersecting){
-            en.target.style.transitionDelay = `${Math.min(idx * 35, 180)}ms`;
-            en.target.classList.add('on');
+        entries.forEach((entry, idx)=>{
+          if(entry.isIntersecting){
+            entry.target.style.transitionDelay = `${Math.min(idx * 35, 180)}ms`;
+            entry.target.classList.add('on');
           }
         });
       }, {threshold:0.12});
@@ -1357,6 +1706,98 @@
     } else {
       revealEls.forEach(el=>el.classList.add('on'));
     }
+
+    const overlay = document.getElementById('overlay');
+    const openMenu = document.getElementById('openMenu');
+    const openMenu2 = document.getElementById('openMenu2');
+    const openMenu3 = document.getElementById('openMenu3');
+    const closeMenu = document.getElementById('closeMenu');
+
+    function showOverlay(){
+      overlay.classList.add('open');
+      overlay.setAttribute('aria-hidden','false');
+      document.body.style.overflow='hidden';
+      resetSlider();
+    }
+    function hideOverlay(){
+      overlay.classList.remove('open');
+      overlay.setAttribute('aria-hidden','true');
+      document.body.style.overflow='';
+      resetSlider();
+    }
+
+    if(openMenu) openMenu.addEventListener('click', showOverlay);
+    if(openMenu2) openMenu2.addEventListener('click', showOverlay);
+    if(openMenu3) openMenu3.addEventListener('click', showOverlay);
+    if(closeMenu) closeMenu.addEventListener('click', hideOverlay);
+    overlay.addEventListener('click', (e)=>{ if(e.target === overlay) hideOverlay(); });
+    window.addEventListener('keydown', (e)=>{ if(e.key === 'Escape' && overlay.classList.contains('open')) hideOverlay(); });
+
+    const sliderTrack = document.getElementById('sliderTrack');
+    const sliderKnob = document.getElementById('sliderKnob');
+    let dragging = false;
+    let startX = 0;
+    let knobX = 4;
+    let maxX = 0;
+
+    function calcMax(){
+      maxX = sliderTrack.clientWidth - sliderKnob.clientWidth - 4;
+    }
+    function setKnob(x){
+      knobX = Math.max(4, Math.min(x, maxX));
+      sliderKnob.style.transform = `translateX(${knobX - 4}px)`;
+    }
+    function resetSlider(){
+      calcMax();
+      sliderKnob.classList.remove('dragging');
+      setKnob(4);
+    }
+
+    function beginDrag(clientX){
+      calcMax();
+      dragging = true;
+      startX = clientX - knobX;
+      sliderKnob.classList.add('dragging');
+    }
+    function moveDrag(clientX){
+      if(!dragging) return;
+      setKnob(clientX - startX);
+    }
+    function endDrag(){
+      if(!dragging) return;
+      dragging = false;
+      sliderKnob.classList.remove('dragging');
+      if(knobX >= maxX - 16){
+        overlay.querySelector('.overlayLinks a')?.focus();
+      }
+      setTimeout(()=> setKnob(4), 120);
+    }
+
+    sliderKnob.addEventListener('mousedown', (e)=> beginDrag(e.clientX));
+    window.addEventListener('mousemove', (e)=> moveDrag(e.clientX));
+    window.addEventListener('mouseup', endDrag);
+
+    sliderKnob.addEventListener('touchstart', (e)=>{
+      beginDrag(e.touches[0].clientX);
+    }, {passive:true});
+    window.addEventListener('touchmove', (e)=>{
+      if(!dragging) return;
+      moveDrag(e.touches[0].clientX);
+    }, {passive:true});
+    window.addEventListener('touchend', endDrag, {passive:true});
+    window.addEventListener('resize', resetSlider);
+    resetSlider();
+
+    const wipe = document.getElementById('pageWipe');
+    document.querySelectorAll('.js-wipe').forEach(link=>{
+      link.addEventListener('click', (e)=>{
+        const href = link.getAttribute('href');
+        if(!href || href.startsWith('#') || link.target === '_blank') return;
+        e.preventDefault();
+        wipe.classList.add('on');
+        setTimeout(()=>{ window.location.href = href; }, prefersReduce ? 0 : 520);
+      });
+    });
   </script>
 </body>
 </html>
