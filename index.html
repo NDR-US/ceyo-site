@@ -1,1122 +1,325 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
-  <title>CEYO — Neutral audit records for AI decisions</title>
-  <meta name="description" content="CEYO produces deterministic, cryptographically sealed audit artifacts for independent verification under constrained disclosure."/>
-  <meta property="og:type" content="website"/>
-  <meta property="og:site_name" content="CEYO"/>
-  <meta property="og:title" content="CEYO — Neutral audit records for AI decisions"/>
-  <meta property="og:description" content="CEYO produces deterministic, cryptographically sealed audit artifacts for independent verification under constrained disclosure."/>
-  <meta property="og:url" content="https://ceyo.ai/"/>
-  <meta name="twitter:card" content="summary_large_image"/>
-  <meta name="twitter:title" content="CEYO — Neutral audit records for AI decisions"/>
-  <meta name="twitter:description" content="CEYO produces deterministic, cryptographically sealed audit artifacts for independent verification under constrained disclosure."/>
-  <meta name="theme-color" content="#0B0F14"/>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<title>CEYO — Evidentiary records for AI decision events</title>
 
-  <style>
-    :root{
-      --ink:#0B0F14;
-      --textOnInk:#C9D1D9;
-      --lineOnInk:rgba(255,255,255,.10);
+<meta name="description" content="CEYO produces deterministic, cryptographically sealed evidentiary artifacts for independent verification under constrained disclosure."/>
 
-      --accent:#3A320C;
-      --accent2:#C9A44A;
+<meta property="og:type" content="website"/>
+<meta property="og:site_name" content="CEYO"/>
+<meta property="og:title" content="CEYO — Evidentiary records for AI decision events"/>
+<meta property="og:description" content="CEYO produces deterministic, cryptographically sealed evidentiary artifacts for independent verification under constrained disclosure."/>
+<meta property="og:url" content="https://ceyo.ai/"/>
 
-      --maxW:1160px;
-      --readW:740px;
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:title" content="CEYO — Evidentiary records for AI decision events"/>
+<meta name="twitter:description" content="CEYO produces deterministic, cryptographically sealed evidentiary artifacts for independent verification under constrained disclosure."/>
 
-      --r-lg:18px;
+<meta name="theme-color" content="#0B0F14"/>
 
-      --s1:8px;  --s2:16px; --s3:24px; --s4:32px; --s5:48px; --s6:64px; --s7:96px;
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-      --lh:1.65;
-      --shadow:0 10px 30px rgba(0,0,0,.25);
-      --shadow2:0 18px 60px rgba(0,0,0,.35);
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 
-      --mono:'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-      --ui:'Inter', system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+<style>
 
-      --navH:72px;
-    }
+:root{
+--ink:#0B0F14;
+--text:#C9D1D9;
+--accent:#C9A44A;
+--mono:'IBM Plex Mono',monospace;
+--ui:'Inter',system-ui;
+--max:1100px;
+}
 
-    *{box-sizing:border-box}
-    html{background:var(--ink);scroll-behavior:smooth}
-    body{
-      margin:0;
-      font-family:var(--ui);
-      color:var(--textOnInk);
-      background:var(--ink);
-      -webkit-text-size-adjust:100%;
-      overflow-x:hidden;
-    }
-    a{color:inherit;text-decoration:none}
-    button{font:inherit}
+*{box-sizing:border-box}
 
-    [id]{ scroll-margin-top: calc(var(--navH) + 24px); }
+body{
+margin:0;
+background:var(--ink);
+color:var(--text);
+font-family:var(--ui);
+line-height:1.65;
+}
 
-    .bg{
-      position:fixed; inset:0; pointer-events:none; z-index:0;
-      background:
-        radial-gradient(900px 520px at 40% 10%, rgba(58,50,12,.22), transparent 62%),
-        radial-gradient(820px 520px at 82% 34%, rgba(201,164,74,.10), transparent 64%),
-        linear-gradient(180deg, #0B0F14 0%, #0A0D12 40%, #0B0F14 100%);
-    }
-    canvas#neurons{
-      position:fixed; inset:0;
-      width:100%; height:100%;
-      z-index:0;
-      pointer-events:none;
-      opacity:.95;
-    }
+.wrap{
+max-width:var(--max);
+margin:auto;
+padding:32px;
+}
 
-    .wrap{ position:relative; z-index:1; max-width:var(--maxW); margin:0 auto; padding:0 var(--s4); }
-    @media (max-width: 640px){ .wrap{ padding:0 18px; } }
+header{
+border-bottom:1px solid rgba(255,255,255,.06);
+padding:18px 0;
+}
 
-    /* Header */
-    header.site{
-      position:sticky; top:0; z-index:50;
-      backdrop-filter: blur(10px);
-      background: rgba(11,15,20,.72);
-      border-bottom:1px solid rgba(255,255,255,.06);
-    }
-    .nav{
-      height: calc(var(--navH) + env(safe-area-inset-top));
-      padding-top: env(safe-area-inset-top);
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap: var(--s3);
-      min-width:0;
-      flex-wrap:nowrap;
-    }
+.logo{
+font-weight:600;
+letter-spacing:.02em;
+}
 
-    .logo{
-      display:flex; align-items:center; gap:10px;
-      font-weight:600; letter-spacing:-.01em;
-      flex:0 0 auto;
-      min-width: 140px;
-    }
-    .logo .mark{
-      display:inline-flex; align-items:center; gap:10px;
-      padding:10px 12px;
-      border-radius:999px;
-      border:1px solid rgba(255,255,255,.08);
-      background: rgba(255,255,255,.02);
-      white-space:nowrap;
-    }
-    .logo .dot{
-      width:8px; height:8px; border-radius:50%;
-      background: var(--accent2);
-      box-shadow: 0 0 0 4px rgba(201,164,74,.12);
-      flex:0 0 auto;
-    }
+h1{
+font-size:46px;
+margin:0 0 16px 0;
+}
 
-    .actions{
-      display:flex; align-items:center; gap:10px;
-      justify-content:flex-end;
-      flex:1 1 auto;
-      min-width:0;
-      flex-wrap:nowrap;
-    }
-    .btn{
-      height:48px; padding:0 18px; border-radius:999px;
-      border:1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.02);
-      color: rgba(201,209,217,.98);
-      display:inline-flex; align-items:center; justify-content:center;
-      font-size:14px;
-      transition: transform .18s ease, border-color .18s ease, background .18s ease;
-      white-space:nowrap;
-    }
-    .btn:hover{ transform: translateY(-1px); border-color: rgba(201,164,74,.35); background: rgba(255,255,255,.04); }
-    .btn.primary{
-      border-color: rgba(201,164,74,.50);
-      background: rgba(201,164,74,.10);
-      color: rgba(245,242,234,.96);
-    }
-    .btn.primary:hover{ background: rgba(201,164,74,.16); }
-    .btn .arr{ display:inline-block; margin-left:10px; transition: transform .16s ease; }
-    .btn:hover .arr{ transform: translateX(3px); }
+h2{
+font-size:28px;
+margin:40px 0 12px;
+}
 
-    .menuBtn{
-      height:48px; width:92px;
-      border-radius:999px;
-      border:1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.02);
-      color: rgba(201,209,217,.95);
-      display:inline-flex; align-items:center; justify-content:center;
-      gap:10px;
-      font-family: var(--mono);
-      font-size: 12px;
-      letter-spacing:.14em;
-      text-transform: uppercase;
-      cursor:pointer;
-      flex:0 0 auto;
-      transition: transform .18s ease, border-color .18s ease, background .18s ease;
-    }
-    .menuBtn:hover{ transform: translateY(-1px); border-color: rgba(201,164,74,.35); background: rgba(255,255,255,.04); }
+p{
+opacity:.85;
+}
 
-    /* Mobile header: prevent crowding */
-    @media (max-width: 520px){
-      .logo{ min-width: 0; }
-      .logo .mark{ padding:8px 10px; gap:8px; }
-      .btn.secondary{ display:none; }
-      .btn.primary{ padding:0 14px; }
-      .menuBtn{ width:82px; }
-      .actions{ gap:8px; }
-    }
-    @media (max-width: 400px){
-      .btn.primary{ display:none; } /* keep header clean: logo + menu */
-      .menuBtn{ width:92px; }
-    }
+.btn{
+display:inline-block;
+padding:12px 18px;
+border-radius:999px;
+border:1px solid rgba(255,255,255,.12);
+margin-right:8px;
+margin-top:12px;
+}
 
-    /* Drawer */
-    .drawer{
-      position:fixed; inset:0; z-index:80;
-      display:none;
-      background: rgba(11,15,20,.72);
-      backdrop-filter: blur(10px);
-      padding: calc(env(safe-area-inset-top) + 12px) 18px 18px;
-    }
-    .drawer.open{ display:block; }
-    .drawerCard{
-      max-width: 720px; margin: 0 auto;
-      border:1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.03);
-      border-radius: var(--r-lg);
-      box-shadow: var(--shadow2);
-      overflow:hidden;
-    }
-    .drawerHead{
-      display:flex; align-items:center; justify-content:space-between;
-      padding: 14px 14px;
-      border-bottom:1px solid rgba(255,255,255,.08);
-    }
-    .drawerHead .t{
-      font-family: var(--mono);
-      font-size:12px; letter-spacing:.18em;
-      text-transform:uppercase; color: rgba(201,209,217,.82);
-    }
-    .close{
-      height:44px; padding:0 14px; border-radius:999px;
-      border:1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.02);
-      color: rgba(201,209,217,.92);
-      cursor:pointer;
-    }
-    .drawerLinks{
-      display:grid;
-      grid-template-columns: 1fr;
-      padding: 10px;
-      gap: 8px;
-    }
-    .drawerLinks a{
-      padding: 14px 14px;
-      border-radius: 14px;
-      border:1px solid rgba(255,255,255,.06);
-      background: rgba(255,255,255,.02);
-      font-size: 15px;
-      transition: transform .18s ease, border-color .18s ease;
-    }
-    .drawerLinks a:hover{ transform: translateY(-1px); border-color: rgba(201,164,74,.28); }
+.grid{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:16px;
+margin-top:24px;
+}
 
-    /* Typography */
-    .read{ max-width: var(--readW); }
-    p{ margin: 0 0 14px 0; line-height: var(--lh); }
-    .muted{ color: rgba(201,209,217,.78); }
+.card{
+border:1px solid rgba(255,255,255,.1);
+padding:20px;
+border-radius:14px;
+background:rgba(255,255,255,.02);
+}
 
-    main{ padding: var(--s6) 0 var(--s7); }
-    section{ padding: var(--s7) 0; border-top:1px solid rgba(255,255,255,.06); }
-    section:first-of-type{ border-top:none; padding-top: var(--s6); }
+.code{
+font-family:var(--mono);
+font-size:13px;
+background:rgba(0,0,0,.35);
+padding:16px;
+border-radius:10px;
+margin-top:14px;
+overflow:auto;
+}
 
-    .eyebrow{
-      font-family: var(--mono);
-      font-size: 12px;
-      letter-spacing: .18em;
-      text-transform: uppercase;
-      color: rgba(201,164,74,.92);
-      margin-bottom: 12px;
-    }
-    h1{ font-size: 52px; line-height: 1.15; letter-spacing: -0.02em; margin: 0 0 14px 0; font-weight: 600; }
-    h2{ font-size: 30px; line-height: 1.20; letter-spacing: -0.01em; margin: 0 0 12px 0; font-weight: 600; }
-    h3{ font-size: 20px; line-height: 1.25; margin: 0 0 10px 0; font-weight: 600; }
-    @media (max-width: 640px){
-      h1{ font-size: 34px; }
-      h2{ font-size: 24px; }
-      h3{ font-size: 19px; }
-    }
+textarea{
+width:100%;
+height:180px;
+background:#06080b;
+border:1px solid rgba(255,255,255,.12);
+color:#d7dee6;
+padding:12px;
+border-radius:10px;
+font-family:var(--mono);
+}
 
-    /* Proof chips */
-    .chips{ display:flex; flex-wrap:wrap; gap:10px; margin-top: 16px; }
-    .chip{
-      height: 40px; padding: 0 14px;
-      border-radius: 999px;
-      border:1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.02);
-      display:inline-flex; align-items:center;
-      font-size: 14px;
-      color: rgba(201,209,217,.92);
-    }
-    .chip b{ font-weight:600; color: rgba(245,242,234,.94); }
-    .chip .k{
-      font-family:var(--mono);
-      font-size: 11px;
-      letter-spacing:.12em;
-      text-transform:uppercase;
-      margin-right:8px;
-      color: rgba(201,164,74,.88);
-    }
+footer{
+margin-top:80px;
+border-top:1px solid rgba(255,255,255,.06);
+padding-top:30px;
+font-size:13px;
+opacity:.7;
+}
 
-    /* 3 pillars */
-    .grid3{
-      display:grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 14px;
-      margin-top: 18px;
-    }
-    @media (max-width: 980px){ .grid3{ grid-template-columns: 1fr; } }
-    .card{
-      border:1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.02);
-      border-radius: var(--r-lg);
-      padding: 20px 22px;
-    }
-    .pillHdr{
-      display:inline-flex; align-items:center; gap:10px;
-      margin-bottom: 10px;
-      padding: 8px 12px;
-      border-radius: 999px;
-      border: 1px solid rgba(201,164,74,.38);
-      background: rgba(201,164,74,.10);
-      color: rgba(245,242,234,.92);
-      font-family: var(--mono);
-      font-size: 11px;
-      letter-spacing: .12em;
-      text-transform: uppercase;
-    }
-    .card p{ color: rgba(201,209,217,.84); }
+@media(max-width:900px){
 
-    /* Purpose strip (replaces In brief) */
-    .strip{
-      border:1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.02);
-      border-radius: var(--r-lg);
-      padding: 20px 22px;
-    }
+.grid{
+grid-template-columns:1fr;
+}
 
-    /* Evidence flow */
-    .diagramWrap{
-      margin-top: 18px;
-      border:1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.02);
-      border-radius: var(--r-lg);
-      padding: 18px 18px;
-      overflow:hidden;
-    }
-    .diagram{ width:100%; max-width: 980px; height:auto; display:block; }
-    .node{ fill: rgba(11,15,20,.85); stroke: rgba(255,255,255,.14); stroke-width:1.2; }
-    .lbl{ fill: rgba(201,209,217,.88); font-family: var(--mono); font-size: 12px; letter-spacing:.10em; text-transform: uppercase; }
-    .line{
-      fill:none;
-      stroke: rgba(201,164,74,.55);
-      stroke-width: 2;
-      stroke-linecap: round;
-      stroke-dasharray: 700;
-      stroke-dashoffset: 700;
-    }
-    .draw .line{ animation: drawLine 1.0s ease-out forwards; }
-    @keyframes drawLine{ to{ stroke-dashoffset: 0; } }
+h1{
+font-size:32px;
+}
 
-    /* Five steps */
-    .stepStrip{
-      margin-top: 18px;
-      border:1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.02);
-      border-radius: var(--r-lg);
-      padding: 18px 18px;
-      overflow:hidden;
-    }
-    .steps{
-      display:grid;
-      grid-template-columns: repeat(5, 1fr);
-      gap: 10px;
-      align-items:stretch;
-    }
-    @media (max-width: 980px){ .steps{ grid-template-columns: 1fr; } }
-    .step{
-      border:1px solid rgba(255,255,255,.08);
-      background: rgba(11,15,20,.55);
-      border-radius: var(--r-lg);
-      padding: 14px 14px;
-    }
-    .stepNum{
-      font-family: var(--mono);
-      font-size: 11px;
-      letter-spacing: .14em;
-      text-transform: uppercase;
-      color: rgba(201,164,74,.90);
-      margin-bottom: 8px;
-    }
-    .stepTitle{ font-weight:600; margin-bottom:6px; }
-    .stepShort{ margin:0; color: rgba(201,209,217,.78); font-size: 14px; line-height: 1.55; }
-    .miniSample{
-      margin-top: 12px;
-      border:1px solid rgba(201,164,74,.22);
-      background: rgba(11,15,20,.60);
-      border-radius: var(--r-lg);
-      padding: 14px 14px;
-      font-family: var(--mono);
-      font-size: 12px;
-      line-height: 1.65;
-      color: rgba(201,209,217,.85);
-      overflow:auto;
-    }
-    .miniSample .k{ color: rgba(201,164,74,.92); text-transform: uppercase; letter-spacing:.12em; font-size: 11px; }
+}
 
-    /* Verify */
-    .verify{
-      border:1px solid rgba(201,164,74,.28);
-      background: rgba(201,164,74,.06);
-      border-radius: var(--r-lg);
-      padding: 18px 18px;
-      margin-top: 18px;
-    }
-    .verify .hdr{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap:12px;
-      flex-wrap:wrap;
-      margin-bottom: 10px;
-    }
-    .verify .tag{
-      font-family: var(--mono);
-      font-size: 12px;
-      letter-spacing:.18em;
-      text-transform: uppercase;
-      color: rgba(201,164,74,.92);
-    }
-    .verify .status{
-      font-family: var(--mono);
-      font-size: 12px;
-      letter-spacing:.14em;
-      text-transform: uppercase;
-      color: rgba(201,209,217,.70);
-      padding: 8px 12px;
-      border-radius: 999px;
-      border:1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.02);
-    }
-    .verify .status.pass{ border-color: rgba(120,210,160,.30); color: rgba(160,240,200,.88); background: rgba(120,210,160,.06); }
-    .verify .status.fail{ border-color: rgba(255,120,120,.28); color: rgba(255,180,180,.86); background: rgba(255,120,120,.05); }
+</style>
 
-    textarea{
-      width:100%;
-      min-height: 180px;
-      resize: vertical;
-      border-radius: var(--r-lg);
-      border:1px solid rgba(255,255,255,.10);
-      background: rgba(11,15,20,.62);
-      color: rgba(201,209,217,.92);
-      padding: 12px 12px;
-      font-family: var(--mono);
-      font-size: 12px;
-      line-height: 1.6;
-      outline:none;
-    }
-    textarea:focus{ border-color: rgba(201,164,74,.35); }
-
-    .verifyRow{
-      display:flex; gap:10px; flex-wrap:wrap; margin-top: 10px;
-      align-items:center;
-    }
-    .miniBtn{
-      height:44px;
-      padding:0 16px;
-      border-radius:999px;
-      border:1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.02);
-      color: rgba(201,209,217,.92);
-      cursor:pointer;
-      transition: transform .16s ease, border-color .16s ease, background .16s ease;
-      font-size: 14px;
-    }
-    .miniBtn:hover{ transform: translateY(-1px); border-color: rgba(201,164,74,.35); background: rgba(255,255,255,.04); }
-    .miniBtn.primary{
-      border-color: rgba(201,164,74,.45);
-      background: rgba(201,164,74,.10);
-      color: rgba(245,242,234,.96);
-    }
-    .miniBtn.primary:hover{ background: rgba(201,164,74,.16); }
-
-    .verifySteps{
-      margin-top: 12px;
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-    }
-    @media (max-width: 980px){ .verifySteps{ grid-template-columns: 1fr; } }
-    .vstep{
-      border:1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.02);
-      border-radius: var(--r-lg);
-      padding: 12px 12px;
-      color: rgba(201,209,217,.82);
-      font-size: 14px;
-      line-height: 1.55;
-    }
-    .vstep b{ color: rgba(245,242,234,.92); font-weight:600; }
-    .vstep .m{
-      display:block;
-      margin-top:6px;
-      font-family: var(--mono);
-      font-size: 11px;
-      letter-spacing:.12em;
-      text-transform: uppercase;
-      color: rgba(201,164,74,.86);
-    }
-
-    /* Footer */
-    footer{
-      border-top:1px solid rgba(255,255,255,.06);
-      padding: var(--s7) 0 var(--s6);
-    }
-    .footGrid{
-      display:grid;
-      grid-template-columns: 1.2fr 1fr 1fr 1fr;
-      gap: 14px;
-      margin-bottom: 22px;
-    }
-    @media (max-width: 980px){ .footGrid{ grid-template-columns: 1fr 1fr; } }
-    @media (max-width: 640px){ .footGrid{ grid-template-columns: 1fr; } }
-    .footCol{
-      border:1px solid rgba(255,255,255,.08);
-      background: rgba(255,255,255,.02);
-      border-radius: var(--r-lg);
-      padding: 18px 18px;
-    }
-    .footCol .t{
-      font-family: var(--mono);
-      font-size: 12px;
-      letter-spacing: .18em;
-      text-transform: uppercase;
-      color: rgba(201,164,74,.86);
-      margin-bottom: 10px;
-    }
-    .footCol a{
-      display:block;
-      padding: 10px 10px;
-      border-radius: 12px;
-      border:1px solid transparent;
-      color: rgba(201,209,217,.84);
-      transition: background .18s ease, border-color .18s ease;
-    }
-    .footCol a:hover{ background: rgba(255,255,255,.03); border-color: rgba(255,255,255,.06); }
-    .footBottom{
-      display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap;
-      font-family: var(--mono);
-      font-size: 12px;
-      letter-spacing: .14em;
-      text-transform: uppercase;
-      color: rgba(201,209,217,.62);
-      padding-top: 18px;
-      border-top:1px solid rgba(255,255,255,.06);
-    }
-
-    .reveal{ opacity:0; transform: translateY(10px); transition: opacity .55s ease, transform .55s ease; }
-    .reveal.on{ opacity:1; transform: translateY(0); }
-
-    @media (prefers-reduced-motion: reduce){
-      html{scroll-behavior:auto;}
-      .reveal{ opacity:1; transform:none; transition:none; }
-      .draw .line{ animation:none; stroke-dashoffset:0; }
-      .btn,.menuBtn,.drawerLinks a,.miniBtn{ transition:none; }
-    }
-  </style>
-
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "Organization",
-    "name": "CEYO",
-    "url": "https://ceyo.ai",
-    "description": "CEYO builds evidentiary infrastructure for AI inference systems: deterministic, cryptographically sealed audit records for independent verification under constrained disclosure.",
-    "contactPoint": { "@type": "ContactPoint", "email": "contact@ceyo.ai" }
-  }
-  </script>
 </head>
 
 <body>
-  <div class="bg" aria-hidden="true"></div>
-  <canvas id="neurons" aria-hidden="true"></canvas>
 
-  <header class="site">
-    <div class="wrap nav">
-      <a class="logo" href="index.html" aria-label="CEYO Home">
-        <span class="mark"><span class="dot" aria-hidden="true"></span><span>CEYO</span></span>
-      </a>
+<header>
+<div class="wrap">
 
-      <div class="actions" aria-label="Actions">
-        <a class="btn secondary" href="resources.html#sample-artifact">Sample artifacts<span class="arr">→</span></a>
-        <a class="btn primary" href="contact.html">Request walkthrough<span class="arr">→</span></a>
-        <button class="menuBtn" id="openMenu" type="button" aria-label="Open menu">Menu <span aria-hidden="true">☰</span></button>
-      </div>
-    </div>
-  </header>
+<div class="logo">CEYO</div>
 
-  <div class="drawer" id="drawer" aria-hidden="true">
-    <div class="drawerCard" role="dialog" aria-modal="true" aria-label="Menu">
-      <div class="drawerHead">
-        <div class="t">Menu</div>
-        <button class="close" id="closeMenu" type="button">Close</button>
-      </div>
-      <div class="drawerLinks">
-        <a href="index.html">Overview</a>
-        <a href="how.html">How It Works</a>
-        <a href="platform.html">Platform</a>
-        <a href="trust.html">Trust</a>
-        <a href="compliance.html">Compliance</a>
-        <a href="integrations.html">Integrations</a>
-        <a href="resources.html">Resources</a>
-        <a href="verify.html">Verify Artifact</a>
-        <a href="company.html">Company</a>
-        <a href="contact.html">Contact</a>
-      </div>
-    </div>
-  </div>
+</div>
+</header>
 
-  <main class="wrap">
-    <section style="padding-top: var(--s6);">
-      <div class="read reveal">
-        <div class="eyebrow">Neutral audit layer · Evidentiary records · Independent verification</div>
-        <h1>Neutral audit records for AI decisions.</h1>
-        <p class="muted">
-          CEYO produces deterministic, cryptographically sealed artifacts for independent verification — without exposing model IP by default.
-        </p>
+<main class="wrap">
 
-        <div class="chips" aria-label="Proof chips">
-          <div class="chip"><span class="k">Proof</span><b>Deterministic</b></div>
-          <div class="chip"><span class="k">Keys</span><b>Non-custodial</b></div>
-          <div class="chip"><span class="k">Review</span><b>Independently verifiable</b></div>
-        </div>
+<h1>Evidentiary records for AI decision events.</h1>
 
-        <div style="margin-top:18px; display:flex; gap:10px; flex-wrap:wrap;">
-          <a class="btn primary" href="#pillars">Record · Seal · Verify<span class="arr">→</span></a>
-          <a class="btn" href="#five">Five steps<span class="arr">→</span></a>
-          <a class="btn" href="#verify60">Verify in 60 seconds<span class="arr">→</span></a>
-          <a class="btn" href="verify.html">Verify an artifact<span class="arr">→</span></a>
-        </div>
-      </div>
-    </section>
+<p>
+CEYO produces deterministic, cryptographically sealed artifacts that allow
+AI-assisted decision events to be independently verified later without requiring
+default disclosure of model internals.
+</p>
 
-    <!-- 3 pillars FIRST -->
-    <section id="pillars">
-      <div class="read reveal">
-        <h2>Record · Seal · Verify</h2>
-        <div class="grid3" aria-label="Three pillars">
-          <div class="card">
-            <div class="pillHdr">Record</div>
-            <p>Capture is policy-scoped. Only declared fields are collected. Out-of-scope data is excluded by design.</p>
-          </div>
-          <div class="card">
-            <div class="pillHdr">Seal</div>
-            <p>Canonicalize deterministically and seal cryptographically so post-hoc alteration is detectable.</p>
-          </div>
-          <div class="card">
-            <div class="pillHdr">Verify</div>
-            <p>Independent parties recompute canonicalization and validate signatures to confirm integrity and provenance.</p>
-          </div>
-        </div>
-      </div>
-    </section>
+<a class="btn" href="#pillars">Record · Seal · Verify</a>
+<a class="btn" href="#steps">Five steps</a>
+<a class="btn" href="#verify">Verify artifact</a>
 
-    <!-- Purpose (your wording) -->
-    <section id="purpose">
-      <div class="read reveal">
-        <h2>Purpose</h2>
-        <div class="strip">
-          <p class="muted" style="margin:0;">
-            Designed for fast executive clarity while remaining credible for technical and security reviewers.
-          </p>
-        </div>
-      </div>
-    </section>
+<section id="pillars">
 
-    <!-- Five steps -->
-    <section id="five">
-      <div class="read reveal">
-        <h2>Five steps</h2>
-        <p class="muted">The mechanics chain is fixed. Each step produces a verifiable boundary.</p>
+<h2>Record · Seal · Verify</h2>
 
-        <div class="stepStrip reveal">
-          <div class="steps" aria-label="Five steps">
-            <div class="step">
-              <div class="stepNum">01 · Attach</div>
-              <div class="stepTitle">Deploy as a layer</div>
-              <p class="stepShort">Sidecar, gateway, or wrapper at the inference boundary.</p>
-            </div>
-            <div class="step">
-              <div class="stepNum">02 · Capture</div>
-              <div class="stepTitle">Define scope first</div>
-              <p class="stepShort">Policy-scoped fields only. Masking applied before sealing.</p>
-            </div>
-            <div class="step">
-              <div class="stepNum">03 · Canonicalize</div>
-              <div class="stepTitle">Normalize deterministically</div>
-              <p class="stepShort">RFC 8785 yields reproducible bytes across environments.</p>
-            </div>
-            <div class="step">
-              <div class="stepNum">04 · Seal</div>
-              <div class="stepTitle">Tamper-evident integrity</div>
-              <p class="stepShort">Hash + signature under operator key custody (non-custodial).</p>
-            </div>
-            <div class="step">
-              <div class="stepNum">05 · Verify</div>
-              <div class="stepTitle">Independent validation</div>
-              <p class="stepShort">Recompute canonicalization + validate signature + policy alignment.</p>
-            </div>
-          </div>
+<div class="grid">
 
-          <div class="miniSample" aria-label="Short example">
-            <div class="k">Example</div>
-            <code>
-policy_id: "POL-001"
-policy_version: "V1"
-canonicalization: "RFC8785"
-hash_algorithm: "SHA-256"
-signature_algorithm: "ECDSA-P256"
-            </code>
-          </div>
+<div class="card">
 
-          <div style="margin-top:16px; display:flex; gap:10px; flex-wrap:wrap;">
-            <a class="btn primary" href="how.html">Full walkthrough<span class="arr">→</span></a>
-            <a class="btn" href="trust.html">Trust model<span class="arr">→</span></a>
-          </div>
-        </div>
-      </div>
-    </section>
+<strong>Record</strong>
 
-    <!-- Verify in 60 seconds -->
-    <section id="verify60">
-      <div class="read reveal">
-        <h2>Verify in 60 seconds</h2>
-        <p class="muted">
-          Paste a sample artifact to see the verification steps and basic format checks.
-          Cryptographic verification is performed in the verifier toolkit.
-        </p>
+<p>
+Policy-scoped capture defines what information may be recorded during
+an AI decision event.
+</p>
 
-        <div class="verify reveal">
-          <div class="hdr">
-            <div class="tag">Verification walkthrough</div>
-            <div class="status" id="statusPill">Status · waiting</div>
-          </div>
+</div>
 
-          <textarea id="artifactInput" spellcheck="false" aria-label="Paste artifact JSON here">
+<div class="card">
+
+<strong>Seal</strong>
+
+<p>
+Deterministic canonicalization and cryptographic hashing create
+tamper-evident artifacts.
+</p>
+
+</div>
+
+<div class="card">
+
+<strong>Verify</strong>
+
+<p>
+Independent parties recompute canonicalization and validate signatures
+to confirm artifact integrity.
+</p>
+
+</div>
+
+</div>
+
+</section>
+
+<section>
+
+<h2>Purpose</h2>
+
+<p>
+Designed to be legible to executive, legal, technical, and security reviewers
+while remaining technically precise for independent verification.
+</p>
+
+</section>
+
+<section id="steps">
+
+<h2>Five steps</h2>
+
+<div class="grid">
+
+<div class="card">
+<strong>1 · Attach</strong>
+<p>Deploy as a boundary layer near inference execution.</p>
+</div>
+
+<div class="card">
+<strong>2 · Capture</strong>
+<p>Policy-scoped decision data is recorded.</p>
+</div>
+
+<div class="card">
+<strong>3 · Canonicalize</strong>
+<p>Data is normalized using deterministic canonicalization.</p>
+</div>
+
+<div class="card">
+<strong>4 · Seal</strong>
+<p>Hashing and digital signatures create tamper-evident records.</p>
+</div>
+
+<div class="card">
+<strong>5 · Verify</strong>
+<p>Third parties independently validate artifact integrity.</p>
+</div>
+
+</div>
+
+<div class="code">
+
+policy_id: POL-001  
+policy_version: V1  
+canonicalization: RFC8785  
+hash_algorithm: SHA-256  
+signature_algorithm: ECDSA-P256  
+
+</div>
+
+</section>
+
+<section id="verify">
+
+<h2>Verify artifact</h2>
+
+<p>
+Paste an artifact structure to simulate format checks.  
+Full cryptographic verification occurs in the verification toolkit.
+</p>
+
+<textarea>
 {
-  "artifact_id": "ART-EXAMPLE-001",
-  "policy_id": "POL-001",
-  "policy_version": "V1",
-  "canonicalization": "RFC8785",
-  "hash_algorithm": "SHA-256",
-  "signature_algorithm": "ECDSA-P256",
-  "digest": "…",
-  "signature": "…",
-  "public_key_reference": "KMS:key/…",
-  "timestamp_utc": "2026-02-19T00:00:00Z"
-}</textarea>
+"artifact_id":"ART-EXAMPLE-001",
+"policy_id":"POL-001",
+"policy_version":"V1",
+"canonicalization":"RFC8785",
+"hash_algorithm":"SHA-256",
+"signature_algorithm":"ECDSA-P256",
+"digest":"…",
+"signature":"…",
+"public_key_reference":"KMS:key/…"
+}
+</textarea>
 
-          <div class="verifyRow">
-            <button class="miniBtn primary" id="runVerify" type="button">Run checks</button>
-            <button class="miniBtn" id="loadExample" type="button">Load sample</button>
-            <button class="miniBtn" id="clearBox" type="button">Clear</button>
-          </div>
+<div class="code">
 
-          <div class="verifySteps" aria-label="Verification steps">
-            <div class="vstep">
-              <b>1) Canonicalize</b> under the recorded scheme
-              <span class="m">RFC 8785 JSON canonicalization</span>
-            </div>
-            <div class="vstep">
-              <b>2) Recompute hash</b> over canonical bytes
-              <span class="m">SHA-256 digest recomputation</span>
-            </div>
-            <div class="vstep">
-              <b>3) Validate signature</b> against public key reference
-              <span class="m">Origin authenticity + tamper evidence</span>
-            </div>
-            <div class="vstep">
-              <b>4) Confirm policy alignment</b> (ID/version/hash)
-              <span class="m">Scope boundary confirmation</span>
-            </div>
-          </div>
+Verification process:
 
-          <p class="muted" style="margin-top:12px">
-            Successful verification confirms integrity and provenance under policy scope.
-            It does not confirm output correctness, legality, or compliance conclusions.
-          </p>
-        </div>
-      </div>
-    </section>
+1. canonicalize artifact
+2. recompute hash
+3. validate signature
+4. confirm policy alignment
 
-    <!-- Evidence flow LAST -->
-    <section id="flow">
-      <div class="read reveal">
-        <h2>Evidence flow</h2>
-        <div class="diagramWrap reveal" id="diagramBox">
-          <svg class="diagram" viewBox="0 0 980 210" role="img" aria-label="Input to verification flow">
-            <path class="line" d="M80 86 C190 86, 190 86, 300 86 S 410 86, 520 86 S 630 86, 740 86 S 850 86, 920 86"/>
-            <circle class="node" cx="80"  cy="86" r="18"></circle>
-            <circle class="node" cx="300" cy="86" r="18"></circle>
-            <circle class="node" cx="520" cy="86" r="18"></circle>
-            <circle class="node" cx="740" cy="86" r="18"></circle>
-            <circle class="node" cx="920" cy="86" r="18"></circle>
+</div>
 
-            <text class="lbl" x="80"  y="36" text-anchor="middle">INPUT</text>
-            <text class="lbl" x="300" y="36" text-anchor="middle">POLICY</text>
-            <text class="lbl" x="520" y="36" text-anchor="middle">CANONICALIZE</text>
-            <text class="lbl" x="740" y="36" text-anchor="middle">SEAL</text>
-            <text class="lbl" x="920" y="36" text-anchor="middle">ARTIFACT</text>
+<p>
 
-            <text class="lbl" x="490" y="176" text-anchor="middle" style="fill: rgba(201,164,74,.88);">VERIFY</text>
-            <text class="lbl" x="490" y="196" text-anchor="middle" style="fill: rgba(201,209,217,.66); letter-spacing:.06em; text-transform:none; font-size: 12px;">
-              Recompute canonicalization · Recompute hash · Validate signature · Confirm policy alignment
-            </text>
-          </svg>
+Successful verification confirms artifact integrity and provenance
+under the declared policy scope.
 
-          <p class="muted" style="margin-top:12px">
-            Verification confirms integrity and provenance under declared policy scope — not correctness of model output.
-          </p>
-        </div>
-      </div>
-    </section>
+Verification does not evaluate model correctness,
+policy validity, or regulatory compliance conclusions.
 
-    <footer id="footer">
-      <div class="footGrid reveal">
-        <div class="footCol">
-          <div class="t">Product</div>
-          <a href="index.html">Overview</a>
-          <a href="how.html">How It Works</a>
-          <a href="platform.html">Platform</a>
-          <a href="integrations.html">Integrations</a>
-        </div>
-        <div class="footCol">
-          <div class="t">Trust</div>
-          <a href="trust.html">Trust Model</a>
-          <a href="security.html">Security</a>
-          <a href="trust.html#verification-spec">Verification Spec</a>
-          <a href="resources.html#trust-center">Trust Center</a>
-          <a href="verify.html">Verify Artifact</a>
-        </div>
-        <div class="footCol">
-          <div class="t">Resources</div>
-          <a href="resources.html">Library</a>
-          <a href="resources.html#sample-artifact">Sample Artifacts</a>
-          <a href="resources.html#glossary">Glossary</a>
-          <a href="resources.html#faq">FAQs</a>
-        </div>
-        <div class="footCol">
-          <div class="t">Legal</div>
-          <a href="privacy.html">Privacy</a>
-          <a href="terms.html">Terms</a>
-          <a href="vdp.html">Security Disclosure</a>
-          <a href="ethics.html">Responsible Use</a>
-        </div>
-      </div>
+</p>
 
-      <div class="footBottom reveal">
-        <div>© <span id="year"></span> CEYO. All rights reserved.</div>
-        <div><a href="vdp.html">Vulnerability Disclosure</a></div>
-      </div>
-    </footer>
-  </main>
+</section>
 
-  <script>
-    document.getElementById('year').textContent = new Date().getFullYear();
+<footer>
 
-    // Drawer menu
-    const drawer = document.getElementById('drawer');
-    const openMenu = document.getElementById('openMenu');
-    const closeMenu = document.getElementById('closeMenu');
-    function openDrawer(){ drawer.classList.add('open'); drawer.setAttribute('aria-hidden','false'); document.body.style.overflow='hidden'; }
-    function closeDrawer(){ drawer.classList.remove('open'); drawer.setAttribute('aria-hidden','true'); document.body.style.overflow=''; }
-    if(openMenu) openMenu.addEventListener('click', openDrawer);
-    if(closeMenu) closeMenu.addEventListener('click', closeDrawer);
-    drawer.addEventListener('click', (e)=>{ if(e.target===drawer) closeDrawer(); });
-    window.addEventListener('keydown', (e)=>{ if(e.key==='Escape' && drawer.classList.contains('open')) closeDrawer(); });
+© 2026 CEYO — All rights reserved
 
-    // Reveal + diagram draw
-    const prefersReduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const revealEls = Array.from(document.querySelectorAll('.reveal'));
+</footer>
 
-    if(!prefersReduce){
-      const io = new IntersectionObserver((entries)=>{
-        entries.forEach(en=>{ if(en.isIntersecting) en.target.classList.add('on'); });
-      }, {threshold: 0.12});
-      revealEls.forEach(el=>io.observe(el));
+</main>
 
-      const d = document.getElementById('diagramBox');
-      const dio = new IntersectionObserver((entries)=>{
-        entries.forEach(en=>{ if(en.isIntersecting) en.target.classList.add('draw'); });
-      }, {threshold: 0.20});
-      dio.observe(d);
-    } else {
-      revealEls.forEach(el=>el.classList.add('on'));
-      document.getElementById('diagramBox').classList.add('draw');
-    }
-
-    // Verify demo logic
-    const statusPill = document.getElementById('statusPill');
-    const artifactInput = document.getElementById('artifactInput');
-    const runVerify = document.getElementById('runVerify');
-    const loadExample = document.getElementById('loadExample');
-    const clearBox = document.getElementById('clearBox');
-
-    const required = [
-      "artifact_id","policy_id","policy_version","canonicalization",
-      "hash_algorithm","signature_algorithm","digest","signature","public_key_reference"
-    ];
-
-    function setStatus(kind, text){
-      statusPill.classList.remove('pass','fail');
-      if(kind) statusPill.classList.add(kind);
-      statusPill.textContent = text;
-    }
-
-    runVerify.addEventListener('click', ()=>{
-      try{
-        const obj = JSON.parse(artifactInput.value);
-        const missing = required.filter(k => !(k in obj));
-        if(missing.length){ setStatus('fail', 'Status · missing fields'); return; }
-        if(String(obj.canonicalization || '').toUpperCase().indexOf('RFC') === -1){
-          setStatus('fail', 'Status · canonicalization mismatch'); return;
-        }
-        setStatus('pass', 'Status · format OK');
-      } catch(e){
-        setStatus('fail', 'Status · invalid JSON');
-      }
-    });
-
-    loadExample.addEventListener('click', ()=>{
-      artifactInput.value = JSON.stringify({
-        artifact_id: "ART-EXAMPLE-001",
-        policy_id: "POL-001",
-        policy_version: "V1",
-        policy_hash: "…",
-        canonicalization: "RFC8785",
-        hash_algorithm: "SHA-256",
-        signature_algorithm: "ECDSA-P256",
-        digest: "…",
-        signature: "…",
-        public_key_reference: "KMS:key/…",
-        timestamp_utc: "2026-02-19T00:00:00Z"
-      }, null, 2);
-      setStatus('', 'Status · waiting');
-    });
-
-    clearBox.addEventListener('click', ()=>{
-      artifactInput.value = "";
-      setStatus('', 'Status · waiting');
-    });
-
-    /* Neuron field + atom ring + burst */
-    (function(){
-      const c = document.getElementById('neurons');
-      const ctx = c.getContext('2d', {alpha:true});
-      let w=0,h=0,dpr=1;
-
-      function resize(){
-        dpr = Math.min(window.devicePixelRatio || 1, 2);
-        w = window.innerWidth; h = window.innerHeight;
-        c.width = Math.floor(w*dpr);
-        c.height = Math.floor(h*dpr);
-        c.style.width = w+'px';
-        c.style.height = h+'px';
-        ctx.setTransform(dpr,0,0,dpr,0,0);
-      }
-      resize();
-      window.addEventListener('resize', resize, {passive:true});
-
-      const N = 240;
-      const pad = 40;
-      const nodes = [];
-      const dirs = [];
-      const rnd = (a,b)=> a + Math.random()*(b-a);
-
-      for(let i=0;i<N;i++){
-        nodes.push({ x:rnd(-pad,w+pad), y:rnd(-pad,h+pad), vx:rnd(-0.18,0.18), vy:rnd(-0.14,0.14), s:rnd(1.1,2.1) });
-        const ang = Math.random()*Math.PI*2;
-        const rad = Math.sqrt(Math.random());
-        dirs.push({ang, rad});
-      }
-
-      let mx=0.5, my=0.5;
-      if(window.matchMedia("(pointer:fine)").matches){
-        window.addEventListener('mousemove', (e)=>{
-          mx = e.clientX / Math.max(1,w);
-          my = e.clientY / Math.max(1,h);
-        }, {passive:true});
-      }
-
-      const anchors = {
-        pillars: document.getElementById('pillars'),
-        flow: document.getElementById('flow'),
-        footer: document.getElementById('footer')
-      };
-
-      function inRangeProgress(el, startPct, endPct){
-        if(!el) return 0;
-        const r = el.getBoundingClientRect();
-        const vh = window.innerHeight || 1;
-        const start = vh * startPct;
-        const end = vh * endPct;
-        const t = (end - r.top) / Math.max(1, (end - start));
-        return Math.max(0, Math.min(1, t));
-      }
-
-      const state = { converge:0, burst:0, focus:0, coreAlpha:0 };
-
-      function tickState(){
-        const p2 = inRangeProgress(anchors.pillars, 0.70, 1.05);
-        const baseConverge = p2;
-
-        const burstP = inRangeProgress(anchors.flow, 0.58, 0.95);
-        const burstOut = Math.sin(burstP * Math.PI);
-        state.burst = Math.max(0, burstOut * 0.95);
-
-        const settle = inRangeProgress(anchors.footer, 0.85, 1.10);
-        state.converge = Math.max(baseConverge, settle);
-
-        state.focus = inRangeProgress(anchors.pillars, 0.55, 0.95);
-        state.coreAlpha = Math.min(0.55, 0.18 + state.converge * 0.48);
-      }
-
-      function draw(){
-        tickState();
-        ctx.clearRect(0,0,w,h);
-
-        const vg = ctx.createRadialGradient(w*0.55, h*0.28, 40, w*0.5, h*0.5, Math.max(w,h)*0.9);
-        vg.addColorStop(0,'rgba(0,0,0,0.00)');
-        vg.addColorStop(1,'rgba(0,0,0,0.28)');
-        ctx.fillStyle = vg;
-        ctx.fillRect(0,0,w,h);
-
-        const px = (mx - 0.5) * 22;
-        const py = (my - 0.5) * 14;
-
-        const cx = w*0.52 + px*0.35;
-        const cy = h*0.34 + py*0.35;
-
-        const baseR = Math.min(w,h) * 0.18;
-        const orbitR = baseR * (0.92 - state.focus*0.10) * (0.92 - state.converge*0.08);
-
-        if(state.coreAlpha > 0.01){
-          ctx.save();
-          ctx.globalAlpha = state.coreAlpha;
-          ctx.strokeStyle = 'rgba(201,164,74,0.55)';
-          ctx.lineWidth = 1.3;
-          ctx.beginPath(); ctx.arc(cx, cy, orbitR*0.38, 0, Math.PI*2); ctx.stroke();
-
-          ctx.globalAlpha = state.coreAlpha * 0.75;
-          ctx.strokeStyle = 'rgba(201,164,74,0.22)';
-          ctx.lineWidth = 1.0;
-          ctx.beginPath(); ctx.arc(cx, cy, orbitR*0.78, 0, Math.PI*2); ctx.stroke();
-
-          const g = ctx.createRadialGradient(cx, cy, 0, cx, cy, orbitR*1.05);
-          g.addColorStop(0,'rgba(201,164,74,0.14)');
-          g.addColorStop(1,'rgba(201,164,74,0.0)');
-          ctx.fillStyle = g;
-          ctx.beginPath(); ctx.arc(cx, cy, orbitR*1.05, 0, Math.PI*2); ctx.fill();
-          ctx.restore();
-        }
-
-        const maxDist = 165;
-        const maxD2 = maxDist*maxDist;
-
-        const conv = state.converge;
-        const burst = state.burst;
-
-        for(let i=0;i<N;i++){
-          const p = nodes[i];
-
-          p.x += p.vx * (1 - 0.65*conv);
-          p.y += p.vy * (1 - 0.65*conv);
-
-          if(p.x < -pad) p.x = w+pad;
-          if(p.x > w+pad) p.x = -pad;
-          if(p.y < -pad) p.y = h+pad;
-          if(p.y > h+pad) p.y = -pad;
-
-          if(conv > 0.001){
-            const d = dirs[i];
-            const ringR = orbitR * (0.62 + d.rad*0.48);
-            const t = performance.now()*0.00035;
-            const ang = d.ang + t * (0.20 + (i%7)*0.03);
-
-            const tx = cx + Math.cos(ang) * ringR;
-            const ty = cy + Math.sin(ang) * ringR;
-
-            p.x += (tx - p.x) * (0.010 + 0.042*conv);
-            p.y += (ty - p.y) * (0.010 + 0.042*conv);
-          }
-
-          if(burst > 0.001){
-            const dx = (p.x - cx);
-            const dy = (p.y - cy);
-            const len = Math.max(1, Math.sqrt(dx*dx + dy*dy));
-            const ux = dx / len;
-            const uy = dy / len;
-            const push = (0.85 + (i%9)*0.05) * 2.25 * burst;
-            p.x += ux * push;
-            p.y += uy * push;
-          }
-        }
-
-        const lineAlphaBase = 0.05 + conv*0.10;
-        const pointAlpha = 0.45 + conv*0.25;
-
-        for(let i=0;i<N;i++){
-          const a = nodes[i];
-          for(let j=i+1;j<N;j++){
-            const b = nodes[j];
-            const dx = a.x - b.x;
-            const dy = a.y - b.y;
-            const d2 = dx*dx + dy*dy;
-            if(d2 < maxD2){
-              const t = 1 - (d2 / maxD2);
-              const alpha = Math.min(0.22, lineAlphaBase * t);
-              ctx.strokeStyle = `rgba(201,164,74,${alpha})`;
-              ctx.lineWidth = 1;
-              ctx.beginPath();
-              ctx.moveTo(a.x, a.y);
-              ctx.lineTo(b.x, b.y);
-              ctx.stroke();
-            }
-          }
-        }
-
-        for(let i=0;i<N;i++){
-          const p = nodes[i];
-          ctx.fillStyle = `rgba(201,164,74,${pointAlpha})`;
-          ctx.beginPath();
-          ctx.arc(p.x, p.y, p.s, 0, Math.PI*2);
-          ctx.fill();
-        }
-
-        if(!prefersReduce && !document.hidden) requestAnimationFrame(draw);
-      }
-
-      draw();
-
-      document.addEventListener('visibilitychange', () => {
-        if (!document.hidden && !prefersReduce) draw();
-      });
-    })();
-  </script>
 </body>
 </html>
