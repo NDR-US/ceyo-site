@@ -466,11 +466,11 @@
 
     p + p{margin-top:18px}
 
-    .placement-grid{
+    .verification-grid{
       display:grid;
       grid-template-columns:minmax(0, 1fr) 420px;
       gap:48px;
-      align-items:center;
+      align-items:start;
     }
 
     .placement-graphic{
@@ -521,6 +521,8 @@
 
     .placement-row span{
       font-family:"IBM Plex Mono", monospace;
+      font-size:.66rem;
+      letter-spacing:.14em;
       text-transform:uppercase;
       letter-spacing:.13em;
       font-size:.64rem;
@@ -603,37 +605,37 @@
 
     .process-grid{
       margin-top:34px;
-      border-top:1px solid var(--line-strong);
-      border-bottom:1px solid var(--line);
+      border-top:1px solid rgba(20,33,49,.14);
+      border-bottom:1px solid rgba(20,33,49,.12);
       display:grid;
-      grid-template-columns:repeat(5,1fr);
+      grid-template-columns:repeat(4,1fr);
     }
 
-    .process-step{
+    .flow-step{
       min-height:280px;
       padding:28px 22px 34px;
       position:relative;
-      background:rgba(255,255,255,.015);
+      background:rgba(20,33,49,.02);
     }
 
-    .process-step + .process-step{
-      border-left:1px solid var(--line);
+    .flow-step + .flow-step{
+      border-left:1px solid rgba(20,33,49,.12);
     }
 
-    .process-index{
+    .flow-index{
       font-family:"IBM Plex Mono", monospace;
       text-transform:uppercase;
       letter-spacing:.14em;
       font-size:.72rem;
-      color:var(--soft);
+      color:rgba(20,33,49,.58);
       margin-bottom:20px;
     }
 
-    .process-step h3{
+    .flow-step h3{
       margin:0 0 12px;
       font-size:1.18rem;
       font-weight:700;
-      color:var(--off);
+      color:var(--ink);
       letter-spacing:-.03em;
     }
 
@@ -833,7 +835,7 @@
 
     @media (max-width:1080px){
       .hero-inner,
-      .placement-grid,
+      .verification-grid,
       .split,
       .video-module,
       .key-layout,
@@ -843,7 +845,6 @@
 
       .hero-side,
       .notes,
-      .key-aside,
       .nav-side{
         border-left:0;
         padding-left:0;
@@ -853,9 +854,9 @@
         grid-template-columns:1fr;
       }
 
-      .process-step + .process-step{
+      .flow-step + .flow-step{
         border-left:0;
-        border-top:1px solid var(--line);
+        border-top:1px solid rgba(20,33,49,.12);
       }
 
       .verification-storage{
@@ -867,6 +868,11 @@
       .architecture-band{
         grid-template-columns:1fr;
         gap:12px;
+      }
+
+      .verification-row{
+        grid-template-columns:1fr;
+        gap:10px;
       }
 
       .next-link{
@@ -986,8 +992,8 @@
     <div class="shell hero-inner">
       <div>
         <div class="hero-rule"></div>
-        <div class="eyebrow">Platform</div>
-        <h1>System Placement and Evidentiary Architecture</h1>
+        <div class="eyebrow">Verification</div>
+        <h1>Independent Integrity Checks and Declared Review Context</h1>
         <p>
           CEYO operates as an independent evidentiary layer positioned alongside AI-supported systems. The platform architecture defines how policy-scoped event data is captured, transformed into artifacts, sealed, and made available for later verification without interfering with the model itself.
         </p>
@@ -998,7 +1004,7 @@
       </div>
 
       <aside class="hero-side">
-        <div class="mono">Platform posture</div>
+        <div class="mono">Verification focus</div>
         <p>
           External placement, declared capture scope, deterministic transformation, controlled sealing, governance continuity, and later independent review.
         </p>
@@ -1007,16 +1013,15 @@
   </section>
 
   <main>
-    <section class="reveal" id="placement">
-      <div class="shell placement-grid">
+    <section class="reveal" id="model">
+      <div class="shell verification-grid">
         <div>
           <div class="section-line"></div>
-          <div class="section-label">System Placement</div>
-          <h2>CEYO sits beside the system, not inside it.</h2>
+          <div class="section-label">Verification Model</div>
+          <h2>Verification asks whether the artifact still means what it claimed to mean at sealing time.</h2>
           <div style="margin-top:28px;max-width:720px;">
-            <p>CEYO does not retrain, modify, or interfere with model execution.</p>
-            <p>Instead, it operates as an external evidentiary layer that receives policy-permitted event context from AI-supported workflows and transforms that context into deterministic, cryptographically sealed artifacts.</p>
-            <p>This placement allows evidentiary generation without requiring modification of model weights, inference logic, or internal system behavior.</p>
+            <p>Verification is not a re-run of the originating system. It is an independent evaluation of the artifact against the deterministic rules, integrity state, and provenance context declared when the artifact was sealed.</p>
+            <p>That means the core verification question is narrow and disciplined: does the artifact remain structurally valid, internally consistent, and attributable to the declared sealing authority?</p>
           </div>
         </div>
 
@@ -1047,7 +1052,7 @@
       </div>
     </section>
 
-    <section class="reveal" id="architecture">
+    <section class="reveal" id="checks">
       <div class="shell">
         <div class="section-label">Architecture</div>
         <h2>Five operational layers.</h2>
@@ -1086,30 +1091,26 @@
       </div>
     </section>
 
-    <section class="reveal" id="policy">
+    <section class="reveal" id="independence">
       <div class="shell split">
         <div>
-          <div class="section-label">Capture Policy</div>
-          <h2>The boundary is declared before the artifact exists.</h2>
+          <div class="section-label">Independent Review</div>
+          <h2>Verification does not require the artifact reviewer to live inside the originating system.</h2>
           <div style="margin-top:28px;max-width:720px;">
-            <p>CEYO artifacts are generated only from fields explicitly permitted within a governing capture policy.</p>
-            <p>That policy defines what may be recorded, what remains excluded, and what evidentiary scope the resulting artifact represents.</p>
-            <p>This allows institutions to constrain collection before artifact generation rather than relying on disclosure decisions after the fact.</p>
+            <p>Verification is designed to occur outside the model and outside the original runtime environment.</p>
+            <p>That separation matters. It allows an institution, counterparty, or downstream reviewer to evaluate the integrity and provenance of the artifact without requiring direct access to the full internal mechanics of the originating system.</p>
+            <p>This is why CEYO operates as an independent evidentiary layer rather than as a model-internal monitoring function.</p>
           </div>
         </div>
 
         <aside class="notes">
           <div class="note">
-            <h3>Declared scope</h3>
-            <p>Capture boundaries are defined before generation begins.</p>
+            <h3>External posture</h3>
+            <p>The reviewer evaluates the artifact from outside the originating system boundary.</p>
           </div>
           <div class="note">
-            <h3>Excluded fields</h3>
-            <p>Data outside the declared policy boundary remains outside the artifact.</p>
-          </div>
-          <div class="note">
-            <h3>Artifact boundary</h3>
-            <p>The resulting artifact represents only the permitted evidentiary scope.</p>
+            <h3>No model interference</h3>
+            <p>Verification does not require changing model weights or reopening runtime execution.</p>
           </div>
           <div class="note">
             <h3>Review implications</h3>
@@ -1119,7 +1120,7 @@
       </div>
     </section>
 
-    <section class="reveal" id="generation">
+    <section class="evidence-band reveal" id="flow">
       <div class="shell">
         <div class="section-label">Artifact Generation</div>
         <h2>From event context to sealed artifact.</h2>
@@ -1132,10 +1133,11 @@
             <p>Receive policy-permitted event data.</p>
           </article>
 
-          <article class="process-step">
-            <div class="process-index">Step 2</div>
-            <h3>Canonicalize</h3>
-            <p>Normalize the payload into deterministic form.</p>
+        <div class="flow-grid">
+          <article class="flow-step">
+            <div class="flow-index">Stage 1</div>
+            <h3>Interpret</h3>
+            <p>Read the artifact according to the protocol structure it claims to follow.</p>
           </article>
 
           <article class="process-step">
@@ -1150,10 +1152,10 @@
             <p>Apply signature controls using the active key context.</p>
           </article>
 
-          <article class="process-step">
-            <div class="process-index">Step 5</div>
-            <h3>Emit</h3>
-            <p>Produce an evidentiary artifact for verification and storage.</p>
+          <article class="flow-step">
+            <div class="flow-index">Stage 4</div>
+            <h3>Attribute</h3>
+            <p>Evaluate provenance against the declared key and signature context.</p>
           </article>
         </div>
       </div>
@@ -1244,10 +1246,10 @@
       </div>
     </section>
 
-    <section class="reveal" id="constraints">
+    <section class="reveal" id="limits">
       <div class="reading">
-        <div class="section-label">Constraints</div>
-        <h2>The platform is intentionally narrow.</h2>
+        <div class="section-label">Verification Limits</div>
+        <h2>Verification is narrower than adjudication.</h2>
         <div style="margin-top:28px;">
           <p>The CEYO platform is designed to generate and preserve evidentiary artifacts.</p>
           <p>It is not designed to replace adjudication, determine correctness, evaluate fairness, or resolve regulatory sufficiency.</p>
