@@ -169,7 +169,6 @@
       max-width:450px;
     }
 
-    /* brand mark updated to host orb */
     .brand-mark{
       width:56px;
       height:56px;
@@ -177,55 +176,10 @@
       border-radius:50%;
       border:1px solid rgba(231,237,245,.12);
       position:relative;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      background:radial-gradient(circle at 30% 20%, rgba(231,237,245,.14), rgba(231,237,245,.04));
-    }
-
-    /* CEYO orb (Perplexity-style) */
-    .ceyo-orb{
-      position:relative;
-      width:40px;
-      height:40px;
-      border-radius:50%;
-      background:radial-gradient(circle at 30% 30%, #48b3ff, #07111b 72%);
-      box-shadow:
-        0 0 16px rgba(72,179,255,.9),
-        0 0 38px rgba(72,179,255,.4);
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      overflow:visible;
-    }
-
-    .ceyo-orb::before,
-    .ceyo-orb::after{
-      content:"";
-      position:absolute;
-      inset:0;
-      border-radius:50%;
-      border:1.5px solid rgba(140,199,255,.7);
-      opacity:var(--orb-wave-opacity,.4);
-      transform:scale(var(--orb-wave-scale,1));
-      transition:
-        opacity 140ms ease-out,
-        transform 140ms ease-out;
-    }
-
-    .ceyo-orb::after{
-      inset:4px;
-      opacity:calc(var(--orb-wave-opacity,.4) * .7);
-    }
-
-    .ceyo-orb__inner{
-      width:13px;
-      height:13px;
-      border-radius:50%;
-      background:#ffffff;
-      box-shadow:0 0 20px rgba(255,255,255,.95);
-      transform:scale(1);
-      transition:transform 120ms ease-out;
+      background:
+        radial-gradient(circle at center, rgba(231,237,245,.16) 0 2px, transparent 2px 100%),
+        radial-gradient(circle at center, transparent 0 11px, rgba(231,237,245,.08) 11px 12px, transparent 12px 100%),
+        radial-gradient(circle at center, transparent 0 20px, rgba(231,237,245,.08) 20px 21px, transparent 21px 100%);
     }
 
     .brand-copy{
@@ -928,11 +882,6 @@
         flex-basis:48px;
       }
 
-      .ceyo-orb{
-        width:34px;
-        height:34px;
-      }
-
       .brand-copy span{display:none}
       .menu-label{display:none}
       .menu-pill{
@@ -1024,11 +973,7 @@
     <div class="shell">
       <div class="header-row">
         <a href="index.html" class="brand-pill glass-pill page-link" aria-label="CEYO home">
-          <span class="brand-mark" aria-hidden="true">
-            <span class="ceyo-orb">
-              <span class="ceyo-orb__inner"></span>
-            </span>
-          </span>
+          <span class="brand-mark" aria-hidden="true"></span>
           <span class="brand-copy">
             <strong>CEYO</strong>
             <span>Independent Evidentiary Infrastructure</span>
@@ -1076,11 +1021,194 @@
   </section>
 
   <main>
-    <!-- all your existing sections unchanged -->
-    <!-- ... (keep everything from your original index here) ... -->
+    <section class="reveal" id="why">
+      <div class="reading">
+        <div class="section-line"></div>
+        <div class="section-label">Why This Layer Exists</div>
+        <div class="problem-block">
+          <h2>AI-supported operations increasingly require evidence that can be reviewed later.</h2>
+          <p>AI systems increasingly participate in consequential workflows across institutional environments.</p>
+          <p>Yet in many deployments, outputs are produced without independent evidentiary records describing what was captured, what was sealed, and what remains available for later review.</p>
+          <p>Without structured evidence artifacts, institutions cannot reliably evaluate integrity, provenance, or chain-of-custody after the event.</p>
+        </div>
+      </div>
+    </section>
 
-    <!-- for brevity, I’m omitting repeated content;
-         keep the rest of your sections exactly as in your current file -->
+    <section class="reveal" id="what">
+      <div class="shell split">
+        <div>
+          <div class="section-label">What CEYO Is</div>
+          <h2>A verification layer for consequential AI operations.</h2>
+          <div style="margin-top:28px;max-width:760px;">
+            <p>CEYO produces deterministic evidentiary artifacts from policy-scoped inference events.</p>
+            <p>Those artifacts are designed to support later institutional review, chain-of-custody integrity, and independent verification without default disclosure of model internals, proprietary weights, or full system logic.</p>
+            <p>It is built for environments where AI-supported actions may require trusted review after the fact.</p>
+          </div>
+        </div>
+
+        <aside class="annotations">
+          <div class="annotation">
+            <h3>Objective</h3>
+            <p>CEYO introduces an independent evidentiary layer for AI-supported systems.</p>
+          </div>
+          <div class="annotation">
+            <h3>Output</h3>
+            <p>Policy-scoped, cryptographically sealed artifacts from AI-supported operations.</p>
+          </div>
+          <div class="annotation">
+            <h3>Review posture</h3>
+            <p>Later institutional verification without modifying the originating system.</p>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="band reveal" id="properties">
+      <div class="shell">
+        <div class="band-inner">
+          <div class="section-label">Core Properties</div>
+          <h2>What remains fixed.</h2>
+          <div class="standards-row" aria-label="Core properties">
+            <span class="standard-tag">Policy-Scoped</span>
+            <span class="standard-tag">Deterministic</span>
+            <span class="standard-tag">Cryptographically Sealed</span>
+            <span class="standard-tag">Independently Verifiable</span>
+          </div>
+          <p>Each artifact is generated within a declared capture boundary and sealed for later verification.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="reveal" id="boundary">
+      <div class="shell boundary-grid">
+        <div>
+          <div class="section-label">Boundary</div>
+          <h2>CEYO operates outside the model.</h2>
+          <div style="margin-top:28px;max-width:620px;">
+            <p>It does not modify, instrument, or interfere with AI inference.</p>
+            <p>It records only what a governing capture policy explicitly permits.</p>
+          </div>
+        </div>
+
+        <aside class="boundary-figure" aria-hidden="true">
+          <div class="boundary-visual">
+            <div class="boundary-grid-lines"></div>
+            <div class="boundary-zone boundary-zone-outer"></div>
+            <div class="boundary-zone boundary-zone-inner"></div>
+            <div class="boundary-node boundary-node-a"></div>
+            <div class="boundary-node boundary-node-b"></div>
+            <div class="boundary-node boundary-node-c"></div>
+            <div class="boundary-caption">Declared Capture Boundary</div>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="band reveal" id="mechanism">
+      <div class="shell">
+        <div class="section-label">Mechanism</div>
+        <h2>Record. Seal. Verify.</h2>
+        <p style="margin-top:22px;max-width:620px;">CEYO follows a fixed evidentiary sequence.</p>
+
+        <div class="mechanism-strip">
+          <article class="mechanism-step">
+            <div class="step-index">01 · Record</div>
+            <h3>Record</h3>
+            <p>Capture only declared fields within policy scope.</p>
+          </article>
+
+          <article class="mechanism-step">
+            <div class="step-index">02 · Seal</div>
+            <h3>Seal</h3>
+            <p>Canonicalize deterministically, hash the record, and apply cryptographic signature controls.</p>
+          </article>
+
+          <article class="mechanism-step">
+            <div class="step-index">03 · Verify</div>
+            <h3>Verify</h3>
+            <p>Allow an independent party to recompute integrity checks and validate provenance under declared policy scope.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="reveal" id="overview-forward">
+      <div class="shell">
+        <div class="section-label">Site Overview</div>
+        <h2>Each page addresses a different layer of the system.</h2>
+
+        <div class="overview-grid">
+          <article class="overview-card">
+            <h3>Platform</h3>
+            <p>System placement, policy capture, artifact generation, governance continuity, and storage posture.</p>
+          </article>
+
+          <article class="overview-card">
+            <h3>Protocol</h3>
+            <p>Artifact structure, deterministic representation, fingerprint derivation, and sealing rules.</p>
+          </article>
+
+          <article class="overview-card">
+            <h3>Verification and Trust</h3>
+            <p>Independent integrity checks, provenance validation, review posture, and institutional confidence.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="reveal" id="nonclaims">
+      <div class="reading">
+        <div class="section-label">What CEYO Does Not Claim</div>
+        <h2>Institutional discipline matters.</h2>
+        <div style="margin-top:28px;">
+          <p>CEYO is an evidentiary infrastructure. It is not a truth engine, a fairness engine, a compliance certification, a model auditor, or a replacement for institutional judgment.</p>
+          <p>Verification confirms integrity and provenance under declared policy scope. It does not prove decision correctness, legal sufficiency, or regulatory compliance outcomes.</p>
+        </div>
+
+        <div class="nonclaims-list" aria-label="Non-claims">
+          <span class="nonclaim">A Truth Engine</span>
+          <span class="nonclaim">A Fairness Engine</span>
+          <span class="nonclaim">A Compliance Certification</span>
+          <span class="nonclaim">A Model Auditor</span>
+          <span class="nonclaim">A Replacement for Institutional Judgment</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="reveal" id="next">
+      <div class="reading">
+        <div class="section-label">Next</div>
+        <h2>Review the system at the level you need.</h2>
+        <p style="margin-top:24px;max-width:44ch;">Built for institutional clarity, constrained disclosure, and independent review.</p>
+
+        <div class="next-index">
+          <a class="next-link page-link" href="platform.html">
+            <strong>Platform</strong>
+            <span>System placement, operational architecture, governance continuity, and evidentiary posture.</span>
+          </a>
+          <a class="next-link page-link" href="protocol.html">
+            <strong>Protocol</strong>
+            <span>Artifact structure, canonicalization rules, deterministic form, and sealing model.</span>
+          </a>
+          <a class="next-link page-link" href="verify.html">
+            <strong>Verification</strong>
+            <span>How integrity is checked independently after generation.</span>
+          </a>
+          <a class="next-link page-link" href="trust.html">
+            <strong>Trust</strong>
+            <span>Review posture, non-custodial controls, and institutional confidence.</span>
+          </a>
+          <a class="next-link page-link" href="resources.html">
+            <strong>Resources</strong>
+            <span>Sample artifacts, glossary, documentation, and supporting material.</span>
+          </a>
+          <a class="next-link page-link" href="contact.html">
+            <strong>Contact</strong>
+            <span>Request a walkthrough or continue the discussion directly.</span>
+          </a>
+        </div>
+      </div>
+    </section>
   </main>
 
   <footer>
@@ -1308,48 +1436,8 @@
 
       document.addEventListener("visibilitychange", () => {
         if (document.hidden && raf) cancelAnimationFrame(raf);
-        if (!document.hidden && !raf) draw();
+        if (!document.hidden) draw();
       });
-    }
-
-    /* scroll-driven orb animation */
-    const orb = document.querySelector(".ceyo-orb");
-    const orbInner = orb ? orb.querySelector(".ceyo-orb__inner") : null;
-
-    function updateOrbOnScroll(){
-      if (!orb || !orbInner || reduceMotion) return;
-
-      const scrollTop = window.scrollY || window.pageYOffset || 0;
-      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-      const progress = docHeight > 0 ? scrollTop / docHeight : 0;
-
-      const eased = 0.5 - 0.5 * Math.cos(progress * Math.PI);
-      const scale = 0.9 + eased * 0.6;
-      orbInner.style.transform = `scale(${scale})`;
-
-      const glowBoost = 0.2 + eased * 0.6;
-      orb.style.boxShadow =
-        `0 0 16px rgba(72,179,255,${0.7 + glowBoost}),` +
-        `0 0 38px rgba(72,179,255,${0.3 + glowBoost})`;
-
-      const waveScale = 1 + eased * 0.7;
-      const waveOpacity = 0.25 + (1 - eased) * 0.4;
-      orb.style.setProperty("--orb-wave-scale", waveScale.toString());
-      orb.style.setProperty("--orb-wave-opacity", waveOpacity.toString());
-    }
-
-    if (!reduceMotion) {
-      updateOrbOnScroll();
-      let tickingOrb = false;
-      window.addEventListener("scroll", () => {
-        if (!tickingOrb) {
-          window.requestAnimationFrame(() => {
-            updateOrbOnScroll();
-            tickingOrb = false;
-          });
-          tickingOrb = true;
-        }
-      }, { passive: true });
     }
   </script>
 </body>
