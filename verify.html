@@ -1,1048 +1,1282 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
-  <title>CEYO — Artifact Verifier</title>
-  <meta name="description" content="Verify a CEYO integrity-sealed artifact in your browser. Paste a sealed envelope and public key to confirm hash integrity and ECDSA P-256 signature — no server required."/>
-  <meta property="og:type" content="website"/>
-  <meta property="og:site_name" content="CEYO"/>
-  <meta property="og:title" content="CEYO — Artifact Verifier"/>
-  <meta property="og:description" content="Verify a CEYO integrity-sealed artifact in your browser. Paste a sealed envelope and public key to confirm hash integrity and ECDSA P-256 signature — no server required."/>
-  <meta property="og:url" content="https://ceyo.ai/verify.html"/>
-  <meta name="twitter:card" content="summary_large_image"/>
-  <meta name="twitter:title" content="CEYO — Artifact Verifier"/>
-  <meta name="twitter:description" content="Verify a CEYO integrity-sealed artifact in your browser. Paste a sealed envelope and public key to confirm hash integrity and ECDSA P-256 signature — no server required."/>
-  <meta name="theme-color" content="#0B0F14"/>
-
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
-
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>CEYO — Verification</title>
+  <meta name="description" content="CEYO verification — independent integrity checks, provenance validation, declared review context, and risk-oriented institutional review." />
+  <meta name="theme-color" content="#07111b" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&family=Cormorant+Garamond:wght@500;600;700&display=swap"
+    rel="stylesheet"
+  />
   <style>
     :root{
-      --ink:#0B0F14;
-      --textOnInk:#C9D1D9;
-      --accent:#3A320C;
-      --accent2:#C9A44A;
-      --maxW:1160px;
-      --readW:740px;
-      --r-lg:18px;
-      --s1:8px; --s2:16px; --s3:24px; --s4:32px; --s5:48px; --s6:64px; --s7:96px;
-      --lh:1.65;
-      --shadow:0 10px 30px rgba(0,0,0,.25);
-      --shadow2:0 18px 60px rgba(0,0,0,.35);
-      --mono:'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-      --ui:'Inter', system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
-      --navH:72px;
+      --bg:#07111b;
+      --bg-2:#0a1726;
+      --bg-3:#102137;
+      --text:#e7edf5;
+      --muted:rgba(231,237,245,.74);
+      --soft:rgba(231,237,245,.5);
+      --line:rgba(231,237,245,.11);
+      --line-strong:rgba(231,237,245,.18);
+      --off:#e8e4db;
+      --ink:#152235;
+      --max:1320px;
+      --read:780px;
+      --ease:cubic-bezier(.22,1,.36,1);
+      --shadow:0 24px 80px rgba(0,0,0,.28);
+      --radius-xl:34px;
+      --radius-lg:22px;
     }
 
     *{box-sizing:border-box}
-    html{ background:var(--ink); scroll-behavior:smooth; scroll-padding-top: calc(var(--navH) + 24px); }
-    body{ margin:0; font-family:var(--ui); color:var(--textOnInk); background:var(--ink); -webkit-text-size-adjust:100%; overflow-x:hidden; }
-    a{color:inherit;text-decoration:none}
-    button{font:inherit}
-    [id]{ scroll-margin-top: calc(var(--navH) + 24px); }
-
-    .bg{
-      position:fixed; inset:0; pointer-events:none; z-index:0;
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      min-height:100vh;
+      color:var(--text);
+      font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
       background:
-        radial-gradient(900px 520px at 40% 10%, rgba(58,50,12,.18), transparent 62%),
-        radial-gradient(820px 520px at 82% 34%, rgba(201,164,74,.07), transparent 64%),
-        linear-gradient(180deg, #0B0F14 0%, #0A0D12 40%, #0B0F14 100%);
+        radial-gradient(circle at 12% 12%, rgba(74,113,170,.18), transparent 24%),
+        radial-gradient(circle at 84% 18%, rgba(48,79,125,.15), transparent 22%),
+        radial-gradient(circle at 50% 120%, rgba(33,63,104,.18), transparent 36%),
+        linear-gradient(180deg, #05101a 0%, #07111b 34%, #07131f 100%);
+      overflow-x:hidden;
+      position:relative;
     }
 
-    .wrap{ position:relative; z-index:1; max-width:var(--maxW); margin:0 auto; padding:0 var(--s4); }
-    @media (max-width: 640px){ .wrap{ padding:0 18px; } }
-
-    header.site{
-      position:sticky; top:0; z-index:50;
-      backdrop-filter: blur(10px);
-      background: rgba(11,15,20,.72);
-      border-bottom:1px solid rgba(255,255,255,.06);
-    }
-    .nav{
-      height: calc(var(--navH) + env(safe-area-inset-top));
-      padding-top: env(safe-area-inset-top);
-      display:flex; align-items:center; justify-content:space-between; gap:var(--s3);
-    }
-
-    .logo{ display:flex; align-items:center; gap:10px; font-weight:600; letter-spacing:-.01em; flex:0 0 auto; }
-    .logo .mark{
-      display:inline-flex; align-items:center; gap:10px;
-      padding:10px 12px; border-radius:999px;
-      border:1px solid rgba(255,255,255,.08);
-      background: rgba(255,255,255,.02);
-    }
-    .logo .dot{
-      width:8px; height:8px; border-radius:50%;
-      background: var(--accent2);
-      box-shadow: 0 0 0 4px rgba(201,164,74,.12);
+    body::before{
+      content:"";
+      position:fixed;
+      inset:0;
+      z-index:-2;
+      pointer-events:none;
+      background:
+        linear-gradient(rgba(255,255,255,.022) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.022) 1px, transparent 1px);
+      background-size:88px 88px;
+      mask-image:radial-gradient(circle at center, black 34%, transparent 88%);
+      opacity:.48;
     }
 
-    .actions{ display:flex; align-items:center; gap:10px; justify-content:flex-end; flex:0 0 auto; }
+    body::after{
+      content:"";
+      position:fixed;
+      inset:0;
+      z-index:-1;
+      pointer-events:none;
+      background-image:
+        radial-gradient(rgba(255,255,255,.05) .7px, transparent .7px),
+        radial-gradient(rgba(255,255,255,.03) .8px, transparent .8px);
+      background-size:19px 19px, 23px 23px;
+      background-position:0 0, 14px 17px;
+      opacity:.1;
+      mix-blend-mode:soft-light;
+    }
+
+    a{color:inherit;text-decoration:none}
+    button{
+      border:0;
+      background:none;
+      color:inherit;
+      font:inherit;
+      cursor:pointer;
+    }
+
+    .shell{
+      width:min(calc(100% - 36px), var(--max));
+      margin:0 auto;
+    }
+
+    .reading{
+      width:min(calc(100% - 36px), var(--read));
+      margin:0 auto;
+    }
+
+    .mono,.section-label,.eyebrow{
+      font-family:"IBM Plex Mono", monospace;
+      text-transform:uppercase;
+      letter-spacing:.15em;
+      font-size:.72rem;
+      color:var(--soft);
+    }
+
+    .page-wipe{
+      position:fixed;
+      inset:0;
+      z-index:180;
+      pointer-events:none;
+      background:linear-gradient(180deg, rgba(7,17,27,.99), rgba(8,18,29,.995));
+      transform:translateY(100%);
+      transition:transform 900ms var(--ease);
+    }
+
+    .page-wipe.active{transform:translateY(0)}
+
+    header{
+      position:sticky;
+      top:0;
+      z-index:100;
+      padding:16px 0 0;
+      transition:padding 320ms var(--ease);
+    }
+
+    header.scrolled{padding-top:10px}
+
+    .header-row{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:14px;
+    }
+
+    .glass-pill{
+      backdrop-filter:blur(16px) saturate(135%);
+      -webkit-backdrop-filter:blur(16px) saturate(135%);
+      background:linear-gradient(180deg, rgba(255,255,255,.075), rgba(255,255,255,.045));
+      border:1px solid rgba(231,237,245,.12);
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.06), 0 24px 80px rgba(0,0,0,.28);
+      position:relative;
+      overflow:hidden;
+    }
+
+    .glass-pill::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:linear-gradient(120deg, transparent 20%, rgba(255,255,255,.08) 48%, transparent 74%);
+      transform:translateX(-120%);
+      animation:sheen 9s linear infinite;
+      pointer-events:none;
+    }
+
+    @keyframes sheen{to{transform:translateX(120%)}}
+
+    .brand-pill,
+    .menu-pill{
+      min-height:72px;
+      border-radius:999px;
+    }
+
+    .brand-pill{
+      display:flex;
+      align-items:center;
+      gap:14px;
+      padding:10px 22px 10px 14px;
+      flex:1 1 auto;
+      max-width:450px;
+    }
+
+    .brand-mark{
+      width:56px;
+      height:56px;
+      flex:0 0 56px;
+      border-radius:50%;
+      border:1px solid rgba(231,237,245,.12);
+      position:relative;
+      background:
+        radial-gradient(circle at center, rgba(231,237,245,.16) 0 2px, transparent 2px 100%),
+        radial-gradient(circle at center, transparent 0 11px, rgba(231,237,245,.08) 11px 12px, transparent 12px 100%),
+        radial-gradient(circle at center, transparent 0 20px, rgba(231,237,245,.08) 20px 21px, transparent 21px 100%);
+    }
+
+    .brand-copy{
+      display:grid;
+      gap:3px;
+      line-height:1;
+      min-width:0;
+    }
+
+    .brand-copy strong{
+      font-size:1rem;
+      font-weight:700;
+      letter-spacing:-.03em;
+    }
+
+    .brand-copy span{
+      font-size:.64rem;
+      text-transform:uppercase;
+      letter-spacing:.14em;
+      color:rgba(231,237,245,.64);
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+
+    .menu-pill{
+      display:inline-flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+      padding:0 22px 0 26px;
+      min-width:210px;
+    }
+
+    .menu-label{
+      font-size:1rem;
+      letter-spacing:-.02em;
+      font-weight:500;
+    }
+
+    .hamburger{
+      width:32px;
+      height:22px;
+      position:relative;
+      display:inline-block;
+      flex:0 0 32px;
+    }
+
+    .hamburger span{
+      position:absolute;
+      left:0; right:0;
+      height:2px;
+      background:var(--text);
+      border-radius:999px;
+      transition:transform 320ms var(--ease), top 320ms var(--ease), opacity 220ms ease;
+    }
+
+    .hamburger span:nth-child(1){top:2px}
+    .hamburger span:nth-child(2){top:10px}
+    .hamburger span:nth-child(3){top:18px}
+
+    body.menu-open .hamburger span:nth-child(1){top:10px;transform:rotate(45deg)}
+    body.menu-open .hamburger span:nth-child(2){opacity:0}
+    body.menu-open .hamburger span:nth-child(3){top:10px;transform:rotate(-45deg)}
+
+    .nav-overlay{
+      position:fixed;
+      inset:0;
+      z-index:150;
+      padding:18px;
+      background:rgba(6,13,21,.88);
+      backdrop-filter:blur(18px);
+      -webkit-backdrop-filter:blur(18px);
+      opacity:0;
+      visibility:hidden;
+      transition:opacity 340ms ease, visibility 340ms ease;
+    }
+
+    .nav-overlay.open{
+      opacity:1;
+      visibility:visible;
+    }
+
+    .nav-sheet{
+      width:min(100%, 1320px);
+      min-height:calc(100vh - 36px);
+      margin:0 auto;
+      border-radius:var(--radius-xl);
+      border:1px solid var(--line);
+      background:linear-gradient(180deg, rgba(10,20,32,.97), rgba(8,16,27,.99));
+      padding:30px;
+      display:grid;
+      grid-template-columns:1fr 220px;
+      gap:40px;
+      transform:translateY(-22px);
+      transition:transform 480ms var(--ease);
+      box-shadow:0 24px 80px rgba(0,0,0,.28);
+    }
+
+    .nav-overlay.open .nav-sheet{transform:translateY(0)}
+
+    .nav-links{
+      display:grid;
+      align-content:start;
+      gap:0;
+    }
+
+    .nav-link{
+      display:block;
+      padding:18px 0;
+      border-bottom:1px solid rgba(231,237,245,.09);
+      font-family:"Cormorant Garamond", serif;
+      font-size:clamp(2.2rem,5vw,4.6rem);
+      line-height:.96;
+      letter-spacing:-.045em;
+      color:var(--off);
+      transition:transform 260ms var(--ease), color 220ms ease;
+    }
+
+    .nav-link:hover{transform:translateX(8px);color:#fff9ef}
+
+    .nav-side{
+      align-self:end;
+      border-left:1px solid var(--line);
+      padding-left:22px;
+      display:flex;
+      flex-direction:column;
+      justify-content:flex-end;
+      min-height:120px;
+    }
+
+    .nav-side-rule{
+      width:100%;
+      max-width:120px;
+      height:1px;
+      margin-top:14px;
+      background:linear-gradient(90deg, rgba(231,237,245,.22), rgba(231,237,245,0));
+    }
+
+    .page-hero{
+      position:relative;
+      padding:96px 0 36px;
+      overflow:clip;
+    }
+
+    .page-hero::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:
+        radial-gradient(circle at 18% 20%, rgba(79,115,176,.10), transparent 24%),
+        radial-gradient(circle at 82% 24%, rgba(56,88,135,.10), transparent 22%);
+      pointer-events:none;
+    }
+
+    .hero-inner{
+      position:relative;
+      z-index:1;
+      display:grid;
+      grid-template-columns:minmax(0, 1fr) 320px;
+      gap:42px;
+      align-items:end;
+    }
+
+    .hero-rule{
+      width:86px;
+      height:1px;
+      background:rgba(232,228,219,.34);
+      margin-bottom:18px;
+    }
+
+    .page-hero h1{
+      margin:0;
+      font-family:"Cormorant Garamond", serif;
+      font-weight:600;
+      font-size:clamp(3rem, 6vw, 5.8rem);
+      line-height:.94;
+      letter-spacing:-.05em;
+      color:var(--off);
+      max-width:10.2ch;
+      text-wrap:balance;
+    }
+
+    .page-hero p{
+      margin:22px 0 0;
+      max-width:54ch;
+      font-size:clamp(1.04rem, 1.45vw, 1.2rem);
+      line-height:1.82;
+      color:var(--muted);
+    }
+
+    .hero-actions{
+      display:flex;
+      flex-wrap:wrap;
+      gap:14px;
+      margin-top:26px;
+    }
 
     .btn{
-      height:48px; padding:0 18px; border-radius:999px;
-      border:1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.02);
-      color: rgba(201,209,217,.98);
-      display:inline-flex; align-items:center; justify-content:center;
-      font-size:14px;
-      transition: transform .18s ease, border-color .18s ease, background .18s ease;
-      white-space:nowrap;
-      cursor:pointer;
+      min-height:56px;
+      padding:0 22px;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      border-radius:999px;
+      border:1px solid var(--line);
+      transition:transform 240ms var(--ease), background 220ms ease, border-color 220ms ease;
+      font-weight:600;
+      letter-spacing:-.02em;
     }
-    .btn:hover{ transform: translateY(-1px); border-color: rgba(201,164,74,.35); background: rgba(255,255,255,.04); }
-    .btn.primary{
-      border-color: rgba(201,164,74,.50);
-      background: rgba(201,164,74,.10);
-      color: rgba(245,242,234,.96);
-    }
-    .btn.primary:hover{ background: rgba(201,164,74,.16); }
-    .btn .arr{ display:inline-block; margin-left:10px; transition: transform .16s ease; }
-    .btn:hover .arr{ transform: translateX(3px); }
-    .btn:disabled{ opacity:.45; cursor:default; transform:none; }
 
-    .menuBtn{
-      height:48px; padding:0 16px; border-radius:999px;
-      border:1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.02);
-      color: rgba(201,209,217,.95);
-      display:inline-flex; align-items:center; justify-content:center;
-      gap:10px; cursor:pointer;
-      transition: transform .18s ease, border-color .18s ease, background .18s ease;
-      white-space:nowrap;
-    }
-    .menuBtn:hover{ transform: translateY(-1px); border-color: rgba(201,164,74,.35); background: rgba(255,255,255,.04); }
-    .menuBtn .m{ font-family: var(--mono); font-size: 12px; letter-spacing: .16em; text-transform: uppercase; }
+    .btn:hover{transform:translateY(-2px)}
 
-    @media (max-width: 980px){ .actions .btn.secondary{ display:none; } }
-
-    .drawer{
-      position:fixed; inset:0; z-index:80;
-      display:none;
-      background: rgba(11,15,20,.72);
-      backdrop-filter: blur(10px);
-      padding: calc(env(safe-area-inset-top) + 12px) 18px 18px;
+    .btn-primary{
+      background:var(--off);
+      color:var(--ink);
+      border-color:rgba(255,255,255,.16);
     }
-    .drawer.open{ display:block; }
-    .drawerCard{
-      max-width: 680px; margin: 0 auto;
-      border:1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.03);
-      border-radius: var(--r-lg);
-      box-shadow: var(--shadow2);
+
+    .btn-secondary{
+      background:rgba(255,255,255,.035);
+      color:var(--text);
+    }
+
+    .hero-side{
+      border-left:1px solid var(--line);
+      padding-left:22px;
+      display:grid;
+      gap:14px;
+      align-self:end;
+    }
+
+    .hero-side p{
+      margin:0;
+      color:var(--muted);
+      font-size:.95rem;
+      line-height:1.72;
+      max-width:28ch;
+    }
+
+    main{position:relative;z-index:2}
+
+    section{
+      position:relative;
+      padding:116px 0;
+    }
+
+    .reveal{
+      opacity:0;
+      transform:translateY(24px);
+      transition:opacity 760ms ease, transform 760ms var(--ease);
+    }
+
+    .reveal.is-visible{
+      opacity:1;
+      transform:translateY(0);
+    }
+
+    .section-line{
+      width:100%;
+      height:1px;
+      background:linear-gradient(90deg, var(--line-strong), rgba(231,237,245,0));
+      margin-bottom:26px;
+    }
+
+    h2{
+      margin:0;
+      font-family:"Cormorant Garamond", serif;
+      font-weight:600;
+      font-size:clamp(2.5rem, 5vw, 5.2rem);
+      line-height:.96;
+      letter-spacing:-.045em;
+      color:var(--off);
+      text-wrap:balance;
+    }
+
+    p{
+      margin:0;
+      font-size:clamp(1rem, 1.24vw, 1.1rem);
+      line-height:1.84;
+      color:var(--muted);
+    }
+
+    p + p{margin-top:18px}
+
+    .review-sheet{
+      display:grid;
+      grid-template-columns:minmax(0, 1fr) 360px;
+      gap:48px;
+      align-items:start;
+    }
+
+    .sheet-panel{
+      border:1px solid var(--line);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.025), rgba(255,255,255,.01));
       overflow:hidden;
     }
-    .drawerHead{
-      display:flex; align-items:center; justify-content:space-between;
-      padding: 14px 14px;
-      border-bottom:1px solid rgba(255,255,255,.08);
-    }
-    .drawerHead .t{ font-family: var(--mono); font-size:12px; letter-spacing:.18em; text-transform:uppercase; color: rgba(201,209,217,.82); }
-    .close{
-      height:44px; padding:0 14px; border-radius:999px;
-      border:1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.02);
-      color: rgba(201,209,217,.92);
-      cursor:pointer;
-    }
-    .drawerLinks{ display:grid; grid-template-columns: 1fr; padding: 10px; gap: 8px; }
-    .drawerLinks a{
-      padding: 14px 14px; border-radius: 14px;
-      border:1px solid rgba(255,255,255,.06);
-      background: rgba(255,255,255,.02);
-      font-size: 15px;
-      transition: transform .18s ease, border-color .18s ease;
-    }
-    .drawerLinks a:hover{ transform: translateY(-1px); border-color: rgba(201,164,74,.28); }
-    .drawerLinks a.active{ border-color: rgba(201,164,74,.35); background: rgba(201,164,74,.10); }
 
-    .read{ max-width: var(--readW); }
-    p{ margin: 0 0 14px 0; line-height: var(--lh); }
-    .muted{ color: rgba(201,209,217,.78); }
-
-    main{ padding-top: calc(var(--navH) + var(--s4)); padding-bottom: var(--s7); }
-    section{ padding: var(--s7) 0; border-top:1px solid rgba(255,255,255,.06); }
-    section:first-of-type{ border-top:none; padding-top: 0; }
-
-    .eyebrow{
-      font-family: var(--mono);
-      font-size: 12px; letter-spacing: .18em;
-      text-transform: uppercase;
-      color: rgba(201,164,74,.92);
-      margin-bottom: 12px;
-    }
-    h1{ font-size: 46px; line-height: 1.15; letter-spacing: -0.02em; margin: 0 0 14px 0; font-weight: 600; }
-    h2{ font-size: 30px; line-height: 1.20; letter-spacing: -0.01em; margin: 0 0 12px 0; font-weight: 600; }
-    h3{ font-size: 20px; line-height: 1.25; margin: 0 0 10px 0; font-weight: 600; }
-    @media (max-width: 640px){ h1{ font-size: 32px; } h2{ font-size: 24px; } h3{ font-size: 19px; } }
-
-    .callout{
-      border:1px solid rgba(201,164,74,.22);
-      background: rgba(11,15,20,.60);
-      border-radius: var(--r-lg);
-      padding: 16px 16px;
-      margin-top: 16px;
-    }
-    .calloutTop{
-      display:flex; align-items:baseline; justify-content:space-between; gap:12px; flex-wrap:wrap;
-      margin-bottom: 8px;
-    }
-    .labelChip{
-      display:inline-flex; align-items:center; gap:8px;
-      padding: 8px 10px; border-radius: 999px;
-      border:1px solid rgba(201,164,74,.38);
-      background: rgba(201,164,74,.10);
-      color: rgba(245,242,234,.92);
-      font-family: var(--mono);
-      font-size: 11px; letter-spacing: .12em; text-transform: uppercase;
-    }
-    .callout ul{ margin: 0; padding: 0 0 0 18px; }
-    .callout li{ margin: 8px 0; color: rgba(201,209,217,.84); line-height: 1.55; }
-
-    footer{ border-top:1px solid rgba(255,255,255,.06); padding: var(--s7) 0 var(--s6); }
-    .footGrid{
-      display:grid; grid-template-columns: 1.2fr 1fr 1fr 1fr;
-      gap: 14px; margin-bottom: 22px;
-    }
-    @media (max-width: 980px){ .footGrid{ grid-template-columns: 1fr 1fr; } }
-    @media (max-width: 640px){ .footGrid{ grid-template-columns: 1fr; } }
-    .footCol{
-      border:1px solid rgba(255,255,255,.08);
-      background: rgba(255,255,255,.02);
-      border-radius: var(--r-lg);
-      padding: 18px 18px;
-    }
-    .footCol .t{ font-family: var(--mono); font-size: 12px; letter-spacing: .18em; text-transform: uppercase; color: rgba(201,164,74,.86); margin-bottom: 10px; }
-    .footCol a{ display:block; padding: 10px 10px; border-radius: 12px; border:1px solid transparent; color: rgba(201,209,217,.84); transition: background .18s ease, border-color .18s ease; }
-    .footCol a:hover{ background: rgba(255,255,255,.03); border-color: rgba(255,255,255,.06); }
-    .footBottom{
-      display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap;
-      font-family: var(--mono); font-size: 12px; letter-spacing: .14em; text-transform: uppercase;
-      color: rgba(201,209,217,.62); padding-top: 18px; border-top:1px solid rgba(255,255,255,.06);
+    .sheet-head{
+      display:grid;
+      grid-template-columns:1fr auto;
+      gap:18px;
+      padding:16px 18px;
+      border-bottom:1px solid var(--line);
+      background:rgba(255,255,255,.02);
     }
 
-    .reveal{ opacity:0; transform: translateY(10px); transition: opacity .55s ease, transform .55s ease; }
-    .reveal.on{ opacity:1; transform: translateY(0); }
+    .sheet-head strong{
+      font-size:.92rem;
+      font-weight:600;
+      color:var(--off);
+      letter-spacing:-.02em;
+    }
+
+    .sheet-head span{
+      font-family:"IBM Plex Mono", monospace;
+      font-size:.66rem;
+      letter-spacing:.14em;
+      text-transform:uppercase;
+      color:var(--soft);
+    }
+
+    .sheet-body{
+      display:grid;
+    }
+
+    .sheet-row{
+      display:grid;
+      grid-template-columns:160px 1fr;
+      gap:18px;
+      padding:14px 18px;
+      border-bottom:1px solid rgba(231,237,245,.08);
+    }
+
+    .sheet-row:last-child{border-bottom:0}
+
+    .sheet-row .k{
+      font-family:"IBM Plex Mono", monospace;
+      font-size:.7rem;
+      letter-spacing:.14em;
+      text-transform:uppercase;
+      color:rgba(232,228,219,.68);
+      padding-top:2px;
+    }
+
+    .sheet-row .v{
+      color:rgba(231,237,245,.82);
+      line-height:1.72;
+      font-size:.95rem;
+    }
+
+    .ledger{
+      margin-top:34px;
+      border-top:1px solid var(--line-strong);
+      display:grid;
+      gap:0;
+    }
+
+    .ledger-row{
+      display:grid;
+      grid-template-columns:90px 250px 1fr;
+      gap:24px;
+      padding:24px 0;
+      border-bottom:1px solid var(--line);
+      align-items:start;
+    }
+
+    .ledger-row .l-no{
+      font-family:"IBM Plex Mono", monospace;
+      text-transform:uppercase;
+      letter-spacing:.14em;
+      font-size:.76rem;
+      color:var(--soft);
+      padding-top:4px;
+    }
+
+    .ledger-row h3{
+      margin:0;
+      font-size:1.12rem;
+      font-weight:700;
+      color:var(--off);
+      letter-spacing:-.03em;
+      line-height:1.3;
+    }
+
+    .evidence-band{
+      background:
+        linear-gradient(180deg, #e8e4db 0%, #ddd7ca 100%);
+      color:var(--ink);
+      border-top:1px solid rgba(20,33,49,.10);
+      border-bottom:1px solid rgba(20,33,49,.10);
+    }
+
+    .evidence-band .section-label,
+    .evidence-band p{
+      color:rgba(20,33,49,.74);
+    }
+
+    .evidence-band h2{color:var(--ink)}
+
+    .video-module{
+      display:grid;
+      grid-template-columns:minmax(0, 1fr) minmax(320px, 540px);
+      gap:32px;
+      align-items:center;
+      margin-top:34px;
+    }
+
+    .video-copy{
+      max-width:640px;
+    }
+
+    .video-copy h3{
+      margin:0 0 14px;
+      font-size:clamp(1.6rem,2.2vw,2.2rem);
+      line-height:1.04;
+      letter-spacing:-.03em;
+      color:var(--ink);
+    }
+
+    .video-frame{
+      position:relative;
+      width:100%;
+      overflow:hidden;
+      border:1px solid rgba(20,33,49,.12);
+      background:rgba(20,33,49,.03);
+    }
+
+    .video-el{
+      display:block;
+      width:100%;
+      height:auto;
+      object-fit:cover;
+    }
+
+    .split{
+      display:grid;
+      grid-template-columns:minmax(0, 1fr) 340px;
+      gap:52px;
+      align-items:start;
+    }
+
+    .notes{
+      border-left:1px solid var(--line);
+      padding-left:22px;
+      display:grid;
+      gap:22px;
+    }
+
+    .note{
+      padding-bottom:20px;
+      border-bottom:1px solid rgba(231,237,245,.08);
+    }
+
+    .note:last-child{
+      padding-bottom:0;
+      border-bottom:0;
+    }
+
+    .note h3{
+      margin:0 0 9px;
+      font-family:"IBM Plex Mono", monospace;
+      text-transform:uppercase;
+      letter-spacing:.15em;
+      font-size:.72rem;
+      color:rgba(232,228,219,.72);
+    }
+
+    .note p{
+      font-size:.97rem;
+      color:rgba(231,237,245,.82);
+      line-height:1.72;
+    }
+
+    .status-grid{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:18px;
+      margin-top:34px;
+    }
+
+    .status-card{
+      min-height:220px;
+      border-top:1px solid var(--line-strong);
+      padding-top:18px;
+      display:grid;
+      align-content:start;
+      gap:12px;
+    }
+
+    .status-card h3{
+      margin:0;
+      font-size:1.1rem;
+      font-weight:700;
+      color:var(--off);
+      letter-spacing:-.03em;
+    }
+
+    .limits-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:34px;
+      margin-top:34px;
+    }
+
+    .limit-block{
+      border-top:1px solid var(--line-strong);
+      padding-top:20px;
+      display:grid;
+      gap:14px;
+    }
+
+    .limit-block h3{
+      margin:0;
+      font-size:1.16rem;
+      font-weight:700;
+      color:var(--off);
+      letter-spacing:-.03em;
+    }
+
+    .constraint-list{
+      display:flex;
+      flex-wrap:wrap;
+      gap:12px;
+      margin-top:28px;
+    }
+
+    .constraint{
+      border:1px solid var(--line);
+      min-height:40px;
+      display:inline-flex;
+      align-items:center;
+      padding:0 14px;
+      font-size:.94rem;
+      color:var(--off);
+      background:rgba(255,255,255,.02);
+      letter-spacing:-.02em;
+      font-weight:500;
+      border-radius:999px;
+    }
+
+    .next-index{
+      border-top:1px solid var(--line-strong);
+      margin-top:30px;
+    }
+
+    .next-link{
+      display:grid;
+      grid-template-columns:220px 1fr;
+      gap:18px;
+      align-items:start;
+      padding:20px 0;
+      border-bottom:1px solid var(--line);
+      transition:transform 240ms var(--ease), color 220ms ease;
+    }
+
+    .next-link:hover{transform:translateX(6px)}
+
+    .next-link strong{
+      font-size:1.18rem;
+      font-weight:700;
+      letter-spacing:-.03em;
+      color:var(--off);
+    }
+
+    .next-link span{
+      color:var(--muted);
+      line-height:1.76;
+      max-width:54ch;
+    }
+
+    footer{
+      padding:8px 0 32px;
+    }
+
+    .footer-shell{
+      padding-bottom:6px;
+    }
+
+    .footer-line{
+      border-top:1px solid var(--line);
+      padding-top:22px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:18px;
+      flex-wrap:wrap;
+      color:rgba(231,237,245,.56);
+      font-size:.88rem;
+      letter-spacing:.02em;
+    }
+
+    .footer-left{
+      white-space:nowrap;
+    }
+
+    .footer-right{
+      display:flex;
+      flex-wrap:wrap;
+      gap:18px;
+    }
+
+    .footer-right a{
+      color:rgba(231,237,245,.56);
+      transition:color 200ms ease;
+    }
+
+    .footer-right a:hover{
+      color:rgba(231,237,245,.88);
+    }
+
+    @media (max-width:1080px){
+      .hero-inner,
+      .review-sheet,
+      .split,
+      .video-module,
+      .nav-sheet{
+        grid-template-columns:1fr;
+      }
+
+      .hero-side,
+      .notes,
+      .nav-side{
+        border-left:0;
+        padding-left:0;
+      }
+
+      .status-grid,
+      .limits-grid{
+        grid-template-columns:1fr;
+      }
+    }
+
+    @media (max-width:840px){
+      .ledger-row{
+        grid-template-columns:1fr;
+        gap:12px;
+      }
+
+      .sheet-row{
+        grid-template-columns:1fr;
+        gap:10px;
+      }
+
+      .next-link{
+        grid-template-columns:1fr;
+        gap:10px;
+      }
+    }
+
+    @media (max-width:760px){
+      .shell,.reading{
+        width:min(calc(100% - 24px), var(--max));
+      }
+
+      header{padding-top:10px}
+      header.scrolled{padding-top:8px}
+
+      .brand-pill,
+      .menu-pill{
+        min-height:64px;
+      }
+
+      .brand-pill{
+        padding:10px 14px 10px 12px;
+      }
+
+      .brand-mark{
+        width:48px;
+        height:48px;
+        flex-basis:48px;
+      }
+
+      .brand-copy span{display:none}
+      .menu-label{display:none}
+      .menu-pill{
+        min-width:126px;
+        padding:0 18px;
+      }
+
+      .page-hero{
+        padding:82px 0 30px;
+      }
+
+      .hero-actions{
+        flex-direction:column;
+        align-items:stretch;
+      }
+
+      .btn{width:100%}
+
+      section{padding:84px 0}
+
+      .footer-line{
+        flex-direction:column;
+        align-items:flex-start;
+      }
+
+      .footer-right{
+        gap:14px;
+      }
+    }
+
     @media (prefers-reduced-motion: reduce){
-      html{scroll-behavior:auto;}
-      .reveal{ opacity:1; transform:none; transition:none; }
-      .btn, .drawerLinks a, .menuBtn{ transition:none; }
+      html{scroll-behavior:auto}
+      *,*::before,*::after{
+        animation-duration:.01ms !important;
+        animation-iteration-count:1 !important;
+        transition-duration:.01ms !important;
+      }
     }
-
-    /* ── Verifier-specific ── */
-
-    .inputGrid{
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 14px;
-      margin-top: 24px;
-    }
-    @media (max-width: 860px){ .inputGrid{ grid-template-columns: 1fr; } }
-
-    .inputBlock{
-      border:1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.02);
-      border-radius: var(--r-lg);
-      overflow:hidden;
-      display:flex; flex-direction:column;
-    }
-    .inputHead{
-      display:flex; align-items:center; justify-content:space-between;
-      padding: 11px 14px;
-      border-bottom:1px solid rgba(255,255,255,.08);
-      background: rgba(255,255,255,.02);
-      flex-shrink:0;
-    }
-    .inputHead .lbl{
-      font-family: var(--mono); font-size: 11px;
-      letter-spacing: .16em; text-transform: uppercase;
-      color: rgba(201,164,74,.86);
-    }
-    .inputHead .opt{
-      font-family: var(--mono); font-size: 10px;
-      color: rgba(201,209,217,.42); letter-spacing: .08em;
-    }
-    textarea.field{
-      width: 100%; flex: 1;
-      background: transparent; border: none; outline: none;
-      color: rgba(201,209,217,.90);
-      font-family: var(--mono); font-size: 12px; line-height: 1.6;
-      padding: 14px; resize: vertical; min-height: 200px;
-    }
-    textarea.field::placeholder{ color: rgba(201,209,217,.28); }
-
-    .actionRow{ display:flex; gap:10px; flex-wrap:wrap; margin-top: 16px; align-items:center; }
-    .actionRow .hint{
-      font-family: var(--mono); font-size: 11px;
-      color: rgba(201,209,217,.42); letter-spacing: .08em;
-    }
-
-    /* Results */
-    .results{ margin-top: 32px; display:none; }
-    .results.visible{ display:block; }
-
-    .statusBanner{
-      border-radius: var(--r-lg); padding: 18px 20px;
-      display:flex; align-items:flex-start; gap:14px; margin-bottom: 20px;
-    }
-    .statusBanner.pass{ border:1px solid rgba(110,231,183,.22); background: rgba(16,185,129,.07); }
-    .statusBanner.fail{ border:1px solid rgba(239,68,68,.22); background: rgba(239,68,68,.07); }
-    .statusBanner.partial{ border:1px solid rgba(201,164,74,.26); background: rgba(201,164,74,.06); }
-    .statusBanner .sIcon{ font-size: 22px; flex:0 0 auto; margin-top:1px; }
-    .statusBanner .sBody{}
-    .statusBanner .sTitle{ font-size: 16px; font-weight: 600; letter-spacing:-.01em; margin-bottom: 4px; }
-    .statusBanner .sSub{ font-size: 13px; color: rgba(201,209,217,.70); line-height: 1.5; }
-
-    .stepGrid{
-      display:grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 12px; margin-bottom: 20px;
-    }
-    @media (max-width: 760px){ .stepGrid{ grid-template-columns: 1fr; } }
-
-    .stepCard{
-      border:1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.02);
-      border-radius: 14px; padding: 14px;
-    }
-    .stepCard .scHead{ display:flex; align-items:center; justify-content:space-between; margin-bottom: 8px; }
-    .stepCard .scTitle{
-      font-family: var(--mono); font-size: 11px;
-      letter-spacing: .14em; text-transform: uppercase;
-      color: rgba(201,209,217,.70);
-    }
-    .stepCard .scDetail{ font-size: 13px; color: rgba(201,209,217,.66); line-height: 1.55; }
-
-    .badge{
-      display:inline-flex; align-items:center; gap:5px;
-      padding: 4px 9px; border-radius: 999px;
-      font-family: var(--mono); font-size: 10px;
-      letter-spacing: .10em; text-transform: uppercase; font-weight: 500;
-    }
-    .badge.pass{ border:1px solid rgba(110,231,183,.30); background: rgba(16,185,129,.10); color: rgba(110,231,183,.92); }
-    .badge.fail{ border:1px solid rgba(239,68,68,.30); background: rgba(239,68,68,.10); color: rgba(252,165,165,.92); }
-    .badge.skip{ border:1px solid rgba(255,255,255,.12); background: rgba(255,255,255,.04); color: rgba(201,209,217,.55); }
-
-    .detailSection{ margin-top: 20px; }
-    .detailSection h3{ font-size: 17px; margin-bottom: 12px; }
-
-    .codeBlock{
-      border:1px solid rgba(255,255,255,.10);
-      background: rgba(0,0,0,.28);
-      border-radius: 12px; overflow:hidden; margin-bottom: 14px;
-    }
-    .codeBlock .cbHead{
-      display:flex; align-items:center; justify-content:space-between;
-      padding: 9px 12px; border-bottom:1px solid rgba(255,255,255,.08);
-    }
-    .codeBlock .cbHead .t{
-      font-family: var(--mono); font-size: 10px;
-      letter-spacing: .16em; text-transform: uppercase;
-      color: rgba(201,209,217,.48);
-    }
-    .copyBtn{
-      font-family: var(--mono); font-size: 10px; letter-spacing: .10em;
-      text-transform: uppercase; color: rgba(201,164,74,.65);
-      background: none; border: none; cursor: pointer;
-      padding: 2px 6px; border-radius: 4px;
-      transition: color .15s ease;
-    }
-    .copyBtn:hover{ color: rgba(201,164,74,1); }
-    .codeBlock pre{
-      margin: 0; padding: 12px;
-      font-family: var(--mono); font-size: 12px; line-height: 1.55;
-      color: rgba(201,209,217,.82); overflow-x: auto; max-height: 220px;
-      white-space: pre-wrap; word-break: break-all;
-    }
-
-    .hashRows{ display:flex; flex-direction:column; gap: 8px; }
-    .hashRow{ display:flex; gap: 10px; align-items: baseline; }
-    .hashRow .hLbl{
-      font-family: var(--mono); font-size: 10px;
-      letter-spacing: .10em; text-transform: uppercase;
-      color: rgba(201,209,217,.48); flex: 0 0 72px;
-    }
-    .hashRow .hVal{
-      font-family: var(--mono); font-size: 12px;
-      color: rgba(201,209,217,.82); word-break: break-all; line-height: 1.5;
-    }
-    .hashRow .hVal.match{ color: rgba(110,231,183,.86); }
-    .hashRow .hVal.mismatch{ color: rgba(252,165,165,.86); }
-
-    .policyGrid{
-      display:grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-      gap: 10px; margin-top: 4px;
-    }
-    .policyItem{
-      border:1px solid rgba(255,255,255,.08);
-      background: rgba(255,255,255,.02);
-      border-radius: 10px; padding: 10px 12px;
-    }
-    .policyItem .piLabel{
-      font-family: var(--mono); font-size: 10px;
-      letter-spacing: .12em; text-transform: uppercase;
-      color: rgba(201,164,74,.72); margin-bottom: 5px;
-    }
-    .policyItem .piVal{
-      font-family: var(--mono); font-size: 13px;
-      color: rgba(201,209,217,.88);
-    }
-
-    .errorBanner{
-      border:1px solid rgba(239,68,68,.22); background: rgba(239,68,68,.07);
-      border-radius: var(--r-lg); padding: 14px 16px;
-      font-family: var(--mono); font-size: 13px; color: rgba(252,165,165,.90);
-      margin-bottom: 16px; display:none;
-    }
-    .errorBanner.visible{ display:block; }
   </style>
-
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "Organization",
-    "name": "CEYO",
-    "url": "https://ceyo.ai",
-    "description": "CEYO builds evidentiary infrastructure for AI inference systems: deterministic, cryptographically sealed audit records for independent verification under constrained disclosure.",
-    "contactPoint": { "@type": "ContactPoint", "email": "contact@ceyo.ai" }
-  }
-  </script>
 </head>
-
 <body>
-  <div class="bg" aria-hidden="true"></div>
+  <div class="page-wipe" id="pageWipe" aria-hidden="true"></div>
 
-  <header class="site">
-    <div class="wrap nav">
-      <a class="logo" href="index.html" aria-label="CEYO Home">
-        <span class="mark"><span class="dot" aria-hidden="true"></span><span>CEYO</span></span>
-      </a>
-      <div class="actions" aria-label="Actions">
-        <a class="btn secondary" href="resources.html#sample-artifact">Sample artifacts<span class="arr">→</span></a>
-        <a class="btn primary" href="contact.html">Request walkthrough<span class="arr">→</span></a>
-        <button class="menuBtn" id="openMenu" aria-label="Open menu" type="button">
-          <span aria-hidden="true">☰</span><span class="m">Menu</span>
+  <div class="nav-overlay" id="navOverlay" aria-hidden="true">
+    <div class="nav-sheet">
+      <nav class="nav-links" aria-label="Primary">
+        <div class="mono">Navigation</div>
+        <a class="nav-link page-link" href="index.html">Overview</a>
+        <a class="nav-link page-link" href="platform.html">Platform</a>
+        <a class="nav-link page-link" href="protocol.html">Protocol</a>
+        <a class="nav-link page-link" href="verify.html">Verification</a>
+        <a class="nav-link page-link" href="trust.html">Trust</a>
+        <a class="nav-link page-link" href="resources.html">Resources</a>
+        <a class="nav-link page-link" href="contact.html">Contact</a>
+      </nav>
+
+      <aside class="nav-side">
+        <div class="mono">CEYO</div>
+        <div class="nav-side-rule"></div>
+      </aside>
+    </div>
+  </div>
+
+  <header id="siteHeader">
+    <div class="shell">
+      <div class="header-row">
+        <a href="index.html" class="brand-pill glass-pill page-link" aria-label="CEYO home">
+          <span class="brand-mark" aria-hidden="true"></span>
+          <span class="brand-copy">
+            <strong>CEYO</strong>
+            <span>Independent Evidentiary Infrastructure</span>
+          </span>
+        </a>
+
+        <button class="menu-pill glass-pill" id="menuToggle" type="button" aria-expanded="false" aria-controls="navOverlay" aria-label="Open navigation">
+          <span class="menu-label">Menu</span>
+          <span class="hamburger" aria-hidden="true">
+            <span></span><span></span><span></span>
+          </span>
         </button>
       </div>
     </div>
   </header>
 
-  <div class="drawer" id="drawer" aria-hidden="true">
-    <div class="drawerCard" role="dialog" aria-modal="true" aria-label="Menu">
-      <div class="drawerHead">
-        <div class="t">Menu</div>
-        <button class="close" id="closeMenu" type="button">Close</button>
-      </div>
-      <div class="drawerLinks">
-        <a href="index.html">Overview</a>
-        <a href="how.html">How It Works</a>
-        <a href="platform.html">Platform</a>
-        <a href="trust.html">Trust &amp; Verification</a>
-        <a href="compliance.html">Compliance</a>
-        <a href="integrations.html">Integrations</a>
-        <a href="use-cases.html">Use Cases</a>
-        <a href="security.html">Security</a>
-        <a href="resources.html">Resources</a>
-        <a class="active" href="verify.html">Verify Artifact</a>
-        <a href="company.html">Company</a>
-        <a href="contact.html">Contact</a>
-      </div>
-    </div>
-  </div>
-
-  <main class="wrap">
-    <section>
-      <div class="read reveal">
-        <div class="eyebrow">Verify · Integrity · Provenance</div>
-        <h1>Verify an artifact.</h1>
-        <p class="muted">
-          Paste a CEYO sealed envelope below. The verifier runs entirely in your browser —
-          no data leaves your machine. Provide a public key to validate the ECDSA signature;
-          omit it to check hash integrity only.
+  <section class="page-hero" id="hero">
+    <div class="shell hero-inner">
+      <div>
+        <div class="hero-rule"></div>
+        <div class="eyebrow">Verification</div>
+        <h1>Independent Integrity Checks and Declared Review Context</h1>
+        <p>
+          CEYO verification evaluates whether an artifact remains structurally valid, deterministically intact, and attributable to the declared sealing context. It concerns later review of the artifact itself, not model intervention, adjudication, or retraining.
         </p>
-
-        <div class="callout reveal">
-          <div class="calloutTop">
-            <span class="labelChip">What this checks</span>
-          </div>
-          <ul>
-            <li><strong>Canonicalization</strong> — reproduces the RFC 8785 (JCS) canonical form of the artifact body.</li>
-            <li><strong>Hash integrity</strong> — recomputes SHA-256 and compares it to the stored value.</li>
-            <li><strong>Signature</strong> — validates the ECDSA P-256 signature over the canonical body using your provided public key.</li>
-          </ul>
+        <div class="hero-actions">
+          <a class="btn btn-primary anchor-link" href="#model">Review verification model</a>
+          <a class="btn btn-secondary page-link" href="trust.html">Continue to trust</a>
         </div>
       </div>
 
-      <!-- Inputs -->
-      <div class="inputGrid reveal" style="margin-top:32px;">
-        <div class="inputBlock">
-          <div class="inputHead">
-            <span class="lbl">Sealed Envelope</span>
-            <span class="opt">JSON</span>
-          </div>
-          <textarea class="field" id="envelopeInput" spellcheck="false"
-            placeholder='{
-  "product": "CEYO",
-  "body": { ... },
-  "canonicalization": { "scheme": "RFC8785", ... },
-  "integrity": {
-    "hash": { "alg": "SHA-256", "value_b64u": "...", ... },
-    "sig":  { "alg": "ECDSA-P256-SHA256", "format": "DER", "value_b64u": "...", ... }
-  }
-}'></textarea>
-        </div>
+      <aside class="hero-side">
+        <div class="mono">Verification focus</div>
+        <p>
+          Structure, integrity recomputation, provenance validation, and risk-oriented institutional review without model interference.
+        </p>
+      </aside>
+    </div>
+  </section>
 
-        <div class="inputBlock">
-          <div class="inputHead">
-            <span class="lbl">Public Key</span>
-            <span class="opt">PEM · optional</span>
-          </div>
-          <textarea class="field" id="pubkeyInput" spellcheck="false"
-            placeholder="-----BEGIN PUBLIC KEY-----
-MFkwEwYHKoZIzj0CAQY...
------END PUBLIC KEY-----
-
-Leave blank to check hash integrity only."></textarea>
-        </div>
-      </div>
-
-      <div class="actionRow reveal">
-        <button class="btn primary" id="verifyBtn" type="button">
-          Verify<span class="arr">→</span>
-        </button>
-        <button class="btn" id="exampleBtn" type="button">
-          Generate &amp; load example
-        </button>
-        <button class="btn" id="clearBtn" type="button">Clear</button>
-        <span class="hint" id="statusHint"></span>
-      </div>
-
-      <div class="errorBanner" id="errorBanner" role="alert"></div>
-
-      <!-- Results -->
-      <div class="results" id="results" aria-live="polite">
-
-        <div class="statusBanner" id="statusBanner">
-          <div class="sIcon" id="statusIcon"></div>
-          <div class="sBody">
-            <div class="sTitle" id="statusTitle"></div>
-            <div class="sSub" id="statusSub"></div>
+  <main>
+    <section class="reveal" id="model">
+      <div class="shell review-sheet">
+        <div>
+          <div class="section-line"></div>
+          <div class="section-label">Verification Model</div>
+          <h2>Verification asks whether the artifact still means what it claimed to mean at sealing time.</h2>
+          <div style="margin-top:28px;max-width:720px;">
+            <p>Verification is not a re-run of the originating system. It is an independent evaluation of the artifact against the deterministic rules, integrity state, and provenance context declared when the artifact was sealed.</p>
+            <p>That means the core verification question is narrow and disciplined: does the artifact remain structurally valid, internally consistent, and attributable to the declared sealing authority?</p>
           </div>
         </div>
 
-        <div class="stepGrid">
-          <div class="stepCard">
-            <div class="scHead">
-              <span class="scTitle">Step 1 · Canonicalize</span>
-              <span class="badge pass" id="step1Badge">Done</span>
-            </div>
-            <div class="scDetail" id="step1Detail">RFC 8785 (JCS) applied to body. Keys sorted by Unicode code point; no whitespace.</div>
+        <aside class="sheet-panel" aria-label="Verification summary">
+          <div class="sheet-head">
+            <strong>Verification Inputs</strong>
+            <span>Review context</span>
           </div>
-          <div class="stepCard">
-            <div class="scHead">
-              <span class="scTitle">Step 2 · Hash</span>
-              <span class="badge" id="step2Badge">—</span>
+          <div class="sheet-body">
+            <div class="sheet-row">
+              <div class="k">Artifact</div>
+              <div class="v">The structured evidentiary object under review.</div>
             </div>
-            <div class="scDetail" id="step2Detail">SHA-256 recomputed and compared to stored value.</div>
-          </div>
-          <div class="stepCard">
-            <div class="scHead">
-              <span class="scTitle">Step 3 · Signature</span>
-              <span class="badge" id="step3Badge">—</span>
+            <div class="sheet-row">
+              <div class="k">Rules</div>
+              <div class="v">The deterministic representation and protocol interpretation requirements.</div>
             </div>
-            <div class="scDetail" id="step3Detail">ECDSA P-256 over canonical body bytes.</div>
-          </div>
-        </div>
-
-        <div class="detailSection">
-          <div class="codeBlock">
-            <div class="cbHead">
-              <span class="t">RFC 8785 Canonical Body</span>
-              <button class="copyBtn" data-target="canonicalOutput">Copy</button>
+            <div class="sheet-row">
+              <div class="k">Integrity state</div>
+              <div class="v">The expected fingerprint relationship between payload and declared digest.</div>
             </div>
-            <pre id="canonicalOutput"></pre>
-          </div>
-
-          <div class="codeBlock">
-            <div class="cbHead"><span class="t">SHA-256 Hash</span></div>
-            <div style="padding:12px;">
-              <div class="hashRows">
-                <div class="hashRow">
-                  <span class="hLbl">Computed</span>
-                  <span class="hVal" id="hashComputed">—</span>
-                </div>
-                <div class="hashRow">
-                  <span class="hLbl">Stored</span>
-                  <span class="hVal" id="hashStored">—</span>
-                </div>
-              </div>
+            <div class="sheet-row">
+              <div class="k">Provenance context</div>
+              <div class="v">The declared signature and key reference used to evaluate sealing authority.</div>
             </div>
           </div>
-
-          <div id="policySection" style="display:none; margin-bottom:14px;">
-            <div style="font-family:var(--mono); font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:rgba(201,164,74,.72); margin-bottom:10px;">Policy Scope</div>
-            <div class="policyGrid" id="policyGrid"></div>
-          </div>
-        </div>
-
+        </aside>
       </div>
     </section>
 
-    <footer id="footer">
-      <div class="footGrid reveal">
-        <div class="footCol">
-          <div class="t">Product</div>
-          <a href="index.html">Overview</a>
-          <a href="how.html">How It Works</a>
-          <a href="platform.html">Platform</a>
-          <a href="integrations.html">Integrations</a>
-        </div>
-        <div class="footCol">
-          <div class="t">Trust</div>
-          <a href="trust.html">Trust Model</a>
-          <a href="security.html">Security</a>
-          <a href="trust.html#verification-spec">Verification Spec</a>
-          <a href="verify.html">Verify Artifact</a>
-        </div>
-        <div class="footCol">
-          <div class="t">Resources</div>
-          <a href="resources.html">Library</a>
-          <a href="resources.html#sample-artifact">Sample Artifacts</a>
-          <a href="resources.html#glossary">Glossary</a>
-          <a href="resources.html#faq">FAQs</a>
-        </div>
-        <div class="footCol">
-          <div class="t">Legal</div>
-          <a href="privacy.html">Privacy</a>
-          <a href="terms.html">Terms</a>
-          <a href="vdp.html">Security Disclosure</a>
-          <a href="ethics.html">Responsible Use</a>
+    <section class="reveal" id="ledger">
+      <div class="shell">
+        <div class="section-label">Verification Ledger</div>
+        <h2>Review proceeds in a disciplined order.</h2>
+
+        <div class="ledger">
+          <div class="ledger-row">
+            <div class="l-no">01</div>
+            <h3>Interpret the artifact</h3>
+            <p>Read the artifact according to the protocol structure it claims to follow.</p>
+          </div>
+
+          <div class="ledger-row">
+            <div class="l-no">02</div>
+            <h3>Rebuild deterministic form</h3>
+            <p>Apply canonicalization rules to reconstruct the stable representation required for integrity evaluation.</p>
+          </div>
+
+          <div class="ledger-row">
+            <div class="l-no">03</div>
+            <h3>Recompute integrity</h3>
+            <p>Derive the expected digest again and compare it to the sealed artifact state.</p>
+          </div>
+
+          <div class="ledger-row">
+            <div class="l-no">04</div>
+            <h3>Evaluate provenance</h3>
+            <p>Assess whether the signature context remains consistent with the declared key authority and sealing claim.</p>
+          </div>
         </div>
       </div>
-      <div class="footBottom reveal">
-        <div>© <span id="year"></span> CEYO. All rights reserved.</div>
-        <div><a href="vdp.html">Vulnerability Disclosure</a></div>
+    </section>
+
+    <section class="evidence-band reveal" id="risk-surface">
+      <div class="shell">
+        <div class="section-label">Governance Surface</div>
+        <h2>Deterministic artifacts across the governance surface.</h2>
+        <p style="margin-top:24px;max-width:720px;">
+          CEYO does not interfere with model execution; it operates as an independent layer that seals policy-scoped inference artifacts at the moment they are declared. That gives institutions a deterministic, audit-ready record that can later be evaluated against governance concerns such as bias, security, privacy, robustness, and procedural control.
+        </p>
+
+        <div class="video-module">
+          <div class="video-copy">
+            <h3>Risk Radar Chart</h3>
+            <p>
+              Verification does not score the model or decide whether a governance concern has been resolved. It preserves the sealed evidence needed for later institutional review across the governance surface, without modifying the model itself.
+            </p>
+          </div>
+
+          <div class="video-frame">
+            <video
+              class="video-el"
+              autoplay
+              muted
+              loop
+              playsinline
+              preload="auto"
+              aria-label="Risk radar chart showing governance dimensions"
+            >
+              <source src="assets/video/risk-radar-chart.mp4" type="video/mp4" />
+            </video>
+          </div>
+        </div>
       </div>
-    </footer>
+    </section>
+
+    <section class="reveal" id="independence">
+      <div class="shell split">
+        <div>
+          <div class="section-label">Independent Review</div>
+          <h2>Verification happens outside the model.</h2>
+          <div style="margin-top:28px;max-width:720px;">
+            <p>Verification is designed to occur outside the model and outside the original runtime environment.</p>
+            <p>That separation matters. It allows an institution, counterparty, or downstream reviewer to evaluate the integrity and provenance of the artifact without requiring direct access to the full internal mechanics of the originating system.</p>
+            <p>This is why CEYO operates as an independent evidentiary layer rather than as a model-internal monitoring function.</p>
+          </div>
+        </div>
+
+        <aside class="notes">
+          <div class="note">
+            <h3>External posture</h3>
+            <p>The reviewer evaluates the artifact from outside the originating system boundary.</p>
+          </div>
+          <div class="note">
+            <h3>No model interference</h3>
+            <p>Verification does not require changing model weights or reopening runtime execution.</p>
+          </div>
+          <div class="note">
+            <h3>Portable review</h3>
+            <p>The artifact remains evaluable when paired with the declared verification context.</p>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="reveal" id="outcomes">
+      <div class="shell">
+        <div class="section-label">Verification Outcomes</div>
+        <h2>Verification can confirm artifact integrity, but it does not resolve every institutional question.</h2>
+
+        <div class="status-grid">
+          <div class="status-card">
+            <h3>Structure holds</h3>
+            <p>The artifact remains legible and internally stable under protocol interpretation.</p>
+          </div>
+
+          <div class="status-card">
+            <h3>Integrity holds</h3>
+            <p>The recomputed deterministic state remains consistent with the sealed digest.</p>
+          </div>
+
+          <div class="status-card">
+            <h3>Provenance holds</h3>
+            <p>The signature and declared key context remain attributable to the sealing claim.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="reveal" id="limits">
+      <div class="reading">
+        <div class="section-label">Limits</div>
+        <h2>Verification is narrower than adjudication.</h2>
+        <div style="margin-top:28px;">
+          <p>Verification does not decide whether the underlying decision was substantively correct, legally sufficient, or normatively justified.</p>
+          <p>It determines whether the sealed artifact remains structurally sound, deterministically intact, and attributable to the declared sealing context. Those are necessary conditions for review, but they are not the whole of judgment.</p>
+        </div>
+
+        <div class="limits-grid">
+          <div class="limit-block">
+            <h3>What verification can confirm</h3>
+            <p>That the artifact structure is valid, that deterministic integrity holds, and that provenance remains consistent with the declared sealing context.</p>
+          </div>
+
+          <div class="limit-block">
+            <h3>What verification cannot confirm</h3>
+            <p>That the originating decision was true, fair, compliant, or institutionally sufficient in every downstream sense.</p>
+          </div>
+        </div>
+
+        <div class="constraint-list" aria-label="Verification limits">
+          <span class="constraint">does not determine truth</span>
+          <span class="constraint">does not replace adjudication</span>
+          <span class="constraint">does not certify compliance outcomes</span>
+          <span class="constraint">does not interfere with the model itself</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="reveal" id="next">
+      <div class="reading">
+        <div class="section-label">Next</div>
+        <h2>Continue into trust, review posture, and institutional confidence.</h2>
+
+        <div class="next-index">
+          <a class="next-link page-link" href="trust.html">
+            <strong>Trust</strong>
+            <span>Review posture, institutional confidence, and evidentiary framing.</span>
+          </a>
+          <a class="next-link page-link" href="resources.html">
+            <strong>Resources</strong>
+            <span>Supporting materials, glossary, and technical references.</span>
+          </a>
+          <a class="next-link page-link" href="contact.html">
+            <strong>Contact</strong>
+            <span>Continue the discussion or request a walkthrough.</span>
+          </a>
+        </div>
+      </div>
+    </section>
   </main>
 
+  <footer>
+    <div class="shell footer-shell">
+      <div class="footer-line">
+        <div class="footer-left">CEYO. All rights reserved 2026.</div>
+        <div class="footer-right">
+          <a href="terms.html">Terms of Use</a>
+          <a href="privacy.html">Privacy</a>
+          <a href="civil-liberties.html">Privacy and Civil Liberties</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
   <script>
-    document.getElementById('year').textContent = new Date().getFullYear();
+    const body = document.body;
+    const header = document.getElementById("siteHeader");
+    const menuToggle = document.getElementById("menuToggle");
+    const navOverlay = document.getElementById("navOverlay");
+    const pageWipe = document.getElementById("pageWipe");
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-    // ── Nav ──
-    const drawer = document.getElementById('drawer');
-    const openMenu = document.getElementById('openMenu');
-    const closeMenu = document.getElementById('closeMenu');
-    function openDrawer(){ drawer.classList.add('open'); drawer.setAttribute('aria-hidden','false'); document.body.style.overflow='hidden'; }
-    function closeDrawer(){ drawer.classList.remove('open'); drawer.setAttribute('aria-hidden','true'); document.body.style.overflow=''; }
-    openMenu.addEventListener('click', openDrawer);
-    closeMenu.addEventListener('click', closeDrawer);
-    drawer.addEventListener('click', (e)=>{ if(e.target===drawer) closeDrawer(); });
-    window.addEventListener('keydown', (e)=>{ if(e.key==='Escape' && drawer.classList.contains('open')) closeDrawer(); });
-
-    // ── Reveal ──
-    const prefersReduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const revealEls = Array.from(document.querySelectorAll('.reveal'));
-    if(!prefersReduce){
-      const io = new IntersectionObserver((entries)=>{
-        entries.forEach(en=>{ if(en.isIntersecting) en.target.classList.add('on'); });
-      }, {threshold: 0.10});
-      revealEls.forEach(el=>io.observe(el));
-    } else {
-      revealEls.forEach(el=>el.classList.add('on'));
+    function openMenu(){
+      body.classList.add("menu-open");
+      navOverlay.classList.add("open");
+      navOverlay.setAttribute("aria-hidden", "false");
+      menuToggle.setAttribute("aria-expanded", "true");
     }
 
-    // ── Copy buttons ──
-    document.querySelectorAll('.copyBtn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const target = document.getElementById(btn.dataset.target);
+    function closeMenu(){
+      body.classList.remove("menu-open");
+      navOverlay.classList.remove("open");
+      navOverlay.setAttribute("aria-hidden", "true");
+      menuToggle.setAttribute("aria-expanded", "false");
+    }
+
+    menuToggle.addEventListener("click", () => {
+      navOverlay.classList.contains("open") ? closeMenu() : openMenu();
+    });
+
+    navOverlay.addEventListener("click", (e) => {
+      if (e.target === navOverlay) closeMenu();
+    });
+
+    window.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && navOverlay.classList.contains("open")) closeMenu();
+    });
+
+    window.addEventListener("scroll", () => {
+      header.classList.toggle("scrolled", (window.scrollY || 0) > 16);
+    }, { passive: true });
+
+    document.querySelectorAll(".anchor-link").forEach((link) => {
+      link.addEventListener("click", (e) => {
+        const href = link.getAttribute("href");
+        if (!href || !href.startsWith("#")) return;
+        const target = document.querySelector(href);
         if (!target) return;
-        navigator.clipboard.writeText(target.textContent).then(() => {
-          const orig = btn.textContent;
-          btn.textContent = 'Copied';
-          setTimeout(() => { btn.textContent = orig; }, 1500);
-        });
+
+        e.preventDefault();
+
+        if (reduceMotion) {
+          target.scrollIntoView({ behavior: "auto", block: "start" });
+          history.replaceState(null, "", href);
+          return;
+        }
+
+        target.scrollIntoView({ behavior: "smooth", block: "start" });
+        history.replaceState(null, "", href);
       });
     });
 
-    // ────────────────────────────────────────────────
-    // RFC 8785 (JCS) Canonicalization
-    // ────────────────────────────────────────────────
-    function jcs(value) {
-      if (value === null) return 'null';
-      if (typeof value === 'boolean') return value ? 'true' : 'false';
-      if (typeof value === 'number') {
-        if (!isFinite(value)) throw new Error('Non-finite number in artifact body.');
-        return JSON.stringify(value);
-      }
-      if (typeof value === 'string') return JSON.stringify(value);
-      if (Array.isArray(value)) {
-        return '[' + value.map(jcs).join(',') + ']';
-      }
-      if (typeof value === 'object') {
-        const pairs = Object.keys(value)
-          .sort()  // UTF-16 code unit order — matches RFC 8785 §3.2.3
-          .map(k => JSON.stringify(k) + ':' + jcs(value[k]));
-        return '{' + pairs.join(',') + '}';
-      }
-      throw new Error('Unsupported value type: ' + typeof value);
-    }
+    document.querySelectorAll(".page-link").forEach((link) => {
+      link.addEventListener("click", (e) => {
+        const href = link.getAttribute("href");
+        if (!href || href.startsWith("#")) return;
 
-    // ────────────────────────────────────────────────
-    // Base64url helpers
-    // ────────────────────────────────────────────────
-    function toB64u(bytes) {
-      let b64 = '';
-      for (const b of bytes) b64 += String.fromCharCode(b);
-      return btoa(b64).replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
-    }
+        e.preventDefault();
+        closeMenu();
 
-    function fromB64u(str) {
-      const padded = str.replace(/-/g, '+').replace(/_/g, '/') +
-        '=='.slice(0, (4 - str.length % 4) % 4);
-      const bin = atob(padded);
-      const bytes = new Uint8Array(bin.length);
-      for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
-      return bytes;
-    }
-
-    // ────────────────────────────────────────────────
-    // DER ↔ Raw P-256 signature (IEEE P1363: r‖s, 64 bytes)
-    // ────────────────────────────────────────────────
-    function derToRaw(der) {
-      let off = 0;
-      if (der[off++] !== 0x30) throw new Error('DER: expected SEQUENCE tag (0x30).');
-      // Skip length (P-256 sigs always < 127 bytes, so one-byte length)
-      off++;
-      if (der[off++] !== 0x02) throw new Error('DER: expected INTEGER tag for r.');
-      const rLen = der[off++];
-      const rBytes = der.slice(off, off + rLen); off += rLen;
-      if (der[off++] !== 0x02) throw new Error('DER: expected INTEGER tag for s.');
-      const sLen = der[off++];
-      const sBytes = der.slice(off, off + sLen);
-
-      function toFixed32(b) {
-        if (b.length === 33 && b[0] === 0) b = b.slice(1);
-        if (b.length > 32) throw new Error('DER integer too large for P-256.');
-        const out = new Uint8Array(32);
-        out.set(b, 32 - b.length);
-        return out;
-      }
-
-      const raw = new Uint8Array(64);
-      raw.set(toFixed32(rBytes), 0);
-      raw.set(toFixed32(sBytes), 32);
-      return raw;
-    }
-
-    function rawToDer(raw) {
-      function encodeInt(bytes) {
-        let i = 0;
-        while (i < bytes.length - 1 && bytes[i] === 0) i++;
-        bytes = bytes.slice(i);
-        if (bytes[0] & 0x80) {
-          const p = new Uint8Array(bytes.length + 1);
-          p[0] = 0; p.set(bytes, 1); bytes = p;
+        if (reduceMotion) {
+          window.location.href = href;
+          return;
         }
-        return bytes;
-      }
-      const r = encodeInt(raw.slice(0, 32));
-      const s = encodeInt(raw.slice(32));
-      const seqLen = 2 + r.length + 2 + s.length;
-      const der = new Uint8Array(2 + seqLen);
-      let off = 0;
-      der[off++] = 0x30; der[off++] = seqLen;
-      der[off++] = 0x02; der[off++] = r.length; der.set(r, off); off += r.length;
-      der[off++] = 0x02; der[off++] = s.length; der.set(s, off);
-      return der;
-    }
 
-    // ────────────────────────────────────────────────
-    // Key import from PEM
-    // ────────────────────────────────────────────────
-    async function importPublicKey(pem) {
-      const b64 = pem.replace(/-----[^-]+-----/g, '').replace(/\s+/g, '');
-      const bin = atob(b64);
-      const spki = new Uint8Array(bin.length);
-      for (let i = 0; i < bin.length; i++) spki[i] = bin.charCodeAt(i);
-      return crypto.subtle.importKey('spki', spki.buffer,
-        { name: 'ECDSA', namedCurve: 'P-256' }, false, ['verify']);
-    }
-
-    function exportKeyToPem(spkiBuffer) {
-      const bytes = new Uint8Array(spkiBuffer);
-      let b64 = '';
-      for (const b of bytes) b64 += String.fromCharCode(b);
-      b64 = btoa(b64);
-      const lines = [];
-      for (let i = 0; i < b64.length; i += 64) lines.push(b64.slice(i, i + 64));
-      return '-----BEGIN PUBLIC KEY-----\n' + lines.join('\n') + '\n-----END PUBLIC KEY-----';
-    }
-
-    // ────────────────────────────────────────────────
-    // Generate a fresh signed example (runs in browser)
-    // ────────────────────────────────────────────────
-    async function generateExample() {
-      const hint = document.getElementById('statusHint');
-      hint.textContent = 'Generating keypair…';
-      const exBtn = document.getElementById('exampleBtn');
-      exBtn.disabled = true;
-
-      try {
-        const kp = await crypto.subtle.generateKey(
-          { name: 'ECDSA', namedCurve: 'P-256' }, true, ['sign', 'verify']);
-
-        const body = {
-          env_fingerprint: 'env:sha256:7b2c9f1a3de4b8c02f5a6d7e8f9a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a',
-          event: { model_ref: 'opaque-ref-v1', type: 'inference' },
-          input_ref_hash: 'sha256:1a9f3b2c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a',
-          policy: { id: 'POL-001', version: '1.0' },
-          tier: 'controlled',
-          ts: new Date().toISOString(),
-        };
-
-        const canonical = jcs(body);
-        const bodyBytes = new TextEncoder().encode(canonical);
-
-        const hashBuf = await crypto.subtle.digest('SHA-256', bodyBytes);
-        const hashB64u = toB64u(new Uint8Array(hashBuf));
-
-        const sigRaw = await crypto.subtle.sign(
-          { name: 'ECDSA', hash: 'SHA-256' }, kp.privateKey, bodyBytes);
-        const sigDer = rawToDer(new Uint8Array(sigRaw));
-        const sigB64u = toB64u(sigDer);
-
-        const spki = await crypto.subtle.exportKey('spki', kp.publicKey);
-        const pubKeyPem = exportKeyToPem(spki);
-
-        const envelope = {
-          product: 'CEYO',
-          body,
-          canonicalization: { scheme: 'RFC8785', scope: 'body', version: '1.0' },
-          integrity: {
-            hash: { alg: 'SHA-256', covers: 'canonical(body)', value_b64u: hashB64u },
-            sig: { alg: 'ECDSA-P256-SHA256', covers: 'canonical(body)', format: 'DER', value_b64u: sigB64u },
-          },
-        };
-
-        document.getElementById('envelopeInput').value = JSON.stringify(envelope, null, 2);
-        document.getElementById('pubkeyInput').value = pubKeyPem;
-        hint.textContent = 'Fresh keypair generated — ready to verify.';
-      } catch (err) {
-        hint.textContent = 'Error generating example: ' + err.message;
-      } finally {
-        exBtn.disabled = false;
-      }
-    }
-
-    // ────────────────────────────────────────────────
-    // Main verify flow
-    // ────────────────────────────────────────────────
-    async function runVerify() {
-      const errorBanner = document.getElementById('errorBanner');
-      const results = document.getElementById('results');
-      errorBanner.classList.remove('visible');
-      results.classList.remove('visible');
-
-      const envelopeRaw = document.getElementById('envelopeInput').value.trim();
-      const pubKeyPem = document.getElementById('pubkeyInput').value.trim();
-
-      if (!envelopeRaw) {
-        showError('Paste a sealed envelope JSON to verify.');
-        return;
-      }
-
-      let envelope;
-      try {
-        envelope = JSON.parse(envelopeRaw);
-      } catch (e) {
-        showError('Invalid JSON: ' + e.message);
-        return;
-      }
-
-      // Validate envelope structure
-      if (!envelope || typeof envelope !== 'object') { showError('Envelope must be a JSON object.'); return; }
-      if (!envelope.body) { showError('Envelope is missing "body". Make sure you paste the full sealed envelope — not just the artifact body itself. The envelope should have "body", "integrity", and "canonicalization" at the top level. Use "Generate & load example" to see the expected format.'); return; }
-      if (!envelope.integrity) { showError('Envelope is missing "integrity". Make sure you paste the full sealed envelope — not just the artifact body. Use "Generate & load example" to see the expected format.'); return; }
-      if (!envelope.canonicalization) { showError('Envelope is missing "canonicalization" metadata. Use "Generate & load example" to see the expected format.'); return; }
-
-      const canon = envelope.canonicalization;
-      if (canon.scheme !== 'RFC8785' || canon.scope !== 'body') {
-        showError('Unsupported canonicalization scheme. Expected RFC8785 over body.');
-        return;
-      }
-
-      // ── Step 1: Canonicalize ──
-      let canonical;
-      try {
-        canonical = jcs(envelope.body);
-      } catch (e) {
-        showError('Canonicalization failed: ' + e.message);
-        return;
-      }
-      const bodyBytes = new TextEncoder().encode(canonical);
-
-      document.getElementById('step1Badge').className = 'badge pass';
-      document.getElementById('step1Badge').textContent = 'Done';
-      document.getElementById('step1Detail').textContent =
-        'RFC 8785 applied. ' + canonical.length + ' bytes canonical.';
-      document.getElementById('canonicalOutput').textContent = canonical;
-
-      // ── Step 2: Hash ──
-      const hashBuf = await crypto.subtle.digest('SHA-256', bodyBytes);
-      const computedB64u = toB64u(new Uint8Array(hashBuf));
-      const storedB64u = (envelope.integrity.hash || {}).value_b64u || '';
-      const hashMatch = computedB64u === storedB64u;
-
-      const hashComputedEl = document.getElementById('hashComputed');
-      const hashStoredEl = document.getElementById('hashStored');
-      hashComputedEl.textContent = computedB64u;
-      hashStoredEl.textContent = storedB64u || '(not present)';
-      hashComputedEl.className = 'hVal ' + (hashMatch ? 'match' : 'mismatch');
-      hashStoredEl.className = 'hVal ' + (hashMatch ? 'match' : 'mismatch');
-
-      const step2Badge = document.getElementById('step2Badge');
-      step2Badge.className = 'badge ' + (hashMatch ? 'pass' : 'fail');
-      step2Badge.textContent = hashMatch ? 'Match' : 'Mismatch';
-      document.getElementById('step2Detail').textContent = hashMatch
-        ? 'SHA-256 recomputed. Values match — body unchanged since sealing.'
-        : 'SHA-256 mismatch — body may have been altered after sealing.';
-
-      // ── Step 3: Signature ──
-      let sigValid = null;
-      const step3Badge = document.getElementById('step3Badge');
-      const step3Detail = document.getElementById('step3Detail');
-
-      if (pubKeyPem) {
-        try {
-          const pubKey = await importPublicKey(pubKeyPem);
-          const sigInfo = envelope.integrity.sig || {};
-
-          if (sigInfo.alg !== 'ECDSA-P256-SHA256') {
-            showError('Unsupported signature algorithm "' + sigInfo.alg + '". Expected ECDSA-P256-SHA256.');
-            return;
-          }
-          if (sigInfo.format !== 'DER') {
-            showError('Unsupported signature format "' + sigInfo.format + '". Expected DER.');
-            return;
-          }
-          if (!sigInfo.value_b64u) {
-            showError('Signature value (integrity.sig.value_b64u) is missing.');
-            return;
-          }
-
-          const sigDer = fromB64u(sigInfo.value_b64u);
-          const sigRaw = derToRaw(sigDer);
-          sigValid = await crypto.subtle.verify(
-            { name: 'ECDSA', hash: 'SHA-256' }, pubKey, sigRaw, bodyBytes);
-
-          step3Badge.className = 'badge ' + (sigValid ? 'pass' : 'fail');
-          step3Badge.textContent = sigValid ? 'Valid' : 'Invalid';
-          step3Detail.textContent = sigValid
-            ? 'ECDSA P-256 signature verified against provided public key.'
-            : 'Signature verification failed. Key mismatch or artifact altered.';
-        } catch (e) {
-          step3Badge.className = 'badge fail';
-          step3Badge.textContent = 'Error';
-          step3Detail.textContent = 'Verification error: ' + e.message;
-          sigValid = false;
-        }
-      } else {
-        step3Badge.className = 'badge skip';
-        step3Badge.textContent = 'Skipped';
-        step3Detail.textContent = 'No public key provided. Paste a PEM key to validate the signature.';
-      }
-
-      // ── Policy metadata ──
-      const policy = (envelope.body || {}).policy;
-      const policySection = document.getElementById('policySection');
-      const policyGrid = document.getElementById('policyGrid');
-      if (policy && typeof policy === 'object') {
-        policyGrid.innerHTML = '';
-        const fields = {
-          'Policy ID': policy.id,
-          'Version': policy.version,
-          'Product': envelope.product,
-          'Tier': envelope.body.tier,
-          'Timestamp': envelope.body.ts,
-          'Canon scheme': canon.scheme + ' ' + (canon.version || ''),
-        };
-        for (const [label, val] of Object.entries(fields)) {
-          if (val == null) continue;
-          const item = document.createElement('div');
-          item.className = 'policyItem';
-          const piLabel = document.createElement('div');
-          piLabel.className = 'piLabel';
-          piLabel.textContent = label;
-          const piVal = document.createElement('div');
-          piVal.className = 'piVal';
-          piVal.textContent = String(val);
-          item.appendChild(piLabel);
-          item.appendChild(piVal);
-          policyGrid.appendChild(item);
-        }
-        policySection.style.display = 'block';
-      } else {
-        policySection.style.display = 'none';
-      }
-
-      // ── Overall status ──
-      const banner = document.getElementById('statusBanner');
-      const icon = document.getElementById('statusIcon');
-      const title = document.getElementById('statusTitle');
-      const sub = document.getElementById('statusSub');
-
-      if (!hashMatch) {
-        banner.className = 'statusBanner fail';
-        icon.textContent = '✗';
-        title.textContent = 'Integrity Failed';
-        sub.textContent = 'Hash mismatch — the artifact body does not match its stored digest. The record may have been altered after sealing.';
-      } else if (sigValid === false) {
-        banner.className = 'statusBanner fail';
-        icon.textContent = '✗';
-        title.textContent = 'Signature Invalid';
-        sub.textContent = 'Hash matched but the ECDSA signature did not verify. The key may not correspond to the signing operator, or the artifact was re-sealed.';
-      } else if (sigValid === true) {
-        banner.className = 'statusBanner pass';
-        icon.textContent = '✓';
-        title.textContent = 'Integrity Confirmed';
-        sub.textContent = 'Hash and ECDSA P-256 signature both verified. The artifact body is unchanged since sealing and provenance is confirmed under the declared policy scope.';
-      } else {
-        banner.className = 'statusBanner partial';
-        icon.textContent = '~';
-        title.textContent = 'Hash Confirmed · Signature Not Checked';
-        sub.textContent = 'The artifact body matches its stored digest. Provide a public key (PEM) to also validate the ECDSA signature and confirm provenance.';
-      }
-
-      results.classList.add('visible');
-      results.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-    }
-
-    function showError(msg) {
-      const el = document.getElementById('errorBanner');
-      el.textContent = msg;
-      el.classList.add('visible');
-    }
-
-    // ── Wire up buttons ──
-    document.getElementById('verifyBtn').addEventListener('click', () => {
-      runVerify().catch(err => showError('Unexpected error: ' + err.message));
-    });
-    document.getElementById('exampleBtn').addEventListener('click', () => {
-      generateExample().catch(err => {
-        document.getElementById('statusHint').textContent = 'Error: ' + err.message;
+        pageWipe.classList.add("active");
+        setTimeout(() => {
+          window.location.href = href;
+        }, 420);
       });
     });
-    document.getElementById('clearBtn').addEventListener('click', () => {
-      document.getElementById('envelopeInput').value = '';
-      document.getElementById('pubkeyInput').value = '';
-      document.getElementById('results').classList.remove('visible');
-      document.getElementById('errorBanner').classList.remove('visible');
-      document.getElementById('statusHint').textContent = '';
-    });
+
+    const revealEls = document.querySelectorAll(".reveal");
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("is-visible");
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.14, rootMargin: "0px 0px -8% 0px" });
+
+    revealEls.forEach((el) => revealObserver.observe(el));
   </script>
 </body>
 </html>

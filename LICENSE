@@ -1,16 +1,23 @@
-Copyright © 2026 Brian Covarrubias
-
+Copyright © 2026 Brian Covarrubias.
 All rights reserved.
 
-This repository contains research materials, experimental code, and architectural
-concepts that are not licensed for reuse, modification, or commercial deployment
-without explicit written permission from the author.
+This repository contains research materials, experimental code, and architectural concepts related to the CEYO evidentiary infrastructure project.
 
-No part of this repository — including source code, documentation, specifications,
-schemas, scripts, or any other content — may be reproduced, distributed, modified,
-sublicensed, or used in any form or by any means without prior explicit written
-permission from Brian Covarrubias.
+The contents of this repository are provided for informational and review purposes only.
 
-THIS REPOSITORY IS PROVIDED FOR INFORMATIONAL AND REVIEW PURPOSES ONLY.
-NO LICENSE, EXPRESS OR IMPLIED, IS GRANTED TO ANY INTELLECTUAL PROPERTY
-RIGHTS CONTAINED HEREIN.
+No license is granted to use, reproduce, modify, distribute, sublicense, or commercially exploit any portion of this repository without prior explicit written permission from the author.
+
+This restriction applies to all materials contained in the repository, including but not limited to:
+	•	source code
+	•	documentation
+	•	specifications
+	•	schemas
+	•	scripts
+	•	design materials
+	•	architectural descriptions
+	•	any associated files or assets
+
+Access to this repository does not grant any express or implied rights under any intellectual property owned by the author.
+
+For licensing inquiries or permission requests, contact the repository author at:
+bsecure.cov@gmail.com

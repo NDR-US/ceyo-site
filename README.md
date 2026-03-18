@@ -2,13 +2,14 @@
 
 Public website for CEYO — evidentiary infrastructure for AI-supported systems.
 
-**Project site:** https://ceyo.ai
+**Project site:**
+https://ndr-us.github.io/ceyo-site/index.html
 
 ---
 
 ## What CEYO Is
 
-CEYO is a conceptual evidentiary infrastructure for AI-supported decision systems.
+CEYO is an evidentiary infrastructure layer for AI-supported decision systems.
 
 It produces policy-scoped, deterministic, cryptographically sealed records of AI inference events. These records can be independently verified by any party who holds the sealed artifact and the corresponding public key — without access to model weights, proprietary internals, or the contents of the underlying decision.
 
@@ -80,6 +81,11 @@ This repository is the **presentation layer** for CEYO. It contains the public-f
 
 ## License
 
-Copyright © 2026 Brian Covarrubias. All rights reserved.
+Copyright © 2026 Brian Covarrubias.  
+All rights reserved.
 
-This repository contains research materials, experimental code, and architectural concepts that are not licensed for reuse, modification, or commercial deployment without explicit written permission from the author.
+The contents of this repository are provided for informational and review purposes only.  
+No license is granted to use, reproduce, modify, distribute, or commercially exploit
+any portion of this repository without prior explicit written permission from the author.
+
+See the LICENSE file for full terms.
