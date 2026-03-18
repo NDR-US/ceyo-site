@@ -2,7 +2,7 @@
 CEYO: Simplified educational demo.
 
 Uses ECDSA P-256 + SHA-256 for consistency with the reference implementation.
-For production use with RFC 8785 JSON canonicalization, see ceyo_reference_implementation.py.
+For production use with RFC 8785 JSON canonicalization, see tools/ceyo_reference_implementation.py.
 """
 
 import base64

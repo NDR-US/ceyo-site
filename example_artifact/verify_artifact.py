@@ -4,7 +4,7 @@ Verify a CEYO sealed envelope from the command line.
 Usage:
     python verify_artifact.py sealed_envelope.json public_key.pem
 
-This mirrors the three-step workflow in ceyo_reference_implementation.py:
+This mirrors the three-step workflow in tools/ceyo_reference_implementation.py:
   1. RFC 8785 canonicalize envelope["body"]
   2. Recompute SHA-256 and compare to integrity.hash.value_b64u
   3. Validate ECDSA P-256 signature over canonical bytes

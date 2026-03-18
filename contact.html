@@ -401,66 +401,16 @@
       <div class="grid2">
         <!-- Form -->
         <div class="card reveal" aria-label="Contact form">
-          <h2 style="margin-top:0">Request form</h2>
-          <p class="muted">No sensitive data. Use high-level descriptions only.</p>
+          <h2 style="margin-top:0">Get in touch</h2>
+          <p class="muted">Contact details coming soon. In the meantime, reach out directly.</p>
 
-          <!-- Form endpoint: replace YOUR_FORM_ID with your Formspree form ID (formspree.io) -->
-          <form id="contactForm" action="https://formspree.io/f/YOUR_FORM_ID" method="post" novalidate>
-            <div class="formRow">
-              <div>
-                <label for="name">Name</label>
-                <input id="name" name="name" autocomplete="name" placeholder="Your name"/>
-              </div>
-              <div>
-                <label for="email">Email</label>
-                <input id="email" name="email" type="email" autocomplete="email" placeholder="you@domain.com" required/>
-              </div>
-            </div>
-
-            <div class="formRow">
-              <div>
-                <label for="org">Organization</label>
-                <input id="org" name="org" autocomplete="organization" placeholder="Organization"/>
-              </div>
-              <div>
-                <label for="role">Role</label>
-                <select id="role" name="role">
-                  <option value="security">Security</option>
-                  <option value="compliance">Compliance</option>
-                  <option value="platform">Platform / Engineering</option>
-                  <option value="legal">Legal</option>
-                  <option value="review">Institutional reviewer</option>
-                  <option value="other">Other</option>
-                </select>
-              </div>
-            </div>
-
-            <label for="context">What are you evaluating?</label>
-            <textarea id="context" name="context" placeholder="Example: AI decision support system; internal audit readiness; need independent verification under constrained disclosure."></textarea>
-
-            <label for="timeline">Timeline</label>
-            <select id="timeline" name="timeline">
-              <option value="now">Now</option>
-              <option value="30">Within 30 days</option>
-              <option value="60">Within 60 days</option>
-              <option value="later">Later / exploratory</option>
-            </select>
-
-            <div class="submitRow">
-              <button class="btn primary" id="submitBtn" type="submit">Send request<span class="arr">→</span></button>
-              <div class="mini">Or email: contact@ceyo.ai</div>
-            </div>
-            <div id="formError" role="alert" style="display:none; margin-top:12px; padding:12px 14px; border-radius:10px; border:1px solid rgba(239,68,68,.30); background:rgba(239,68,68,.07); font-size:13px; color:rgba(252,165,165,.9);"></div>
-          </form>
-
-          <div id="formSuccess" style="display:none; padding:24px; border-radius:var(--r-lg); border:1px solid rgba(110,231,183,.22); background:rgba(16,185,129,.07); text-align:center;">
-            <div style="font-size:28px; margin-bottom:10px;">✓</div>
-            <div style="font-weight:600; margin-bottom:6px;">Request received</div>
-            <div style="font-size:13px; color:var(--muted);">We'll respond within 2 business days to confirm scope and next steps.</div>
+          <div style="margin-top:24px; padding:20px 24px; border-radius:var(--r-lg); border:1px solid rgba(255,255,255,.08); background:rgba(255,255,255,.03);">
+            <div style="font-size:13px; color:var(--muted); margin-bottom:8px;">Email</div>
+            <a href="mailto:contact@ceyo.ai" style="font-size:16px; font-weight:500; color:var(--fg);">contact@ceyo.ai</a>
           </div>
 
-          <div class="note">
-            <b>Security note:</b> do not submit secrets, keys, personal data, or proprietary model internals via this form.
+          <div class="note" style="margin-top:20px;">
+            <b>Security note:</b> do not send secrets, keys, personal data, or proprietary model internals via email.
           </div>
         </div>
 
@@ -506,53 +456,6 @@
 
   <script>
     document.getElementById('year').textContent = new Date().getFullYear();
-
-    // Contact form submission
-    const contactForm = document.getElementById('contactForm');
-    const submitBtn = document.getElementById('submitBtn');
-    const formError = document.getElementById('formError');
-    const formSuccess = document.getElementById('formSuccess');
-
-    contactForm.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      formError.style.display = 'none';
-
-      const email = contactForm.querySelector('#email');
-      if (!email.value || !email.validity.valid) {
-        formError.textContent = 'A valid email address is required.';
-        formError.style.display = 'block';
-        email.focus();
-        return;
-      }
-
-      submitBtn.disabled = true;
-      submitBtn.textContent = 'Sending…';
-
-      try {
-        const res = await fetch(contactForm.action, {
-          method: 'POST',
-          body: new FormData(contactForm),
-          headers: { 'Accept': 'application/json' }
-        });
-
-        if (res.ok) {
-          contactForm.style.display = 'none';
-          formSuccess.style.display = 'block';
-        } else {
-          const data = await res.json().catch(() => ({}));
-          formError.textContent = (data.errors || []).map(e => e.message).join(' ') ||
-            'Submission failed. Please email contact@ceyo.ai directly.';
-          formError.style.display = 'block';
-          submitBtn.disabled = false;
-          submitBtn.innerHTML = 'Send request<span class="arr">→</span>';
-        }
-      } catch {
-        formError.textContent = 'Network error. Please email contact@ceyo.ai directly.';
-        formError.style.display = 'block';
-        submitBtn.disabled = false;
-        submitBtn.innerHTML = 'Send request<span class="arr">→</span>';
-      }
-    });
 
     // Drawer
     const drawer = document.getElementById('drawer');
