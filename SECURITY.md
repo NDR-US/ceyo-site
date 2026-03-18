@@ -6,7 +6,7 @@ If you discover a security vulnerability related to the CEYO reference implement
 
 Send vulnerability reports to:
 
-security@ceyo.dev
+security@ceyo.ai
 
 Please include:
 

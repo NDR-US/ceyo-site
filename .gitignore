@@ -2,14 +2,26 @@
 private_key.pem
 *.pem
 *.key
+.env
+.env.*
 
 # Python
 __pycache__/
 *.pyc
 *.pyo
+*.egg-info/
 .venv/
 venv/
 env/
+.pytest_cache/
+.coverage
+htmlcov/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
 
 # OS
 .DS_Store

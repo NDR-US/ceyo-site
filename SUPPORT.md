@@ -2,15 +2,9 @@
 
 ## Documentation
 
-Most questions about CEYO can be answered by reviewing the documentation in the `docs/` directory.
+The README provides an overview of the repository and its contents.
 
-Key documents include:
-
-• architecture.md
-• specification.md
-• verification-protocol.md
-• threat-model.md
-• artifact-schema.json
+Protocol specifications, architecture documents, and formal schema definitions are maintained in the separate `ceyo-protocol` repository.
 
 ---
 
