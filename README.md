@@ -1,91 +1,91 @@
 # CEYO
 
-Public website for CEYO — evidentiary infrastructure for AI-supported systems.
+**Public presentation layer for independent evidentiary infrastructure for AI systems**
 
-**Project site:**
-https://ndr-us.github.io/ceyo-site/index.html
+**Created and led by Brian Covarrubias**  
+**Copyright © 2026 Brian Covarrubias. All rights reserved.**
 
----
+Project site: https://ceyo.ai
 
-## What CEYO Is
+## What CEYO is
 
-CEYO is an evidentiary infrastructure layer for AI-supported decision systems.
+CEYO is being developed as an independent evidentiary layer for consequential AI and autonomous-system operations.
 
-It produces policy-scoped, deterministic, cryptographically sealed records of AI inference events. These records can be independently verified by any party who holds the sealed artifact and the corresponding public key — without access to model weights, proprietary internals, or the contents of the underlying decision.
+Its purpose is to produce deterministic, cryptographically verifiable evidence artifacts that can be reviewed later without requiring access to model weights or proprietary system internals.
 
-CEYO operates outside the model. It does not modify, instrument, or interfere with AI inference. It records only what a governing capture policy explicitly permits.
+CEYO is deliberately separate from decision authority. It records and verifies evidence properties; it does not decide whether an underlying AI outcome was correct, fair, lawful, or institutionally sufficient.
 
----
+## Current implementation and target architecture
 
-## Why This Matters
+CEYO is under active development.
 
-AI systems increasingly influence consequential outcomes: credit, employment, healthcare, benefits, autonomous control. In regulated and high-stakes contexts, there is a distinct requirement that cannot be met by internal logging alone: the ability to demonstrate that a system behaved as declared, to an external party, without disclosing what it decided.
+The current public protocol profile demonstrates:
 
-CEYO addresses this gap. A sealed artifact proves that a record was produced at a specific time, under a specific policy, and has not been altered since — without revealing what the underlying system processed or concluded.
+- policy-scoped structured artifact capture;
+- RFC 8785 canonicalization;
+- SHA-256 integrity digests;
+- ECDSA P-256 / SHA-256 signatures;
+- independent artifact verification;
+- append-only storage primitives;
+- Merkle-tree transparency logging, signed checkpoints, and inclusion proofs.
 
----
+The broader target architecture extends this foundation toward protected policy/schema context, authenticated trust registries, hardware-backed key custody, trusted-time evidence, revocation, distributed transparency, constrained disclosure, custody, and institutional verification.
 
-## How It Works
+Future-state capabilities are design direction until they are formally specified, implemented, tested, and promoted into a versioned CEYO protocol profile.
 
-Every CEYO artifact passes through a fixed lifecycle:
+## Protocol authority
 
-| Step | What happens |
-|------|-------------|
-| Policy-scoped capture | An inference event is recorded within the bounds of a declared capture policy; out-of-scope fields are excluded by design |
-| Deterministic canonicalization | The captured body is serialized using RFC 8785 (JSON Canonicalization Scheme), producing identical bytes for identical inputs regardless of key ordering or whitespace |
-| Cryptographic sealing | A SHA-256 hash and an ECDSA P-256 signature are computed over the canonical bytes |
-| Independent verification | Any party with the sealed artifact and the corresponding public key can recompute the hash and validate the signature, with no access to the originating system |
+This website is explanatory, not normative.
 
----
+The canonical public CEYO protocol specification and reference implementation are maintained in:
 
-## What CEYO Does Not Claim
+- `NDR-US/ceyo-protocol`
 
-CEYO is an evidentiary infrastructure. It is not:
+Private architecture and research are maintained in:
 
-- **A truth engine.** CEYO does not verify that an AI decision was correct.
-- **A fairness engine.** CEYO does not assess whether a decision was equitable or unbiased.
-- **A compliance certification.** CEYO does not certify conformance with any regulatory standard.
-- **A model auditor.** CEYO does not access, analyze, or evaluate model internals.
+- `NDR-US/ceyo-core`
 
-CEYO proves that a sealed record is unaltered and was produced under a declared policy. It does not prove anything about the quality, legality, or appropriateness of the underlying AI output.
+The public decision demo is maintained in:
 
----
+- `NDR-US/ceyo-decision-verification-demo`
 
-## This Repository
+If website language conflicts with a versioned protocol specification, the canonical protocol specification controls technical interpretation.
 
-This repository is the **presentation layer** for CEYO. It contains the public-facing website explaining the concept, architecture, and verification approach.
+## Cryptographic roles
 
-**What is here:**
-- Static website (HTML/CSS/JS)
-- Interactive in-browser artifact verifier (`verify.html`)
-- Reference implementation scripts for demonstration purposes (`tools/`, `example_artifact/`)
+CEYO separates integrity, authenticity, confidentiality, trust, and time:
 
-**What is not here:**
-- Protocol specifications → maintained in `ceyo-protocol`
-- Production SDK or deployment tooling
+- hashing supports integrity comparison;
+- digital signatures bind protected content to a cryptographic key holder;
+- encryption, where used, protects confidentiality and is not itself the integrity validator;
+- trust policy determines whether a signing key or authority is recognized;
+- verifiable time/transparency evidence is required for stronger temporal claims.
 
----
+## Claim boundaries
 
-## Terminology
+CEYO does not claim that cryptographic verification alone proves:
 
-| Term | Meaning |
-|------|---------|
-| Policy-scoped capture | Recording only fields permitted by an explicit, declared capture policy |
-| Deterministic canonicalization | Serialization that produces identical bytes for identical inputs (RFC 8785) |
-| Sealed artifact | A JSON envelope containing a canonical body, its SHA-256 hash, and an ECDSA P-256 signature |
-| Independent verification | Recomputing the hash and validating the signature using only the artifact and a public key |
-| Constrained disclosure | Sharing verifiable evidence of behavior without exposing proprietary model internals |
-| Tier | A declared disclosure level governing what the artifact conveys to a verifier |
+- the truth or completeness of pre-capture source data;
+- model correctness or fairness;
+- regulatory compliance;
+- institutional authorization without a trust basis;
+- real-world time of existence from an untrusted local timestamp;
+- legal admissibility or evidentiary sufficiency.
 
----
+CEYO produces verifiable evidence records, not judgments.
 
-## License
+## This repository
 
-Copyright © 2026 Brian Covarrubias.  
-All rights reserved.
+`ceyo-site` contains the public-facing website, explanatory materials, sample artifacts, and selected demonstration tooling.
 
-The contents of this repository are provided for informational and review purposes only.  
-No license is granted to use, reproduce, modify, distribute, or commercially exploit
-any portion of this repository without prior explicit written permission from the author.
+The site should not contain a competing protocol definition. Technical examples and terminology should remain aligned with `ceyo-protocol`.
 
-See the LICENSE file for full terms.
+## Versioning
+
+Website release versions are presentation-layer versions and are distinct from protocol-profile versions. See `VERSION`, `VERSIONING.md`, and `CHANGELOG.md`.
+
+## Authorship and ownership
+
+CEYO was conceived and is directed by **Brian Covarrubias**. NDR-US is the GitHub publishing identity used for the project and should not be interpreted as a separate IP owner unless rights are formally assigned to a legal entity in the future.
+
+See `LICENSE` for repository terms.

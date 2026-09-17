@@ -1,70 +1,52 @@
 # Changelog
 
-All notable changes to the CEYO project will be documented in this file.
+All notable changes to the CEYO public presentation layer are documented here.
 
-The format loosely follows Keep a Changelog principles.
+## [0.4.0] - 2026-09-16
 
----
+### Architecture alignment
+
+- clarified the distinction between the current public protocol profile and the broader CEYO target architecture;
+- established `NDR-US/ceyo-protocol` as the canonical public technical authority;
+- aligned project authorship and ownership language around Brian Covarrubias;
+- clarified that hashing/signatures provide integrity/authenticity while encryption is a separate confidentiality mechanism;
+- removed duplicate protocol/reference implementations from the presentation repository to prevent technical drift;
+- removed the site-local Python verifier and unused Python requirements;
+- aligned proprietary contribution and licensing language;
+- normalized the site release version.
 
 ## [0.3.0] - 2026-03-18
 
 ### Changed
 
-• contact.html: replaced broken Formspree placeholder form with mailto link
-• how.html: corrected page title (was "Compliance", now "How It Works")
-• SECURITY.md: standardized contact email to security@ceyo.ai
-• SUPPORT.md: removed stale references to deleted docs/ directory
+- `contact.html`: replaced broken Formspree placeholder form with mailto link;
+- `how.html`: corrected page title;
+- `SECURITY.md`: standardized contact email to `security@ceyo.ai`;
+- `SUPPORT.md`: removed stale references to deleted documentation.
 
 ### Added
 
-• .gitignore: added .env, IDE directories, pytest cache, coverage, egg-info
+- expanded `.gitignore` coverage for environment files, IDE directories, caches, coverage, and package artifacts.
 
 ### Fixed
 
-• Broken "Trust Center" footer link across 4 pages (now points to trust.html)
-• Malformed requirements filename (was "requirements.txt (root)")
-
----
+- broken Trust Center links;
+- malformed requirements filename.
 
 ## [0.2.0] - 2026-03-11
 
-Site rewrite and hardening.
-
 ### Changed
 
-• Rewrote public-facing site as static HTML presentation layer
-• Institutional-grade hardening across all 17 pages
-• Replaced MIT license with proprietary All Rights Reserved
-• Rewrote README as clean public-facing presentation layer
+- rewrote the public-facing site as a static HTML presentation layer;
+- hardened public-facing pages;
+- replaced the previous open-source license with proprietary All Rights Reserved terms;
+- rewrote the repository README.
 
 ### Added
 
-• Interactive in-browser artifact verifier (verify.html)
-• Wire verify.html into site navigation and CTAs
+- public verification/explanation materials;
+- navigation and resource integration.
 
-### Fixed
+## [0.1.0] - Initial prototype
 
-• Broken ethics nav link across all pages
-• Stale sample artifacts; updated tooling and error messages
-
----
-
-## [0.1.0] - Initial Prototype
-
-Initial public repository structure.
-
-### Added
-
-Reference components:
-
-• Example artifact workflow
-• Sample artifact records
-• Minimal verification demonstration
-
-Repository structure:
-
-• example_artifact/ — sample envelope and verification script
-• tools/ — reference implementation and CLI verifier
-• Protocol specifications maintained in ceyo-protocol repository
-
-This release represents the initial prototype and conceptual architecture for the CEYO evidentiary infrastructure.
+Initial public repository structure and demonstration materials for the CEYO evidentiary-infrastructure concept.

@@ -1,23 +1,16 @@
 Copyright © 2026 Brian Covarrubias.
 All rights reserved.
 
-This repository contains research materials, experimental code, and architectural concepts related to the CEYO evidentiary infrastructure project.
+CEYO was conceived and is directed by Brian Covarrubias. This repository contains research materials, experimental code, website source, documentation, and architectural materials associated with the CEYO evidentiary infrastructure project.
 
-The contents of this repository are provided for informational and review purposes only.
+The contents of this repository are provided for informational, evaluation, and review purposes only.
 
-No license is granted to use, reproduce, modify, distribute, sublicense, or commercially exploit any portion of this repository without prior explicit written permission from the author.
+No license is granted to use, reproduce, modify, distribute, sublicense, create derivative systems from, or commercially exploit any portion of this repository without prior explicit written permission from the copyright holder.
 
-This restriction applies to all materials contained in the repository, including but not limited to:
-	•	source code
-	•	documentation
-	•	specifications
-	•	schemas
-	•	scripts
-	•	design materials
-	•	architectural descriptions
-	•	any associated files or assets
+This restriction applies to all repository materials, including source code, documentation, specifications, schemas, scripts, design materials, architectural descriptions, media, and associated assets.
 
-Access to this repository does not grant any express or implied rights under any intellectual property owned by the author.
+Access to this repository does not grant any express or implied rights under copyright, patent, trademark, trade-secret, or other intellectual-property rights owned or controlled by the rights holder.
 
-For licensing inquiries or permission requests, contact the repository author at:
-bsecure.cov@gmail.com
+NDR-US is the GitHub publishing identity for the project and should not be interpreted as a separate IP owner unless rights are formally assigned in writing.
+
+Licensing and permission inquiries: contact@ceyo.ai
