@@ -1,61 +1,36 @@
-Contributing to CEYO
+# Contributing to CEYO
 
-Thank you for your interest in contributing to CEYO.
+CEYO is a proprietary research and infrastructure project created and led by **Brian Covarrubias**.
 
-CEYO is a prototype evidentiary infrastructure layer designed to enable cryptographic verification and governance mechanisms for AI-supported systems.
+The public website repository is available for inspection, issue reporting, security review, and controlled collaboration. Publication does not grant an open-source license.
 
-⸻
+## Issues
 
-Ways to Contribute
+Issues are welcome for:
 
-Contributions may include:
-	•	improvements to documentation
-	•	clarifications to protocol specifications
-	•	reference implementation improvements
-	•	security reviews
-	•	artifact verification tooling
+- broken links or presentation defects;
+- inaccurate or inconsistent public wording;
+- security concerns;
+- accessibility problems;
+- protocol/site inconsistencies;
+- documentation errors.
 
-⸻
+Security vulnerabilities should be reported according to `SECURITY.md`.
 
-Contribution Process
+## Pull requests
 
-To contribute to the project:
-	1.	Fork the repository
-	2.	Create a feature branch
-	3.	Make your changes
-	4.	Submit a pull request
+Substantive external contributions are not accepted by default under an implied inbound license.
 
-Please ensure that:
-	•	documentation updates remain clear and concise
-	•	code follows consistent formatting
-	•	new functionality includes appropriate explanation or examples
+Before submitting code, design assets, specifications, or other protectable material, obtain written confirmation that the contribution can be accepted under terms compatible with CEYO's proprietary licensing and IP model.
 
-⸻
+## Protocol authority
 
-Pull Request Guidelines
+This repository is the presentation layer. It must not redefine the CEYO protocol independently.
 
-Pull requests should include:
-	•	a clear description of the proposed change
-	•	the motivation for the modification
-	•	documentation updates when applicable
+Technical language, examples, cryptographic descriptions, artifact fields, and verification claims should remain consistent with the canonical public protocol in `NDR-US/ceyo-protocol`.
 
-Large architectural changes should first be discussed by opening an issue.
+## Authorship
 
-⸻
+CEYO was conceived and is directed by Brian Covarrubias. Accepted contributions do not change project ownership, authorship, or licensing except through an explicit written agreement.
 
-Design Philosophy
-
-CEYO follows several guiding principles:
-	•	model neutrality
-	•	cryptographic verifiability
-	•	deterministic artifact generation
-	•	minimal operational coupling
-	•	independent verification
-
-Contributions should respect and preserve these principles.
-
-⸻
-
-Code of Conduct
-
-By participating in this project, you agree to follow the project’s Code of Conduct.
+See `LICENSE` for repository terms.
