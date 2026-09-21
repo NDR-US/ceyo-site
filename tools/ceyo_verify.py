@@ -10,6 +10,13 @@ from __future__ import annotations
 
 import argparse
 import sys
+from pathlib import Path
+
+# The historical script is itself named ceyo_verify.py. Remove its tools/
+# directory from import search paths so it cannot shadow the installed
+# canonical ceyo_verify package when executed as a script.
+_tools_dir = Path(__file__).resolve().parent
+sys.path[:] = [entry for entry in sys.path if Path(entry).resolve() != _tools_dir]
 
 from ceyo_verify.verifier import load_artifact, load_pubkey, verify_artifact
 
