@@ -1,0 +1,3 @@
+# Temporary integration pin to Protocol PR #22 (wheel includes ceyo_verify).
+# Replace with the stable Protocol main merge commit before merging this site PR.
+ceyo @ git+https://github.com/NDR-US/ceyo-protocol.git@2385c106b971ba4813d29b1f8fd429badb318ae7
