@@ -74,6 +74,23 @@ CEYO does not claim that cryptographic verification alone proves:
 
 CEYO produces verifiable evidence records, not judgments.
 
+## Reference tooling boundary
+
+The optional Python tools in `tools/` require `pip install -r requirements.txt`
+and delegate cryptographic sealing and verification to the **pinned canonical
+public CEYO Protocol v1 reference implementation**. The CLI verifier accepts a
+complete sealed envelope and the public key; bare record/signature verification
+is not a CEYO envelope verification and is not supported. The example generator
+uses an ephemeral key and never writes a private key to this repository.
+
+The committed `example_artifact/sample_envelope.json` is an illustration with
+placeholder digest and signature, **not a valid sealed artifact**. Generate a
+new example with `python tools/make_example_artifact.py`, then verify it with
+`python tools/ceyo_verify.py example_artifact/sealed_envelope.json
+example_artifact/public_key.pem`. Current site tools demonstrate the existing
+body-only v1 signing scope. They do not imply that v2 protected-envelope signing
+or independent authorization/time infrastructure is implemented on the site.
+
 ## This repository
 
 `ceyo-site` contains the public-facing website, explanatory materials, sample artifacts, and selected demonstration tooling.
