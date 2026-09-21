@@ -1,0 +1,39 @@
+name: Canonical website example
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: actions/setup-python@0b93645e9fea7318ecaed2b359559ac225c90a2b # v5.3.0
+        with:
+          python-version: '3.12'
+      - name: Install pinned canonical protocol
+        run: python -m pip install -r requirements.txt
+      - name: Generate canonical public v1 artifact without writing a private key
+        run: |
+          python tools/make_example_artifact.py
+          test ! -e example_artifact/private_key.pem
+      - name: Verify complete envelope and key using canonical verifier
+        run: python tools/ceyo_verify.py example_artifact/sealed_envelope.json example_artifact/public_key.pem --policy-id site.example.capture --policy-version 1.0
+      - name: Reject post-sealing body changes
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p = Path("example_artifact/sealed_envelope.json")
+          data = json.loads(p.read_text(encoding="utf-8"))
+          data["body"]["event"]["event_id"] = "MODIFIED"
+          p.write_text(json.dumps(data), encoding="utf-8")
+          PY
+          if python tools/ceyo_verify.py example_artifact/sealed_envelope.json example_artifact/public_key.pem; then
+            echo "ERROR: modified artifact was accepted"
+            exit 1
+          fi
